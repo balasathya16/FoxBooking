@@ -8,8 +8,8 @@ const LocalStrategy = require('passport-local').Strategy;
 passport.use(
     new GoogleStrategy(
       {
-        clientID: '160214083248-lh01pgd4bct49jpp9kpklfdi9a7cvgdj.apps.googleusercontent.com',
-        clientSecret: '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',
+        clientID: '',
+        clientSecret: '',
         callbackURL: '/auth/google/callback',
       },
       (accessToken, refreshToken, profile, done) => {
