@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Header.css'; // Import the CSS file
+import '../styles/Header.css';
+import SignUpPopup from '../components/SignUpPopUp';
 
 const Header = () => {
+  const [showSignUpPopup, setShowSignUpPopup] = useState(false);
+
+  const handleGetStarted = () => {
+    setShowSignUpPopup(true);
+  };
+
+  const handleCloseSignUpPopup = () => {
+    setShowSignUpPopup(false);
+  };
+
   return (
     <header className="header">
       <div className="logo">
-        <img src= "../../stretching-exercises.png" alt="FoxBooking Logo" />
+        <img src="../../stretching-exercises.png" alt="FoxBooking Logo" />
         <span className="logo-text">FoxBooking</span>
       </div>
       <nav className="navigation">
@@ -26,10 +37,11 @@ const Header = () => {
         <Link to="/login" className="login-button">
           Sign In
         </Link>
-        <Link to="/signup" className="get-started-button">
+        <button className="get-started-button" onClick={handleGetStarted}>
           Get Started
-        </Link>
+        </button>
       </div>
+      {showSignUpPopup && <SignUpPopup onClose={handleCloseSignUpPopup} />}
     </header>
   );
 };

@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from '../src/components/Header';
 import '../src/styles/Header.css'; // Import any additional global CSS styles
+import '../src/styles/tailwind.css'; // Import any additional global CSS styles
+
 
 const App = () => {
   return (
