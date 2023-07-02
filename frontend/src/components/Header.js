@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
 import SignUpPopup from '../components/SignUpPopUp';
+import sportsLogo from '../sports.png';
+
 
 const Header = () => {
   const [showSignUpPopup, setShowSignUpPopup] = useState(false);
@@ -17,7 +19,8 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <img src="../../stretching-exercises.png" alt="FoxBooking Logo" />
+      <img src={sportsLogo} alt="FoxBooking Logo" />
+
         <span className="logo-text">FoxBooking</span>
       </div>
       <nav className="navigation">
