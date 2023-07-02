@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/SignUpPopUp.css'; // Import the CSS file
 
 const SignUpPopup = ({ onClose }) => {
   const handleSignUpWithGoogle = () => {
@@ -14,8 +15,8 @@ const SignUpPopup = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
+    <div className="signup-popup">
+      <div className="popup-content">
         <button className="mb-4" onClick={handleSignUpWithGoogle}>
           Sign up with Google
         </button>
