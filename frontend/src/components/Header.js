@@ -26,13 +26,13 @@ const Header = () => {
       <nav className="navigation">
         <ul>
           <li>
-            <Link to="/indoor-cricket">Cricket</Link>
+            <Link to="/cricket">Cricket</Link>
           </li>
           <li>
-            <Link to="/indoor-football">Football</Link>
+            <Link to="/football">Football</Link>
           </li>
           <li>
-            <Link to="/indoor-badminton">Badminton</Link>
+            <Link to="/badminton">Badminton</Link>
           </li>
         </ul>
       </nav>
