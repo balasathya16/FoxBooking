@@ -4,7 +4,6 @@ import '../styles/Header.css';
 import SignUpPopup from '../components/SignUpPopUp';
 import sportsLogo from '../sports.png';
 
-
 const Header = () => {
   const [showSignUpPopup, setShowSignUpPopup] = useState(false);
 
@@ -18,24 +17,17 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="logo">
+    <div className="logo">
       <img src={sportsLogo} alt="FoxBooking Logo" />
-
-        <span className="logo-text">FoxBooking</span>
+      <span className="logo-text">FoxBooking</span>
+    </div>
+    <div className="navigation">
+      <div className="search-bar">
+        <input type="text" placeholder="Search..." />
+        <button>
+          <i className="fas fa-search"></i>
+        </button>
       </div>
-      <nav className="navigation">
-        <ul>
-          <li>
-            <Link to="/cricket">Cricket</Link>
-          </li>
-          <li>
-            <Link to="/football">Football</Link>
-          </li>
-          <li>
-            <Link to="/badminton">Badminton</Link>
-          </li>
-        </ul>
-      </nav>
       <div className="cta-buttons">
         <Link to="/login" className="login-button">
           Sign In
@@ -44,8 +36,10 @@ const Header = () => {
           Get Started
         </button>
       </div>
-      {showSignUpPopup && <SignUpPopup onClose={handleCloseSignUpPopup} />}
-    </header>
+    </div>
+    {showSignUpPopup && <SignUpPopup onClose={handleCloseSignUpPopup} />}
+  </header>
+  
   );
 };
 
