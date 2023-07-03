@@ -22,6 +22,12 @@ const SignUpPopup = ({ onClose }) => {
 
   const handleSignUpWithFacebook = () => {
     const provider = new firebase.auth.FacebookAuthProvider();
+  
+    // Check if there is an existing popup and close it before opening a new one
+    if (auth.currentUser && auth.currentUser.multiFactor && auth.currentUser.multiFactor.hint) {
+      auth.currentUser.multiFactor.hint.close();
+    }
+  
     auth.signInWithPopup(provider)
       .then((result) => {
         // Handle successful sign-up with Facebook
@@ -30,9 +36,14 @@ const SignUpPopup = ({ onClose }) => {
       })
       .catch((error) => {
         // Handle error during sign-up
-        console.error('Error signing up with Facebook:', error);
+        if (error.code === 'auth/cancelled-popup-request') {
+          console.log('Popup request cancelled due to conflict');
+        } else {
+          console.error('Error signing up with Facebook:', error);
+        }
       });
   };
+  
 
   const handleSignUpWithEmail = () => {
     // Implement your own logic for sign-up with email
