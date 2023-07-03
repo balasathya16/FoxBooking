@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../../../fonts/Ubuntu/Ubuntu-Bold.ttf') format('woff2');
+  }
+  
+  .animated-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .animated-text {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 48px;
+    color: #283747; /* Set the text color to #283747 */
+    text-align: center;
+    animation: bounce 2s infinite;
+    position: relative;
+    z-index: 2; /* Bring the text to the front */
+  }
+  
+  .background-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  
+  .background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('./background.jpg'); /* Update the path to your image */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+  }
+  
