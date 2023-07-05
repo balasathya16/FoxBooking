@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from './components/Header';
 import AnimatedText from './components/HomePage/AnimatedText';
-import Footer from './components/Footer'; // Import the Footer component
+import Footer from './components/Footer';
+import HomePage from './components/HomePage/HomePage';
 import './styles/Header.css';
 import './styles/AnimatedText.css';
-import './styles/Footer.css'; // Import the Footer component's CSS
+import './styles/Footer.css';
 import './styles/tailwind.css';
+import './styles/GalleryContainer.css';
 
 const App = () => {
   return (
@@ -13,9 +15,9 @@ const App = () => {
       <Header />
       <div className="App-content">
         <AnimatedText />
-        {/* Add your other components and content here */}
+        <HomePage /> 
       </div>
-      <Footer /> {/* Add the Footer component */}
+      <Footer />
     </div>
   );
 };
