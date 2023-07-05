@@ -1,0 +1,11 @@
+.home-page {
+    /* Add any styling specific to the home page */
+  }
+  
+  .gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
