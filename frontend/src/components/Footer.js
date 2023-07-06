@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Footer.css';
 
 const Footer = () => {
+  const [showFooter, setShowFooter] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrollAtBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+      setShowFooter(isScrollAtBottom);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  if (!showFooter) {
+    return null;
+  }
+
   return (
     <footer className="footer">
       <div className="container">
