@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Ubuntu';
-    src: url('../../../fonts/Ubuntu/Ubuntu-Bold.ttf') format('woff2');
+    src: url('./Ubuntu-Light.ttf') format('woff2');
   }
   
   .animated-text-container {

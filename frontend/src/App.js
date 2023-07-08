@@ -1,9 +1,9 @@
-// App.js
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './components/HomePage/HomePage';
-import SignUpPopup from './components/SignUpPopup';
+import GetStartedButton from './components/HomePage/GetStartedButton'; // Import GetStartedButton
+import SignUpPopup from './components/SignUpPopUp';
 import './styles/Header.css';
 import './styles/Footer.css';
 import './styles/tailwind.css';
