@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './components/HomePage/HomePage';
-import GetStartedButton from './components/HomePage/GetStartedButton'; // Import GetStartedButton
+import GetStartedButton from './components/HomePage/GetStartedButton';
 import SignUpPopup from './components/SignUpPopUp';
 import './styles/Header.css';
 import './styles/Footer.css';
@@ -25,8 +25,8 @@ const App = () => {
       <div className="App-content">
         <HomePage />
         <GetStartedButton onClick={handleSignUpClick} />
-        {showSignUp && <SignUpPopup onClose={closeSignUpPopup} />}
       </div>
+      {showSignUp && <SignUpPopup onClose={closeSignUpPopup} />}
       <Footer />
     </div>
   );
