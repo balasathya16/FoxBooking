@@ -1,10 +1,8 @@
 import React from 'react';
 import { FaGoogle, FaEnvelope } from 'react-icons/fa';
 import '../styles/SignUpPopUp.css';
-import firebase from 'firebase/compat/app';
+import firebase from '../firebase';
 import 'firebase/compat/auth';
-import { auth } from '../firebase';
-
 const SignUpPopup = ({ onClose }) => {
   const handleSignUpWithGoogle = () => {
     // ... handle sign up with Google logic

@@ -1,25 +1,23 @@
 import React from 'react';
-import AnimatedText from './AnimatedText';
+import GetStartedButton from '../HomePage/GetStartedButton';
+
 import GalleryTile from './GalleryTile';
 import '../../styles/HomePage.css';
 
 const HomePage = () => {
+  const handleSignUpButtonClick = () => {
+    // Handle sign up button click logic here
+  };
+
   return (
     <div className="home-page">
-      <AnimatedText />
-
-      <div className="gallery">
-        <div className="gallery-container">
-          <GalleryTile name="Cricket" />
-        </div>
-        <div className="gallery-container">
-          <GalleryTile name="Football" />
-        </div>
-        <div className="gallery-container">
-          <GalleryTile name="Badminton" />
-        </div>
-      </div>
-
+      {/* Your existing code */}
+      <GalleryTile name="Cricket" />
+      <GalleryTile name="Football" />
+      <GalleryTile name="Badminton" />
+      
+      <GetStartedButton onClick={handleSignUpButtonClick} />
+      
       {/* Add your other content */}
     </div>
   );

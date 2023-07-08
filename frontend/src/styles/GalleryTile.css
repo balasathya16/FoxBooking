@@ -1,11 +1,12 @@
 .gallery {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap; /* Display tiles in a single row */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
   
   .gallery-tile {
     flex: 1;

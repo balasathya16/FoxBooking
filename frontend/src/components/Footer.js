@@ -7,7 +7,7 @@ const Footer = () => {
   useEffect(() => {
     const handleScroll = () => {
       const isScrollAtBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+        window.innerHeight + window.pageYOffset >= document.documentElement.offsetHeight;
       setShowFooter(isScrollAtBottom);
     };
 

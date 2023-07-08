@@ -5,6 +5,7 @@
     width: 100%;
     background-color: #283747;
     color: #ffffff;
+    z-index: 100;
   }
   
   .container {
