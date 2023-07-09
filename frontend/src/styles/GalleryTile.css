@@ -1,34 +1,35 @@
 .gallery {
   display: flex;
+  flex-wrap: wrap; /* Display tiles in multiple rows */
   justify-content: center;
   align-items: center;
-  flex-wrap: nowrap; /* Display tiles in a single row */
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
 }
-  
+
+.gallery-tile {
+  flex-basis: calc(100% / 3); /* Adjust as per your requirements */
+  height: 200px; /* Adjust the height as per your requirements */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #283747;
+  position: relative;
+  cursor: pointer;
+  margin: 10px; /* Adjust the margin as per your requirements */
+}
+
+@media (max-width: 768px) {
   .gallery-tile {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #283747;
-    position: relative;
-    cursor: pointer;
-    margin: 0 10px;
+    flex-basis: calc(100% / 2); /* Adjust as per your requirements */
+    height: 150px; /* Adjust the height as per your requirements */
   }
-  
-  @media (max-width: 768px) {
-    .gallery-tile {
-      flex-basis: calc(100% / 3); /* Adjust as per your requirements */
-      height: 200px;
-    }
+}
+
+@media (max-width: 480px) {
+  .gallery-tile {
+    flex-basis: 100%; /* Take up the full width on smaller screens */
+    height: 120px; /* Adjust the height as per your requirements */
   }
-  
-  .gallery-tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
+}

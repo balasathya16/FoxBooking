@@ -1,11 +1,10 @@
 import React from 'react';
 import '../../styles/GalleryTile.css';
 
-const GalleryTile = ({ name }) => {
-  const lowercaseName = name.toLowerCase();
+const GalleryTile = () => {
   return (
     <div className="gallery-tile">
-      <img src={process.env.PUBLIC_URL + `/images/${lowercaseName}.jpg`} alt={name} />
+      {/* Place your content here */}
     </div>
   );
 };
