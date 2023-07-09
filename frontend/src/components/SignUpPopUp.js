@@ -1,54 +1,39 @@
-import React, { useState } from 'react';
-import GetStartedButton from './HomePage/GetStartedButton';
-import SignUpPopup from './SignUpPopUp';
-import '../styles/AnimatedText.css';
-import { auth } from '../firebase'; // Import the auth instance from firebase.js
+import React from 'react';
+import { FaGoogle, FaEnvelope } from 'react-icons/fa';
+import '../styles/SignUpPopUp.css';
+import { auth } from '../firebase'; // Import only the auth module
+import firebase from '../firebase';
 
-const AnimatedText = () => {
-  const [showSignUpPopup, setShowSignUpPopup] = useState(false);
+const handleSignUpWithGoogle = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth
+    .signInWithPopup(provider)
+    .then((result) => {
+      // Handle successful sign-in
+      console.log('Sign-in successful:', result.user);
+    })
+    .catch((error) => {
+      // Handle sign-in error
+      console.error('Sign-in error:', error);
+    });
+};
 
-  const handleGetStarted = () => {
-    setShowSignUpPopup(true);
-  };
-
-  const handleCloseSignUpPopup = () => {
-    setShowSignUpPopup(false);
-  };
-
-  const handleSignUpWithGoogle = () => {
-    const provider = new auth.GoogleAuthProvider();
-    auth
-      .signInWithPopup(provider)
-      .then((result) => {
-        // Handle successful sign-in
-        console.log('Sign-in successful:', result.user);
-      })
-      .catch((error) => {
-        // Handle sign-in error
-        console.error('Sign-in error:', error);
-      });
-  };
-
-  const handleSignUpWithEmail = () => {
-    // ... handle sign up with email logic
-  };
-
+const SignUpPopup = ({ onSignUpWithEmail, onClose }) => {
   return (
-    <div className="animated-text-container">
-      <div className="background-image" />
-      <h1 className="animated-text">
-        Step up your game. Book a sports arena and conquer.
-      </h1>
-      <GetStartedButton onClick={handleGetStarted} />
-      {showSignUpPopup && (
-        <SignUpPopup
-          onSignUpWithGoogle={handleSignUpWithGoogle}
-          onSignUpWithEmail={handleSignUpWithEmail}
-          onClose={handleCloseSignUpPopup}
-        />
-      )}
+    <div className="signup-popup">
+      <div className="popup-content">
+        <button className="mb-4" onClick={handleSignUpWithGoogle}>
+          <FaGoogle className="icon" />
+          Sign up with Google
+        </button>
+        <button className="mb-4" onClick={onSignUpWithEmail}>
+          <FaEnvelope className="icon" />
+          Sign up with Email
+        </button>
+        <button onClick={onClose}>Close</button>
+      </div>
     </div>
   );
 };
 
-export default AnimatedText;
+export default SignUpPopup;
