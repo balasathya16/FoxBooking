@@ -26,7 +26,14 @@ func GetBadmintonCourt(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	courtID := params["id"]
 
-	// Retrieve the court from the database using MongoDB driver based on courtID
+	// Retrieve the badminton court from the database using MongoDB driver based on courtID
+	// Implement the necessary logic to fetch the court details and assign it to the `court` variable
+
+	court := models.BadmintonCourt{
+		ID:       courtID,
+		Location: "Sample Location",
+		// Set other properties based on the fetched data
+	}
 
 	json.NewEncoder(w).Encode(court)
 }
