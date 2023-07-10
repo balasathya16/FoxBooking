@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
+	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
 
 	"github.com/gorilla/mux"
@@ -15,7 +17,20 @@ func CreateFootballCourt(w http.ResponseWriter, r *http.Request) {
 	var court models.FootballCourt
 	_ = json.NewDecoder(r.Body).Decode(&court)
 
-	// Save the court to the database using MongoDB driver
+	// Save the court to the database
+	database, err := db.ConnectDB()
+	if err != nil {
+		// Handle the error appropriately
+	}
+
+	// Get the collection
+	collection := database.Collection("football_courts")
+
+	// Insert the court document
+	_, err = collection.InsertOne(context.TODO(), court)
+	if err != nil {
+		// Handle the error appropriately
+	}
 
 	json.NewEncoder(w).Encode(court)
 }
