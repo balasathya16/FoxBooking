@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/balasathya16/FoxBooking/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -31,4 +32,24 @@ func ConnectDB() (*mongo.Database, error) {
 	db := client.Database("FoxBooking")
 
 	return db, nil
+}
+
+// SaveUser saves the user information to the database
+func SaveUser(user models.User) error {
+	// Connect to the MongoDB database
+	db, err := ConnectDB()
+	if err != nil {
+		return err
+	}
+
+	// Get the collection from the database
+	collection := db.Collection("users")
+
+	// Insert the user document into the collection
+	_, err = collection.InsertOne(context.TODO(), user)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
