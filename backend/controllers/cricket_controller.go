@@ -8,6 +8,7 @@ import (
 	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/gorilla/mux"
 )
@@ -16,12 +17,20 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var court models.CricketCourt
-	_ = json.NewDecoder(r.Body).Decode(&court)
+	err := json.NewDecoder(r.Body).Decode(&court)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid request body")
+		return
+	}
 
 	// Save the court to the database
 	database, err := db.ConnectDB()
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
 	}
 
 	// Get the collection
@@ -31,8 +40,12 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	_, err = collection.InsertOne(context.TODO(), court)
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to insert court")
+		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
 }
 
@@ -46,6 +59,9 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	database, err := db.ConnectDB()
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
 	}
 
 	// Get the collection
@@ -58,7 +74,16 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	var court models.CricketCourt
 	err = collection.FindOne(context.TODO(), filter).Decode(&court)
 	if err != nil {
-		// Handle the error appropriately
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode("Court not found")
+			return
+		}
+
+		// Handle other errors appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to fetch court")
+		return
 	}
 
 	json.NewEncoder(w).Encode(court)
@@ -74,6 +99,9 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	database, err := db.ConnectDB()
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
 	}
 
 	// Get the collection
@@ -86,17 +114,34 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	var booking models.CricketBooking
 	err = collection.FindOne(context.TODO(), filter).Decode(&booking)
 	if err != nil {
-		// Handle the error appropriately
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode("Booking not found")
+			return
+		}
+
+		// Handle other errors appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to fetch booking")
+		return
 	}
 
 	// Update the booking details based on the request body
-	_ = json.NewDecoder(r.Body).Decode(&booking)
+	err = json.NewDecoder(r.Body).Decode(&booking)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid request body")
+		return
+	}
 
 	// Update the booking document in the collection
 	update := bson.M{"$set": booking}
 	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to update booking")
+		return
 	}
 
 	json.NewEncoder(w).Encode(booking)
@@ -112,6 +157,9 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 	database, err := db.ConnectDB()
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
 	}
 
 	// Get the collection
@@ -124,7 +172,16 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 	var booking models.CricketBooking
 	err = collection.FindOne(context.TODO(), filter).Decode(&booking)
 	if err != nil {
-		// Handle the error appropriately
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode("Booking not found")
+			return
+		}
+
+		// Handle other errors appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to fetch booking")
+		return
 	}
 
 	// Perform the payment processing logic here
@@ -138,6 +195,9 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to update booking")
+		return
 	}
 
 	json.NewEncoder(w).Encode(booking)
