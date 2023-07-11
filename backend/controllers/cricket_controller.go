@@ -49,6 +49,62 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
+// GetAllCricketCourts retrieves all cricket courts from the database
+func GetAllCricketCourts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	// Retrieve all cricket courts from the database
+	database, err := db.ConnectDB()
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
+	}
+
+	// Get the collection
+	collection := database.Collection("cricket_courts")
+
+	// Find all court documents in the collection
+	filter := bson.M{}
+	cursor, err := collection.Find(context.TODO(), filter)
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to fetch cricket courts")
+		return
+	}
+	defer cursor.Close(context.TODO())
+
+	// Iterate over the cursor and collect all courts
+	var courts []models.CricketCourt
+	for cursor.Next(context.TODO()) {
+		var court models.CricketCourt
+		if err := cursor.Decode(&court); err != nil {
+			// Handle the error appropriately
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode("Failed to decode cricket court")
+			return
+		}
+		courts = append(courts, court)
+	}
+
+	if err := cursor.Err(); err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to fetch cricket courts")
+		return
+	}
+
+	if len(courts) == 0 {
+		// Return an empty array if no cricket courts are found
+		json.NewEncoder(w).Encode([]models.CricketCourt{})
+		return
+	}
+
+	json.NewEncoder(w).Encode(courts)
+}
+
 func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

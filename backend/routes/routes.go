@@ -10,6 +10,7 @@ func SetupRoutes(router *mux.Router) {
 	// Cricket Court Routes
 	router.HandleFunc("/cricket", controllers.CreateCricketCourt).Methods("POST")
 	router.HandleFunc("/cricket/{id}", controllers.GetCricketCourt).Methods("GET")
+	router.HandleFunc("/cricket", controllers.GetAllCricketCourts).Methods("GET")
 
 	// Football Court Routes
 	router.HandleFunc("/football", controllers.CreateFootballCourt).Methods("POST")
