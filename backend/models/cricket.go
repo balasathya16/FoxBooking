@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type CricketCourt struct {
-	ID            string           `json:"id,omitempty"`
+	ID            uuid.UUID        `json:"id,omitempty"`
 	Location      string           `json:"location"`
 	NetsAvailable int              `json:"netsAvailable"`
 	BookingTime   []CricketBooking `json:"bookingTime"`

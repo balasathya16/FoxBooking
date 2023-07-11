@@ -7,6 +7,7 @@ import (
 
 	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -23,6 +24,9 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Invalid request body")
 		return
 	}
+
+	// Generate a new UUID for the court ID
+	court.ID = uuid.New()
 
 	// Save the court to the database
 	database, err := db.ConnectDB()
@@ -105,11 +109,21 @@ func GetAllCricketCourts(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(courts)
 }
 
+// GetCricketCourtByID retrieves a single cricket court from the database
+
 func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
-	courtID := params["id"]
+	courtIDStr := params["id"]
+
+	// Parse the courtID string into a UUID
+	courtID, err := uuid.Parse(courtIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid court ID")
+		return
+	}
 
 	// Retrieve the cricket court from the database using MongoDB driver based on courtID
 	database, err := db.ConnectDB()
@@ -145,6 +159,7 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
+// EditCricketCourt edits a single cricket court in the database
 func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -202,6 +217,8 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(booking)
 }
+
+// payForBooking pays for a single cricket booking in the database
 
 func PayForBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
