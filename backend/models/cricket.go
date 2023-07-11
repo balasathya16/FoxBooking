@@ -8,6 +8,13 @@ type CricketCourt struct {
 	NetsAvailable int              `json:"netsAvailable"`
 	BookingTime   []CricketBooking `json:"bookingTime"`
 	// Add other relevant fields for cricket
+
+	// Additional fields
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	ContactEmail string `json:"contactEmail"`
+	ContactPhone string `json:"contactPhone"`
+	// Add more fields for the cricket court, such as pricing, amenities, etc.
 }
 
 type CricketBooking struct {
@@ -15,4 +22,8 @@ type CricketBooking struct {
 	EndTime   time.Time `json:"endTime"`
 	Status    string    `json:"status"`
 	// Add other relevant fields for cricket bookings
+
+	// Additional fields
+	UserID    string `json:"userID"`
+	PaymentID string `json:"paymentID"`
 }
