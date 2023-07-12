@@ -57,6 +57,9 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 func GetAllCricketCourts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	// Retrieve the search query from the request
+	query := r.URL.Query().Get("query")
+
 	// Retrieve all cricket courts from the database
 	database, err := db.ConnectDB()
 	if err != nil {
@@ -69,8 +72,15 @@ func GetAllCricketCourts(w http.ResponseWriter, r *http.Request) {
 	// Get the collection
 	collection := database.Collection("cricket_courts")
 
-	// Find all court documents in the collection
-	filter := bson.M{}
+	// Define a filter to find the courts by name or location
+	filter := bson.M{
+		"$or": []bson.M{
+			{"name": bson.M{"$regex": query, "$options": "i"}},
+			{"location": bson.M{"$regex": query, "$options": "i"}},
+		},
+	}
+
+	// Find the court documents in the collection based on the filter
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
 		// Handle the error appropriately
