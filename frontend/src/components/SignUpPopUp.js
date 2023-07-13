@@ -1,60 +1,48 @@
 import React from 'react';
-import GoogleSignUp from './GoogleSignUp';
-import EmailSignUp from './EmailSignUp';
-import PhoneSignUp from './PhoneSignUp';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 import '../styles/SignUpPopUp.css';
-import { auth as firebaseAuth } from '../firebase'; // Import the Firebase auth instance
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'; // Import RecaptchaVerifier and signInWithPhoneNumber
-import firebase from 'firebase/compat/app'; // Import the Firebase app module
-import { firebaseConfig } from '../firebase'; // Import the firebaseConfig object
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const SignUpPopup = ({ onSignUpWithEmail, onClose }) => {
-  const handleSignUpWithPhone = (recaptchaToken) => {
-    const phoneNumber = "+12268086028"; // Replace with the phone number you want to test
-    const appVerifier = recaptchaVerifier;
-
-    signInWithPhoneNumber(firebaseAuth, phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        const verificationCode = prompt('Enter the verification code:');
-        if (verificationCode) {
-          confirmationResult.confirm(verificationCode)
-            .then((result) => {
-              console.log('Phone sign-in successful:', result.user);
-            })
-            .catch((error) => {
-              console.error('Verification error:', error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error('SMS verification error:', error);
-      });
+const SignUpPopUp = ({ onClose }) => {
+  const handleGoogleSignUp = () => {
+    // Implement Google sign up functionality
+    // ...
   };
 
-  const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-    size: 'invisible',
-    callback: (response) => {
-      handleSignUpWithPhone(response);
-    }
-  }, firebaseAuth);
+  const handleEmailSignUp = () => {
+    // Implement email sign up functionality
+    // ...
+  };
 
-  recaptchaVerifier.render().then((widgetId) => {
-    window.recaptchaWidgetId = widgetId;
-  });
+  const handlePhoneSignUp = () => {
+    // Implement phone sign up functionality
+    // ...
+  };
 
   return (
     <div className="signup-popup">
       <div className="popup-content">
-        <GoogleSignUp />
-        <EmailSignUp onSignUpWithEmail={onSignUpWithEmail} />
-        <PhoneSignUp onSignUpWithPhone={handleSignUpWithPhone} />
-        <button onClick={onClose}>Close</button>
+        <h3>Sign up</h3>
+        <button className="popup-button" onClick={handleGoogleSignUp}>
+          <FontAwesomeIcon icon={faGoogle} className="icon" />
+          Sign up with Google
+        </button>
+        <button className="popup-button" onClick={handleEmailSignUp}>
+          <FontAwesomeIcon icon={faEnvelope} className="icon" />
+          Sign up with Email
+        </button>
+        <button className="popup-button" onClick={handlePhoneSignUp}>
+          <FontAwesomeIcon icon={faPhone} className="icon" />
+          Sign up with phone number
+        </button>
+        <button className="close-button" onClick={onClose}>
+          Close
+        </button>
       </div>
     </div>
   );
 };
 
-export default SignUpPopup;
+export default SignUpPopUp;
