@@ -1,13 +1,16 @@
-import React from 'react';
-import { FaEnvelope } from 'react-icons/fa';
+import { auth } from '../firebase'; // Assuming `firebase.js` is located in the same directory
 
-const EmailSignUp = ({ onSignUpWithEmail }) => {
-  return (
-    <button className="mb-4" onClick={onSignUpWithEmail}>
-      <FaEnvelope className="icon" />
-      Sign up with Email
-    </button>
-  );
+const handleEmailSignUp = (email, password) => {
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Handle successful sign up
+      const user = userCredential.user;
+      console.log('Email sign up successful:', user);
+    })
+    .catch((error) => {
+      // Handle sign up error
+      console.error('Error signing up with email:', error);
+    });
 };
 
-export default EmailSignUp;
+export default handleEmailSignUp;
