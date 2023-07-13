@@ -2,15 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-
+import handleGoogleSignUp from './GoogleSignUp'; // Import the handleGoogleSignUp function
 import '../styles/SignUpPopUp.css';
 
 const SignUpPopUp = ({ onClose }) => {
-  const handleGoogleSignUp = () => {
-    // Implement Google sign up functionality
-    // ...
-  };
-
   const handleEmailSignUp = () => {
     // Implement email sign up functionality
     // ...

@@ -11,11 +11,12 @@ const firebaseConfig = {
   measurementId: "G-V1J1G6FS83"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase app if it's not already initialized
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const auth = firebase.auth();
-const app = firebase.app();
 
-export { auth, firebaseConfig, app };
+export { auth, firebase };
 export default firebase;
