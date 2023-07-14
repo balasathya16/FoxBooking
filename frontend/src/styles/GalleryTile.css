@@ -1,35 +1,34 @@
-.gallery {
-  display: flex;
-  flex-wrap: wrap; /* Display tiles in multiple rows */
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
 .gallery-tile {
-  flex-basis: calc(100% / 3); /* Adjust as per your requirements */
-  height: 200px; /* Adjust the height as per your requirements */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #283747;
-  position: relative;
-  cursor: pointer;
-  margin: 10px; /* Adjust the margin as per your requirements */
+  margin-top: 2rem;
+  padding: 1rem;
 }
 
-@media (max-width: 768px) {
-  .gallery-tile {
-    flex-basis: calc(100% / 2); /* Adjust as per your requirements */
-    height: 150px; /* Adjust the height as per your requirements */
+.gallery-tile h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.listing-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 1rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .listing-container {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 480px) {
-  .gallery-tile {
-    flex-basis: 100%; /* Take up the full width on smaller screens */
-    height: 120px; /* Adjust the height as per your requirements */
+@media screen and (max-width: 768px) {
+  .listing-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .listing-container {
+    grid-template-columns: 1fr;
   }
 }

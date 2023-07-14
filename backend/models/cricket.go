@@ -14,10 +14,11 @@ type CricketCourt struct {
 	// Add other relevant fields for cricket
 
 	// Additional fields
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	ContactEmail string `json:"contactEmail"`
-	ContactPhone string `json:"contactPhone"`
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	ContactEmail string   `json:"contactEmail"`
+	ContactPhone string   `json:"contactPhone"`
+	Images       []string `json:"images"`
 	// Add more fields for the cricket court, such as pricing, amenities, etc.
 }
 
