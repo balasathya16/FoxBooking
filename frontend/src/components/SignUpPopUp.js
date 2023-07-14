@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import handleGoogleSignUp from './GoogleSignUp';
 import handleEmailSignUp from './EmailSignUp';
@@ -10,7 +9,7 @@ import '../styles/SignUpPopUp.css';
 const SignUpPopUp = ({ onClose }) => {
   const handleEmailSignUpClick = () => {
     const email = 'balasathya16@yahoo.com'; // Replace with your email input value
-    const password = 'test'; // Replace with your password input value
+    const password = 'testjjjjjo'; // Replace with your password input value
 
     handleEmailSignUp(email, password);
   };
