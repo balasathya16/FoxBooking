@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/balasathya16/FoxBooking/db"
@@ -10,6 +11,8 @@ import (
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"encoding/base64"
 
 	"github.com/gorilla/mux"
 )
@@ -51,6 +54,84 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
+}
+
+// Upload images for cricket courts
+
+func UploadImages(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	// Parse the multipart form data
+	err := r.ParseMultipartForm(10 << 20) // 10MB maximum file size
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Failed to parse multipart form data")
+		return
+	}
+
+	// Get the court ID from the URL parameters
+	courtID := mux.Vars(r)["id"]
+
+	// Get the court from the database
+	database, err := db.ConnectDB()
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
+	}
+	collection := database.Collection("cricket_courts")
+	filter := bson.M{"_id": courtID}
+	var court models.CricketCourt
+	err = collection.FindOne(context.TODO(), filter).Decode(&court)
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Court not found")
+		return
+	}
+
+	// Retrieve the uploaded image files
+	images := r.MultipartForm.File["images"]
+	for _, file := range images {
+		// Open the uploaded image file
+		uploadedFile, err := file.Open()
+		if err != nil {
+			// Handle the error appropriately
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode("Failed to open uploaded image file")
+			return
+		}
+		defer uploadedFile.Close()
+
+		// Read the image data from the file
+		imageData, err := ioutil.ReadAll(uploadedFile)
+		if err != nil {
+			// Handle the error appropriately
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode("Failed to read image data from file")
+			return
+		}
+
+		// Convert the image data to base64-encoded string
+		base64Data := base64.StdEncoding.EncodeToString(imageData)
+
+		// Append the base64-encoded image data to the court's Images field
+		court.Images = append(court.Images, base64Data)
+	}
+
+	// Save the updated court to the database
+	_, err = collection.ReplaceOne(context.TODO(), filter, court)
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to save images to court")
+		return
+	}
+
+	// Return a success response
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("Images uploaded successfully")
 }
 
 // GetAllCricketCourts retrieves all cricket courts from the database
