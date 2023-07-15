@@ -16,6 +16,10 @@ const ListingTile = ({ listing }) => {
     }
   };
 
+  // Check if bookingTime is not empty before accessing the first element
+  const firstBooking = listing.bookingTime && listing.bookingTime.length > 0 ? listing.bookingTime[0] : null;
+  const bookingStatus = firstBooking ? firstBooking.status : 'No bookings available';
+
   return (
     <div className="listing-tile">
       {listing.images && listing.images.length > 0 ? (
@@ -25,13 +29,8 @@ const ListingTile = ({ listing }) => {
       )}
       <div className="listing-details">
         <h3 className="listing-name">{listing.name}</h3>
-        <p className="listing-price">{listing.price}</p>
-        <div className="listing-rating">
-          Rating: {listing.rating}
-        </div>
-        <div className="listing-availability">
-          Availability: {listing.availability ? 'Available' : 'Not Available'}
-        </div>
+        <p className="listing-location">{listing.location}</p>
+        <p className="listing-status">{bookingStatus}</p>
         <div className="listing-image-navigation">
           <button onClick={handlePrevImage}>Previous</button>
           <button onClick={handleNextImage}>Next</button>
