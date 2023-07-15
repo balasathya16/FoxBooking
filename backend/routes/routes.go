@@ -13,8 +13,6 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/cricket", controllers.GetAllCricketCourts).Methods("GET")
 	router.HandleFunc("/cricket/{id}", controllers.EditCricketBooking).Methods("PUT")
 	router.HandleFunc("/cricket/{id}/pay", controllers.PayForBooking).Methods("POST")
-	router.HandleFunc("/cricket/{id}/images", controllers.UploadImages).Methods("POST") // New endpoint for image upload
-
 	// Football Court Routes
 	router.HandleFunc("/football", controllers.CreateFootballCourt).Methods("POST")
 	router.HandleFunc("/football/{id}", controllers.GetFootballCourt).Methods("GET")
