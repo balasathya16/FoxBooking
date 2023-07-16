@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
 import '../../styles/GalleryTile.css';
+import { Link } from 'react-router-dom'; // Add this import statement
 
 const GalleryTile = () => {
   const [listings, setListings] = useState([]);
@@ -42,7 +43,10 @@ const GalleryTile = () => {
       <h2>Gallery</h2>
       <div className="listing-container">
         {listings.map((listing) => (
-          <ListingTile key={listing.id} listing={listing} />
+          // Use the Link component to navigate to the listing details page
+          <Link key={listing.id} to={`/listing/${listing.id}`}>
+            <ListingTile listing={listing} />
+          </Link>
         ))}
       </div>
     </div>
