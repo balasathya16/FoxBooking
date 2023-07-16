@@ -5,15 +5,11 @@ const ListingTile = ({ listing }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const handlePrevImage = () => {
-    if (listing.images && listing.images.length > 0) {
-      setCurrentImage((prevImage) => (prevImage - 1 + listing.images.length) % listing.images.length);
-    }
+    setCurrentImage((prevImage) => (prevImage - 1 + (listing.images ? listing.images.length : 1)) % (listing.images ? listing.images.length : 1));
   };
 
   const handleNextImage = () => {
-    if (listing.images && listing.images.length > 0) {
-      setCurrentImage((prevImage) => (prevImage + 1) % listing.images.length);
-    }
+    setCurrentImage((prevImage) => (prevImage + 1) % (listing.images ? listing.images.length : 1));
   };
 
   // Check if bookingTime is not empty before accessing the first element
@@ -32,8 +28,12 @@ const ListingTile = ({ listing }) => {
         <p className="listing-location">{listing.location}</p>
         <p className="listing-status">{bookingStatus}</p>
         <div className="listing-image-navigation">
-          <button onClick={handlePrevImage}>Previous</button>
-          <button onClick={handleNextImage}>Next</button>
+          {listing.images && listing.images.length > 1 && (
+            <>
+              <button onClick={handlePrevImage}>Previous</button>
+              <button onClick={handleNextImage}>Next</button>
+            </>
+          )}
         </div>
       </div>
     </div>
