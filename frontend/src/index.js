@@ -4,9 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import '../src/styles/styles.css'; // Import Tailwind CSS from the styles folder
 
-// Replace ReactDOM.render with createRoot
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.render(
   <BrowserRouter>
     <App />
-  </BrowserRouter>
+  </BrowserRouter>,
+  document.getElementById('root')
 );
