@@ -3,8 +3,14 @@ package controllers
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"path/filepath"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
 	"github.com/google/uuid"
@@ -20,18 +26,36 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	var court models.CricketCourt
 	err := json.NewDecoder(r.Body).Decode(&court)
 	if err != nil {
+		log.Println("Error decoding request body:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Invalid request body")
 		return
 	}
 
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error reading request body:", err)
+	} else {
+		log.Println("Raw request body:", string(body))
+	}
+
 	// Generate a new UUID for the court ID
 	court.ID = uuid.New()
+
+	// Upload images to Amazon S3 and get the image URLs
+	imageURLs, err := uploadImagesToS3(r, court.ID.String(), "cricket-court-images") // Replace "cricket-court-images" with your S3 bucket name
+	if err != nil {
+		log.Println("Error uploading images:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to upload images")
+		return
+	}
+	court.Images = imageURLs
 
 	// Save the court to the database
 	database, err := db.ConnectDB()
 	if err != nil {
-		// Handle the error appropriately
+		log.Println("Error connecting to the database:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Database connection error")
 		return
@@ -43,7 +67,7 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	// Insert the court document
 	_, err = collection.InsertOne(context.TODO(), court)
 	if err != nil {
-		// Handle the error appropriately
+		log.Println("Error inserting court into the database:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Failed to insert court")
 		return
@@ -51,6 +75,68 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
+}
+
+func uploadImagesToS3(r *http.Request, courtID, bucketName string) ([]string, error) {
+	// Parse the multipart/form-data request to get the images
+	err := r.ParseMultipartForm(10 << 20) // 10 MB max image size
+	if err != nil {
+		log.Println("Error parsing form data:", err)
+		return nil, err
+	}
+
+	// Create an AWS session
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("ap-south-1"), // Replace with your AWS region, e.g., "us-east-1"
+	})
+	if err != nil {
+		log.Println("Error creating AWS session:", err)
+		return nil, err
+	}
+
+	// Create an S3 service client
+	svc := s3.New(sess)
+
+	creds, err := sess.Config.Credentials.Get()
+	if err != nil {
+		log.Println("Error getting AWS credentials:", err)
+	} else {
+		log.Println("Using AWS credentials with AccessKeyID:", creds.AccessKeyID)
+	}
+
+	var imageURLs []string
+
+	// Iterate over the uploaded images
+	for _, headers := range r.MultipartForm.File {
+		for i := range headers {
+			file, err := headers[i].Open()
+			if err != nil {
+				log.Printf("Error opening uploaded image: %s", err)
+				return nil, err
+			}
+			defer file.Close()
+
+			// Create the image name with the UUID folder prefix and a unique file name
+			fileName := filepath.Join(courtID, uuid.New().String()+filepath.Ext(headers[i].Filename))
+
+			// Upload the image to S3
+			_, err = svc.PutObject(&s3.PutObjectInput{
+				Bucket: aws.String(bucketName),
+				Key:    aws.String(fileName),
+				Body:   file,
+			})
+			if err != nil {
+				log.Printf("Error uploading image '%s': %s", fileName, err)
+				return nil, err
+			}
+
+			// Generate the image URL
+			imageURL := "https://" + bucketName + ".s3.amazonaws.com/" + fileName
+			imageURLs = append(imageURLs, imageURL)
+		}
+	}
+
+	return imageURLs, nil
 }
 
 // GetAllCricketCourts retrieves all cricket courts from the database
