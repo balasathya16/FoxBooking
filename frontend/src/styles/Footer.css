@@ -36,22 +36,19 @@ body {
 
 .footer-left p {
   margin: 0; /* Remove default margin for the paragraph */
-  text-align: left; /* Align the text to the left */
-
 }
 
 .footer-left a {
   color: #ffffff;
   text-decoration: none;
   margin-right: 1rem;
-  text-align: left; /* Align the text to the left */
-
 }
 
 /* Apply the styles for the social icons in the footer */
 .social-icons {
   display: flex;
-  align-items: right;
+  align-items: center;
+  justify-content: flex-end; /* Align the icons to the right */
 }
 
 .social-icon {
@@ -101,4 +98,33 @@ body {
 .login-button:hover,
 .get-started-button:hover {
   background-color: #e65c00; /* Slightly darker shade on hover */
+}
+
+/* Additional Styles to make it professional and stylish */
+
+/* Center the entire footer content */
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Add margin between elements in the footer */
+.footer-left,
+.social-icons,
+.footer-right {
+  margin: 10px;
+}
+
+/* Style the links in the footer */
+.footer-left a,
+.menu a {
+  font-weight: 300; /* Adjust font weight for a more stylish look */
+}
+
+/* Style the CTA buttons on hover */
+.login-button:hover,
+.get-started-button:hover {
+  background-color: #ff8c40; /* Slightly lighter shade on hover */
 }

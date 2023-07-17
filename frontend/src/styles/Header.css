@@ -1,3 +1,4 @@
+/* Use the same font-family and color as in footer.css */
 @font-face {
   font-family: 'Ubuntu';
   src: url('../../public/fonts/Ubuntu/Ubuntu-Light.ttf') format('woff2');
@@ -11,11 +12,12 @@ body {
   color: #ffffff;
 }
 
+/* Apply the same styles for the header as the footer */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 90px; /* Adjust padding to create even margin on both sides */
   width: 100%;
   background-color: #283747;
 }
@@ -23,13 +25,12 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
 }
 
+/* Style the logo and logo text */
 .logo {
   display: flex;
   align-items: center;
-  margin-left: 10%;
 }
 
 .logo img {
@@ -40,15 +41,22 @@ body {
 
 .logo-text {
   font-size: 20px;
-  margin-left: 15%;
 }
 
+/* Style the navigation links */
 .navigation {
   display: flex;
   align-items: center;
-  margin-right: 10%;
 }
 
+.navigation a {
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: capitalize;
+  margin: 0 15px;
+}
+
+/* Style the search bar */
 .search-bar {
   display: flex;
   align-items: center;
@@ -62,13 +70,11 @@ body {
   color: #283747;
   font-size: 14px;
   outline: none;
-  margin-right: 10px;
 }
 
 .search-bar button {
   background-color: transparent;
   border: none;
-  margin-left: 5px;
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
@@ -82,23 +88,13 @@ body {
   font-size: 16px;
 }
 
+/* Style the CTA buttons */
 .cta-buttons {
   display: flex;
   align-items: center;
-  margin-right: 10px;
 }
 
-.login-button {
-  background-color: #ff6f00;
-  color: #ffffff;
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  margin-right: 10px;
-}
-
+.login-button,
 .get-started-button {
   background-color: #ff6f00;
   color: #ffffff;
@@ -107,4 +103,33 @@ body {
   border-radius: 20px;
   text-decoration: none;
   transition: background-color 0.3s ease;
+  margin: 0 10px;
+}
+
+.login-button:hover,
+.get-started-button:hover {
+  background-color: #e65c00; /* Slightly darker shade on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .logo-text {
+    margin-top: 10px;
+  }
+
+  .navigation {
+    margin-top: 10px;
+  }
+
+  .search-bar {
+    margin-top: 10px;
+  }
+
+  .cta-buttons {
+    margin-top: 10px;
+  }
 }

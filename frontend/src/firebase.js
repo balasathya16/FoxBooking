@@ -2,13 +2,13 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCwYMkMDHSIJGmGl30vRDDGcqPySgFl_zU",
-  authDomain: "foxbooking-f405e.firebaseapp.com",
-  projectId: "foxbooking-f405e",
-  storageBucket: "foxbooking-f405e.appspot.com",
-  messagingSenderId: "180821396900",
-  appId: "1:180821396900:web:1d0e28152e7e79e7f14531",
-  measurementId: "G-V1J1G6FS83"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase app if it's not already initialized
