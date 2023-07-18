@@ -3,7 +3,6 @@ package controllers
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -23,24 +22,25 @@ import (
 func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var court models.CricketCourt
-	err := json.NewDecoder(r.Body).Decode(&court)
+	// Parse the multipart/form-data to get the images
+	err := r.ParseMultipartForm(10 << 20) // 10 MB max image size
 	if err != nil {
-		log.Println("Error decoding request body:", err)
+		log.Println("Error parsing form data:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Invalid request body")
 		return
 	}
 
-	body, err := ioutil.ReadAll(r.Body)
+	// Extract JSON data from the "data" form field
+	data := r.FormValue("data")
+	var court models.CricketCourt
+	err = json.Unmarshal([]byte(data), &court)
 	if err != nil {
-		log.Println("Error reading request body:", err)
-	} else {
-		log.Println("Raw request body:", string(body))
+		log.Println("Error decoding JSON data:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid JSON data")
+		return
 	}
-
-	// Generate a new UUID for the court ID
-	court.ID = uuid.New()
 
 	// Upload images to Amazon S3 and get the image URLs
 	imageURLs, err := uploadImagesToS3(r, court.ID.String(), "cricket-court-images") // Replace "cricket-court-images" with your S3 bucket name
@@ -84,6 +84,9 @@ func uploadImagesToS3(r *http.Request, courtID, bucketName string) ([]string, er
 		log.Println("Error parsing form data:", err)
 		return nil, err
 	}
+
+	// Log the raw form data
+	log.Println("Raw form data:", r.MultipartForm)
 
 	// Create an AWS session
 	sess, err := session.NewSession(&aws.Config{
