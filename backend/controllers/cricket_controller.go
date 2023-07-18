@@ -31,19 +31,27 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract JSON data from the "data" form field
-	data := r.FormValue("data")
+	// Extract JSON data from the "file" form field
+	dataFile, _, err := r.FormFile("file")
+	if err != nil {
+		log.Println("Error retrieving JSON data:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Error retrieving JSON data")
+		return
+	}
+	defer dataFile.Close()
+
 	var court models.CricketCourt
-	err = json.Unmarshal([]byte(data), &court)
+	err = json.NewDecoder(dataFile).Decode(&court)
 	if err != nil {
 		log.Println("Error decoding JSON data:", err)
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Invalid JSON data")
+		json.NewEncoder(w).Encode("Error decoding JSON data: " + err.Error())
 		return
 	}
 
 	// Upload images to Amazon S3 and get the image URLs
-	imageURLs, err := uploadImagesToS3(r, court.ID.String(), "cricket-court-images") // Replace "cricket-court-images" with your S3 bucket name
+	imageURLs, err := uploadImagesToS3(r, court.ID.String(), "cricket-court-images") // Pass court.ID.String() as courtID
 	if err != nil {
 		log.Println("Error uploading images:", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -85,9 +93,6 @@ func uploadImagesToS3(r *http.Request, courtID, bucketName string) ([]string, er
 		return nil, err
 	}
 
-	// Log the raw form data
-	log.Println("Raw form data:", r.MultipartForm)
-
 	// Create an AWS session
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("ap-south-1"), // Replace with your AWS region, e.g., "us-east-1"
@@ -109,6 +114,16 @@ func uploadImagesToS3(r *http.Request, courtID, bucketName string) ([]string, er
 
 	var imageURLs []string
 
+	// Create the UUID folder on S3
+	_, err = svc.PutObject(&s3.PutObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(courtID + "/"), // Include trailing slash to create a folder
+	})
+	if err != nil {
+		log.Printf("Error creating UUID folder '%s': %s", courtID, err)
+		return nil, err
+	}
+
 	// Iterate over the uploaded images
 	for _, headers := range r.MultipartForm.File {
 		for i := range headers {
@@ -119,8 +134,8 @@ func uploadImagesToS3(r *http.Request, courtID, bucketName string) ([]string, er
 			}
 			defer file.Close()
 
-			// Create the image name with the UUID folder prefix and a unique file name
-			fileName := filepath.Join(courtID, uuid.New().String()+filepath.Ext(headers[i].Filename))
+			// Use the original image name as the file name
+			fileName := filepath.Join(courtID, filepath.Base(headers[i].Filename))
 
 			// Upload the image to S3
 			_, err = svc.PutObject(&s3.PutObjectInput{
