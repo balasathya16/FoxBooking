@@ -26,7 +26,7 @@ const SignUpPopUp = ({ onClose }) => {
         </button>
         <button className="popup-button" onClick={handleEmailSignUpClick}>
           <FontAwesomeIcon icon={faEnvelope} className="icon" />
-          Sign up with Emaillll
+          Sign up with Email
         </button>
         <button className="close-button" onClick={onClose}>
           Close
