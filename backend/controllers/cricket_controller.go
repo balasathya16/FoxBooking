@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -18,12 +22,24 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+const (
+	S3BucketURL = "http://cricket-court-images.s3-website.ap-south-1.amazonaws.com/"
+	AWSRegion   = "ap-south-1"
+)
 
-	// Parse the JSON data from the request body
+func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
+	// Parse the form data to get the uploaded image
+	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
+	if err != nil {
+		log.Println("Error parsing form data:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Error parsing form data: " + err.Error())
+		return
+	}
+
+	// Decode the JSON data from the request body
 	var court models.CricketCourt
-	err := json.NewDecoder(r.Body).Decode(&court)
+	err = json.NewDecoder(r.Body).Decode(&court)
 	if err != nil {
 		log.Println("Error decoding JSON data:", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -39,12 +55,15 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a folder in S3 with the same name as the courtID
-	err = createFolderInS3(courtID.String(), "cricket-court-images")
+	// Set the court ID with the generated UUID
+	court.ID = courtID
+
+	// Save images to S3 and update the court.Images with the S3 URLs
+	err = saveImagesToS3(&court, courtID, r)
 	if err != nil {
-		log.Println("Error creating folder in S3:", err)
+		log.Println("Error saving images to S3:", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to create folder in S3")
+		json.NewEncoder(w).Encode("Failed to save images to S3")
 		return
 	}
 
@@ -76,26 +95,63 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
-func createFolderInS3(courtID string, bucketName string) error {
+func UploadImage(courtID uuid.UUID, file *multipart.FileHeader) (string, error) {
+	src, err := file.Open()
+	if err != nil {
+		return "", err
+	}
+	defer src.Close()
+
+	// Read the image file data
+	imageData, err := ioutil.ReadAll(src)
+	if err != nil {
+		return "", err
+	}
+
 	// Create a new AWS session
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("ap-south-1"),
+		Region: aws.String(AWSRegion),
 		// You can provide your AWS credentials here or use environment variables.
 	})
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// Create an S3 service client
 	svc := s3.New(sess)
 
-	// Create the UUID folder on S3
+	// Upload the image file to S3 with a unique name (combining court UUID and image file name)
+	imageKey := courtID.String() + "/" + filepath.Base(file.Filename)
 	_, err = svc.PutObject(&s3.PutObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(courtID + "/"), // Include trailing slash to create a folder
+		Bucket: aws.String("cricket-court-images"), // Use your S3 bucket name here
+		Key:    aws.String(imageKey),
+		Body:   bytes.NewReader(imageData),
 	})
 	if err != nil {
+		return "", err
+	}
+
+	return S3BucketURL + imageKey, nil
+}
+
+func saveImagesToS3(court *models.CricketCourt, courtID uuid.UUID, r *http.Request) error {
+	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
+	if err != nil {
 		return err
+	}
+
+	// Get the images from the request form
+	images := r.MultipartForm.File["images"]
+	if len(images) == 0 {
+		return nil // No images uploaded, nothing to do.
+	}
+
+	for _, image := range images {
+		imageURL, err := UploadImage(courtID, image)
+		if err != nil {
+			return err
+		}
+		court.Images = append(court.Images, imageURL)
 	}
 
 	return nil
@@ -332,3 +388,16 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(booking)
 }
+
+
+
+curl -X POST -H "Content-Type: application/json" \
+  -F "location=Sample Location" \
+  -F "netsAvailable=2" \
+  -F "bookingTime=[{\"startTime\":\"2023-07-20T10:00:00Z\",\"endTime\":\"2023-07-20T12:00:00Z\",\"status\":\"booked\",\"userID\":\"user123\",\"paymentID\":\"payment123\"}]" \
+  -F "name=Sample Cricket Court" \
+  -F "description=This is a sample cricket court." \
+  -F "contactEmail=contact@example.com" \
+  -F "contactPhone=1234567890" \
+  -F "images="@C:\Users\Divya\Downloads\2.jpg" \
+  http://localhost:8000/cricket

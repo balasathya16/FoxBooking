@@ -19,7 +19,15 @@ type CricketCourt struct {
 	ContactEmail string   `json:"contactEmail"`
 	ContactPhone string   `json:"contactPhone"`
 	Images       []string `json:"images"` // Separate field for storing image URLs
+
+	// New field for image file handling
+	ImageFiles []*ImageFile `json:"-"`
 	// Add more fields for the cricket court, such as pricing, amenities, etc.
+}
+
+type ImageFile struct {
+	Filename string
+	Data     []byte
 }
 
 type CricketBooking struct {
