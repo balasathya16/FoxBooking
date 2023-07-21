@@ -37,16 +37,6 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Decode the JSON data from the request body
-	var court models.CricketCourt
-	err = json.NewDecoder(r.Body).Decode(&court)
-	if err != nil {
-		log.Println("Error decoding JSON data:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Error decoding JSON data: " + err.Error())
-		return
-	}
-
 	courtID, err := uuid.NewUUID()
 	if err != nil {
 		// Handle the error appropriately
@@ -55,10 +45,13 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Set the court ID with the generated UUID
-	court.ID = courtID
-
 	// Save images to S3 and update the court.Images with the S3 URLs
+	court := models.CricketCourt{
+		ID:            courtID,
+		Location:      r.FormValue("location"),
+		NetsAvailable: 4, // Assuming you are always setting 4 for netsAvailable
+	}
+
 	err = saveImagesToS3(&court, courtID, r)
 	if err != nil {
 		log.Println("Error saving images to S3:", err)
@@ -88,8 +81,24 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Save the images' URLs to the court.Images field
+	for _, image := range court.ImageFiles {
+		imageURL := S3BucketURL + courtID.String() + "/" + image.Filename
+		court.Images = append(court.Images, imageURL)
+	}
+
+	// Update the court document with the images' URLs
+	_, err = collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": court.ID},
+		bson.M{"$set": bson.M{"images": court.Images}},
+	)
+	if err != nil {
+		log.Println("Error updating court with images' URLs:", err)
+		// You may handle the error accordingly; this example just logs the error.
+	}
+
 	court.Images = nil // Clear the images field as we are not uploading images
-	court.ID = courtID // Set the court ID with the generated UUID
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
@@ -388,16 +397,3 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(booking)
 }
-
-
-
-curl -X POST -H "Content-Type: application/json" \
-  -F "location=Sample Location" \
-  -F "netsAvailable=2" \
-  -F "bookingTime=[{\"startTime\":\"2023-07-20T10:00:00Z\",\"endTime\":\"2023-07-20T12:00:00Z\",\"status\":\"booked\",\"userID\":\"user123\",\"paymentID\":\"payment123\"}]" \
-  -F "name=Sample Cricket Court" \
-  -F "description=This is a sample cricket court." \
-  -F "contactEmail=contact@example.com" \
-  -F "contactPhone=1234567890" \
-  -F "images="@C:\Users\Divya\Downloads\2.jpg" \
-  http://localhost:8000/cricket
