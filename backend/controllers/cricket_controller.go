@@ -281,17 +281,22 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
-// EditCricketCourt edits a single cricket court in the database
+// EditCricketBooking edits a single cricket booking in the database
+// EditCricketBooking edits a single cricket booking in the database
 func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
 	bookingID := params["id"]
 
+	// Log the bookingID for debugging purposes
+	log.Println("BookingID:", bookingID)
+
 	// Retrieve the cricket booking from the database using MongoDB driver based on bookingID
 	database, err := db.ConnectDB()
 	if err != nil {
 		// Handle the error appropriately
+		log.Println("Database connection error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Database connection error")
 		return
@@ -308,12 +313,14 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	err = collection.FindOne(context.TODO(), filter).Decode(&booking)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
+			log.Println("Booking not found in the database")
 			w.WriteHeader(http.StatusNotFound)
 			json.NewEncoder(w).Encode("Booking not found")
 			return
 		}
 
 		// Handle other errors appropriately
+		log.Println("Failed to fetch booking from the database:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Failed to fetch booking")
 		return
@@ -322,22 +329,57 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	// Update the booking details based on the request body
 	err = json.NewDecoder(r.Body).Decode(&booking)
 	if err != nil {
+		log.Println("Invalid request body:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Invalid request body")
 		return
 	}
 
-	// Update the booking document in the collection
+	// Handle image upload and update the booking document with image URLs
+	err = saveImagesToS3ForBooking(&booking, bookingID, r)
+	if err != nil {
+		log.Println("Failed to save images to S3:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to save images to S3")
+		return
+	}
+
+	// Update the booking document in the collection with the new image URLs
 	update := bson.M{"$set": booking}
 	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		// Handle the error appropriately
+		log.Println("Failed to update booking in the database:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Failed to update booking")
 		return
 	}
 
 	json.NewEncoder(w).Encode(booking)
+}
+
+// Handle image upload and update the booking document with image URLs
+func saveImagesToS3ForBooking(booking *models.CricketBooking, bookingID string, r *http.Request) error {
+	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
+	if err != nil {
+		return err
+	}
+
+	// Get the images from the request form
+	images := r.MultipartForm.File["images"]
+	if len(images) == 0 {
+		return nil // No images uploaded, nothing to do.
+	}
+
+	for _, image := range images {
+		imageURL, err := UploadImage(uuid.MustParse(bookingID), image)
+		if err != nil {
+			return err
+		}
+		booking.Images = append(booking.Images, imageURL)
+	}
+
+	return nil
 }
 
 // payForBooking pays for a single cricket booking in the database

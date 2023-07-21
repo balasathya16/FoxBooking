@@ -31,9 +31,11 @@ type ImageFile struct {
 }
 
 type CricketBooking struct {
+	ID        uuid.UUID `json:"id,omitempty"`
 	StartTime time.Time `json:"startTime"`
 	EndTime   time.Time `json:"endTime"`
 	Status    string    `json:"status"`
+	Images     []string  `json:"images"` // Separate field for storing image URLs
 	// Add other relevant fields for cricket bookings
 
 	// Additional fields
