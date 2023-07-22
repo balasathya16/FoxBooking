@@ -19,7 +19,7 @@ const SignUpPopUp = ({ onClose }) => {
   return (
     <div id="signup-popup" className="signup-popup">
       <div className="popup-content">
-        <h3>Sign up</h3>
+        <h3>Sign up NOW</h3>
         <button className="popup-button" onClick={handleGoogleSignUp}>
           <FontAwesomeIcon icon={faGoogle} className="icon" />
           Sign up with Google
