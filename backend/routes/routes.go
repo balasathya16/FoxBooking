@@ -13,6 +13,9 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/cricket", controllers.GetAllCricketCourts).Methods("GET")
 	router.HandleFunc("/cricket/booking/{id}", controllers.EditCricketBooking).Methods("PUT") // Updated route pattern
 	router.HandleFunc("/cricket/{id}/pay", controllers.PayForBooking).Methods("POST")
+	router.HandleFunc("/cricket", controllers.DeleteAllCricketCourts).Methods("DELETE")      // New route to delete all cricket courts
+	router.HandleFunc("/cricket/{id}", controllers.DeleteCricketCourtByID).Methods("DELETE") // New route to delete a single cricket court
+
 	// Football Court Routes
 	router.HandleFunc("/football", controllers.CreateFootballCourt).Methods("POST")
 	router.HandleFunc("/football/{id}", controllers.GetFootballCourt).Methods("GET")

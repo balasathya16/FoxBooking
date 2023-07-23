@@ -9,6 +9,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -47,10 +48,24 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 
 	// Save images to S3 and update the court.Images with the S3 URLs
 	court := models.CricketCourt{
-		ID:            courtID,
-		Location:      r.FormValue("location"),
-		NetsAvailable: 4, // Assuming you are always setting 4 for netsAvailable
+		ID:       courtID,
+		Location: r.FormValue("location"),
 	}
+
+	// Parse "netsAvailable" as an integer
+	netsAvailable, err := strconv.Atoi(r.FormValue("netsAvailable"))
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid value for netsAvailable")
+		return
+	}
+	court.NetsAvailable = netsAvailable
+
+	court.Name = r.FormValue("name")
+	court.Description = r.FormValue("description")
+	court.ContactEmail = r.FormValue("contactEmail")
+	court.ContactPhone = r.FormValue("contactPhone")
 
 	err = saveImagesToS3(&court, courtID, r)
 	if err != nil {
