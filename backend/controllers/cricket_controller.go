@@ -382,6 +382,84 @@ func saveImagesToS3ForBooking(booking *models.CricketBooking, bookingID string, 
 	return nil
 }
 
+// DeleteAllCricketCourts deletes all cricket courts from the database
+func DeleteAllCricketCourts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	database, err := db.ConnectDB()
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
+	}
+
+	// Get the collection
+	collection := database.Collection("cricket_courts")
+
+	// Delete all documents from the collection (delete all cricket courts)
+	_, err = collection.DeleteMany(context.TODO(), bson.M{})
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to delete cricket courts")
+		return
+	}
+
+	json.NewEncoder(w).Encode("All cricket courts deleted successfully")
+}
+
+// DeleteCricketCourtByID deletes a single cricket court by ID from the database
+func DeleteCricketCourtByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+	courtIDStr := params["id"]
+
+	// Parse the courtID string into a UUID
+	courtID, err := uuid.Parse(courtIDStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid court ID")
+		return
+	}
+
+	database, err := db.ConnectDB()
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Database connection error")
+		return
+	}
+
+	// Get the collection
+	collection := database.Collection("cricket_courts")
+
+	// Define a filter to find the court by ID
+	filter := bson.M{"id": courtID}
+
+	// Find the court document in the collection
+	var court models.CricketCourt
+	err = collection.FindOneAndDelete(context.TODO(), filter).Decode(&court)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode("Court not found")
+			return
+		}
+
+		// Handle other errors appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to delete court")
+		return
+	}
+
+	// Perform additional cleanup or tasks if needed
+	// ...
+
+	json.NewEncoder(w).Encode("Court deleted successfully")
+}
+
 // payForBooking pays for a single cricket booking in the database
 
 func PayForBooking(w http.ResponseWriter, r *http.Request) {
