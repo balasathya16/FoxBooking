@@ -1,12 +1,12 @@
+// App.js
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import HomePage from './components/HomePage/HomePage';
-import ListingDetails from '../src/pages/ListingDetails';
 import SignUpPopup from './components/SignUpPopUp';
 import './styles/Header.css';
 import './styles/Footer.css';
 import './styles/tailwind.css';
+import AppRouter from './routes/AppRouter'; // Import the AppRouter component
 
 const App = () => {
   const [showSignUp, setShowSignUp] = useState(false);
@@ -19,7 +19,8 @@ const App = () => {
     <div className="App">
       <Header />
       <div className="App-content">
-        <HomePage />
+        {/* Use the AppRouter component to manage the routing */}
+        <AppRouter />
       </div>
       {showSignUp && <SignUpPopup onClose={closeSignUpPopup} />}
       <Footer />
