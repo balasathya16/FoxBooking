@@ -1,8 +1,8 @@
-// components/HomePage/GalleryTile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
 import '../../styles/GalleryTile.css';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 const GalleryTile = () => {
   const [listings, setListings] = useState([]);
@@ -30,6 +30,8 @@ const GalleryTile = () => {
     fetchListings();
   }, []);
 
+  const navigate = useNavigate(); // Get the navigate function from the hook
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -43,10 +45,10 @@ const GalleryTile = () => {
       <h2>Gallery</h2>
       <div className="listing-container">
         {listings.map((listing) => (
-          // Use an anchor tag to open the listing details page in a new tab
-          <a key={listing.id} href={`/listing/${listing.id}`} target="_blank" rel="noreferrer">
+          // Use onClick to navigate to the listing details page programmatically
+          <div key={listing.id} onClick={() => navigate(`/listing/${listing.id}`)}>
             <ListingTile listing={listing} />
-          </a>
+          </div>
         ))}
       </div>
     </div>

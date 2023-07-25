@@ -1,13 +1,14 @@
-// index.js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import '../src/styles/styles.css'; // Import Tailwind CSS from the styles folder
+import './styles/styles.css'; // Import Tailwind CSS from the styles folder
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );

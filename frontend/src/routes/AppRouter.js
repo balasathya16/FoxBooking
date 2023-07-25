@@ -1,6 +1,5 @@
-// routes/AppRouter.js
 import React from 'react';
-import { Routes, Route } from 'react-router-dom'; // Update the import statement
+import { Routes, Route } from 'react-router-dom';
 import HomePage from '../components/HomePage/HomePage';
 import ListingDetailsPage from '../pages/ListingDetailsPage';
 
