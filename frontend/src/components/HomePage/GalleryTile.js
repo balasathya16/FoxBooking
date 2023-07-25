@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
 import '../../styles/GalleryTile.css';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
+import { useNavigate } from 'react-router-dom';
 
 const GalleryTile = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch cricket court listings from the backend API
     const fetchListings = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/cricket');
@@ -30,8 +30,6 @@ const GalleryTile = () => {
     fetchListings();
   }, []);
 
-  const navigate = useNavigate(); // Get the navigate function from the hook
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -45,10 +43,9 @@ const GalleryTile = () => {
       <h2>Gallery</h2>
       <div className="listing-container">
         {listings.map((listing) => (
-          // Use onClick to navigate to the listing details page programmatically
-          <div key={listing.id} onClick={() => navigate(`/listing/${listing.id}`)}>
+          <a key={listing.id} href={`/listing/${listing.id}`} target="_blank" rel="noopener noreferrer">
             <ListingTile listing={listing} />
-          </div>
+          </a>
         ))}
       </div>
     </div>
