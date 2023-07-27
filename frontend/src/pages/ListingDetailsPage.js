@@ -4,9 +4,23 @@ import axios from 'axios';
 import '../styles/ListingDetailsPage.css'; // You can create a new CSS file for this page if needed
 
 const ListingDetailsPage = () => {
+
+
+
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+
+
+  const [fullscreenImage, setFullscreenImage] = useState(null);
+
+  const handleImageClick = (image) => {
+    setFullscreenImage(image);
+  };
+
+  const handleFullscreenImageClose = () => {
+    setFullscreenImage(null);
+  };
 
   useEffect(() => {
     const fetchListingDetails = async () => {
@@ -37,7 +51,12 @@ const ListingDetailsPage = () => {
       {/* Display listing images */}
       <div className="listing-images">
         {listing.images.map((image, index) => (
-          <img key={index} src={image} alt={listing.name} />
+          <img
+            key={index}
+            src={image}
+            alt={listing.name}
+            onClick={() => handleImageClick(image)} // Handle image click event
+          />
         ))}
       </div>
       {/* Display listing name and description */}
@@ -46,6 +65,13 @@ const ListingDetailsPage = () => {
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
       <button>Book Now</button>
+
+      {/* Display fullscreen image if available */}
+      {fullscreenImage && (
+        <div className="fullscreen-image" onClick={handleFullscreenImageClose}>
+          <img src={fullscreenImage} alt={listing.name} />
+        </div>
+      )}
     </div>
   );
 };
