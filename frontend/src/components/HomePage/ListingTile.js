@@ -4,11 +4,13 @@ import '../../styles/ListingTile.css';
 const ListingTile = ({ listing }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
-  const handlePrevImage = () => {
+  const handlePrevImage = (e) => {
+    e.preventDefault(); // Prevent the default link behavior
     setCurrentImage((prevImage) => (prevImage - 1 + (listing.images ? listing.images.length : 1)) % (listing.images ? listing.images.length : 1));
   };
 
-  const handleNextImage = () => {
+  const handleNextImage = (e) => {
+    e.preventDefault(); // Prevent the default link behavior
     setCurrentImage((prevImage) => (prevImage + 1) % (listing.images ? listing.images.length : 1));
   };
 

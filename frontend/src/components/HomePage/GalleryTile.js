@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const GalleryTile = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+
+   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
 
   useEffect(() => {

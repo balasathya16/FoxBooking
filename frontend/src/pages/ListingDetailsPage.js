@@ -1,21 +1,36 @@
-// ListingDetailsPage.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/ListingDetailsPage.css'; // You can create a new CSS file for this page if needed
 
 const ListingDetailsPage = () => {
-  // Access the listing ID from the URL params
   const { id } = useParams();
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch listing details from the API or use props to access the listing data
-  // Replace the placeholder data with actual data fetched from the API
-  const listing = {
-    id: id,
-    name: 'Listing Name',
-    description: 'Listing description goes here...',
-    images: ['image1.jpg', 'image2.jpg', 'image3.jpg'],
-    // Add other details about the listing, e.g., location, price, availability, etc.
-  };
+  useEffect(() => {
+    const fetchListingDetails = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/cricket/${id}`);
+        const { data } = response;
+        setListing(data);
+      } catch (error) {
+        console.error('Error fetching listing details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListingDetails();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!listing) {
+    return <div>No listing found.</div>;
+  }
 
   return (
     <div className="listing-details-page">
