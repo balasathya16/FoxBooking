@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import '../styles/ListingDetailsPage.css'; // You can create a new CSS file for this page if needed
+import '../styles/ListingDetailsPage.css';
 
 const ListingDetailsPage = () => {
-
-
-
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
-  const [fullscreenImage, setFullscreenImage] = useState(null);
-
-  const handleImageClick = (image) => {
-    setFullscreenImage(image);
-  };
-
-  const handleFullscreenImageClose = () => {
-    setFullscreenImage(null);
-  };
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showFullscreen, setShowFullscreen] = useState(false);
 
   useEffect(() => {
     const fetchListingDetails = async () => {
@@ -38,6 +26,26 @@ const ListingDetailsPage = () => {
     fetchListingDetails();
   }, [id]);
 
+  const handlePrevImage = () => {
+    if (!showFullscreen) {
+      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + listing.images.length) % listing.images.length);
+    }
+  };
+
+  const handleNextImage = () => {
+    if (!showFullscreen) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % listing.images.length);
+    }
+  };
+
+  const handleImageClick = () => {
+    setShowFullscreen(!showFullscreen); // Toggle fullscreen view on image click
+  };
+
+  const handleCloseFullscreen = () => {
+    setShowFullscreen(false); // Close fullscreen view
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -48,16 +56,21 @@ const ListingDetailsPage = () => {
 
   return (
     <div className="listing-details-page">
-      {/* Display listing images */}
+      {/* Display the current image */}
       <div className="listing-images">
-        {listing.images.map((image, index) => (
+        <div className={`slideshow-container ${showFullscreen ? 'fullscreen' : ''}`}>
           <img
-            key={index}
-            src={image}
+            src={listing.images[currentImageIndex]}
             alt={listing.name}
-            onClick={() => handleImageClick(image)} // Handle image click event
+            className="slideshow-image"
+            onClick={handleImageClick}
           />
-        ))}
+          {/* Display the left and right arrows */}
+          <div className="listing-image-navigation">
+            <button onClick={handlePrevImage}>◀</button>
+            <button onClick={handleNextImage}>▶</button>
+          </div>
+        </div>
       </div>
       {/* Display listing name and description */}
       <h2>{listing.name}</h2>
@@ -65,11 +78,13 @@ const ListingDetailsPage = () => {
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
       <button>Book Now</button>
-
-      {/* Display fullscreen image if available */}
-      {fullscreenImage && (
-        <div className="fullscreen-image" onClick={handleFullscreenImageClose}>
-          <img src={fullscreenImage} alt={listing.name} />
+      {/* Fullscreen image overlay */}
+      {showFullscreen && (
+        <div className="fullscreen-image-overlay" onClick={handleCloseFullscreen}>
+          <img src={listing.images[currentImageIndex]} alt={listing.name} className="fullscreen-image" />
+          <span className="close-button" onClick={handleCloseFullscreen}>
+            &times;
+          </span>
         </div>
       )}
     </div>
