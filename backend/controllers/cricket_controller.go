@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
 	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
-	"path/filepath"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -132,6 +135,14 @@ func UploadImage(courtID uuid.UUID, file *multipart.FileHeader) (string, error) 
 		return "", err
 	}
 
+	// Compress the image using an image processing library (e.g., "image/jpeg")
+	// Replace "image/jpeg" with the appropriate image format based on the file type.
+	// Make sure you have the necessary image processing library installed.
+	compressedImageData, err := compressImage(imageData, "image/jpeg")
+	if err != nil {
+		return "", err
+	}
+
 	// Create a new AWS session
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(AWSRegion),
@@ -144,18 +155,59 @@ func UploadImage(courtID uuid.UUID, file *multipart.FileHeader) (string, error) 
 	// Create an S3 service client
 	svc := s3.New(sess)
 
-	// Upload the image file to S3 with a unique name (combining court UUID and image file name)
-	imageKey := courtID.String() + "/" + filepath.Base(file.Filename)
+	// Create a unique UUID for the image filename
+	imageUUID, err := uuid.NewUUID()
+	if err != nil {
+		return "", err
+	}
+
+	// Upload the compressed image file to S3 with the unique filename
+	imageKey := courtID.String() + "/" + imageUUID.String() + ".jpg" // Replace ".jpg" with the appropriate image format.
 	_, err = svc.PutObject(&s3.PutObjectInput{
 		Bucket: aws.String("cricket-court-images"), // Use your S3 bucket name here
 		Key:    aws.String(imageKey),
-		Body:   bytes.NewReader(imageData),
+		Body:   bytes.NewReader(compressedImageData),
 	})
 	if err != nil {
 		return "", err
 	}
 
 	return S3BucketURL + imageKey, nil
+}
+
+func compressImage(imageData []byte, format string) ([]byte, error) {
+	// Implement the image compression logic here using an image processing library.
+	// You can use packages like "image/jpeg" or "image/png" to compress the image.
+	// For example, to compress the image in JPEG format, you can use "image/jpeg.Encode".
+	// The compressed image data should be returned as []byte.
+
+	img, _, err := image.Decode(bytes.NewReader(imageData))
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a buffer to hold the compressed image
+	var buf bytes.Buffer
+
+	// Compress the image using the given format
+	switch format {
+	case "image/jpeg":
+		// For JPEG format, you can adjust the quality (80 is a common value).
+		jpegOptions := &jpeg.Options{Quality: 80}
+		err = jpeg.Encode(&buf, img, jpegOptions)
+	case "image/png":
+		// For PNG format, there is no quality option as it is lossless.
+		err = png.Encode(&buf, img)
+	default:
+		// Unsupported image format
+		return nil, fmt.Errorf("unsupported image format: %s", format)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
 }
 
 func saveImagesToS3(court *models.CricketCourt, courtID uuid.UUID, r *http.Request) error {
