@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
+import { Link } from 'react-router-dom'; // Import the Link component
 import '../../styles/GalleryTile.css';
-import { useNavigate } from 'react-router-dom';
 
 const GalleryTile = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
-
-   // eslint-disable-next-line no-unused-vars
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -45,9 +42,10 @@ const GalleryTile = () => {
       <h2>Gallery</h2>
       <div className="listing-container">
         {listings.map((listing) => (
-          <a key={listing.id} href={`/listing/${listing.id}`} target="_blank" rel="noopener noreferrer">
+          // Use Link component to handle routing to ListingDetailsPage in a new tab
+          <Link key={listing.id} to={`/listing/${listing.id}`} target="_blank" rel="noopener noreferrer">
             <ListingTile listing={listing} />
-          </a>
+          </Link>
         ))}
       </div>
     </div>
