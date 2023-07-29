@@ -14,8 +14,6 @@ const SignUpPopUp = ({ onClose }) => {
     handleEmailSignUp(email, password);
   };
 
-
-
   return (
     <div id="signup-popup" className="signup-popup">
       <div className="popup-content">

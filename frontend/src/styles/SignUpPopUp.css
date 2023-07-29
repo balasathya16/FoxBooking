@@ -1,51 +1,73 @@
 .signup-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 3; /* Bring the text to the front */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3; /* Bring the text to the front */
+}
 
-  }
-  
-  .popup-content {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 400px;
-  }
-  
-  .popup-content button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #ff6f00;
-    color: #ffffff;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  
-  .popup-content button .icon {
-    margin-right: 8px;
-  }
-  
-  .popup-content button:hover {
-    background-color: #e65c00;
-  }
-  
-  .popup-content button:active {
-    background-color: #d45500;
-  }
-  
+.popup-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 400px;
+}
+
+.popup-content button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #ff6f00;
+  color: #ffffff;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.popup-content button .icon {
+  margin-right: 8px;
+}
+
+.popup-content button:hover {
+  background-color: #e65c00;
+}
+
+.popup-content button:active {
+  background-color: #d45500;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  background-color: #eaeaea;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-button:hover {
+  background-color: #ccc;
+}
+
+.close-button:focus {
+  outline: none;
+}
