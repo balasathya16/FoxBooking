@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import faTimes icon
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import handleGoogleSignUp from './GoogleSignUp';
 import handleEmailSignUp from './EmailSignUp';
@@ -26,7 +26,8 @@ const SignUpPopUp = ({ onClose }) => {
           <FontAwesomeIcon icon={faEnvelope} className="icon" />
           Sign up with Email
         </button>
-        <button className="close-button" onClick={onClose}>
+        <button className="popup-button" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} className="icon" /> {/* Use faTimes icon for Close */}
           Close
         </button>
       </div>
