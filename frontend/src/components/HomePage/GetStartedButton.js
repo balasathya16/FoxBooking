@@ -4,7 +4,7 @@ const GetStartedButton = ({ onClick }) => {
   return (
     <div className="get-started-container">
       <button className="get-started-button" onClick={onClick}>
-        Sign up NOW!
+        Sign up
       </button>
     </div>
   );
