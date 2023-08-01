@@ -1,7 +1,8 @@
+// GalleryTile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
-import { Link } from 'react-router-dom'; // Import the Link component
+import { Link } from 'react-router-dom';
 import '../../styles/GalleryTile.css';
 
 const GalleryTile = () => {
@@ -41,8 +42,7 @@ const GalleryTile = () => {
     <div className="gallery-tile">
       <div className="listing-container">
         {listings.map((listing) => (
-          // Use Link component to handle routing to ListingDetailsPage in a new tab
-          <Link key={listing.id} to={`/listing/${listing.id}`} target="_blank" rel="noopener noreferrer">
+          <Link key={listing.id} to={`/listing/${listing.id}`}>
             <ListingTile listing={listing} />
           </Link>
         ))}
