@@ -39,7 +39,6 @@ const GalleryTile = () => {
 
   return (
     <div className="gallery-tile">
-      <h2>Gallery</h2>
       <div className="listing-container">
         {listings.map((listing) => (
           // Use Link component to handle routing to ListingDetailsPage in a new tab
