@@ -51,10 +51,13 @@
 
 .left-arrow {
   left: 10px;
+  color: #283747;
 }
 
 .right-arrow {
   right: 10px;
+  color: #283747;
+
 }
 
 .arrow-circle.left-arrow:hover,
