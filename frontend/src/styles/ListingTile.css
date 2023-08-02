@@ -31,34 +31,37 @@
   margin-bottom: 0.5rem;
 }
 
-/* Styling for the image navigation arrows */
-.listing-image-navigation {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-
-.arrow-btn {
-  background-color: transparent;
+/* Styling for the image navigation circles */
+.arrow-circle {
+  background-color: #fff;
   color: #2d6cdf;
-  font-size: 2rem;
-  border: none;
+  font-size: 1.5rem;
   cursor: pointer;
-  outline: none;
   position: absolute; /* Position arrows over the image */
   top: 50%;
-  transform: translateY(-50%);
   z-index: 1; /* Ensure the arrows are above the image */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .left-arrow {
-  left: 1rem;
+  left: 10px;
 }
 
 .right-arrow {
-  right: 1rem;
+  right: 10px;
 }
 
-.arrow-btn:hover {
+.arrow-circle.left-arrow:hover,
+.arrow-circle.right-arrow:hover {
+  background-color: #f0f0f0;
+}
+
+.arrow:hover {
   color: #1c4c9a;
 }

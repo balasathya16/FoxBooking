@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
-import { Link } from 'react-router-dom';
 import '../../styles/GalleryTile.css';
 
 const GalleryTile = () => {
@@ -42,9 +41,7 @@ const GalleryTile = () => {
     <div className="gallery-tile">
       <div className="listing-container">
         {listings.map((listing) => (
-          <Link key={listing.id} to={`/listing/${listing.id}`}>
-            <ListingTile listing={listing} />
-          </Link>
+          <ListingTile key={listing.id} listing={listing} />
         ))}
       </div>
     </div>
