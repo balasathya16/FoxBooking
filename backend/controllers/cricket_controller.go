@@ -393,14 +393,22 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update the booking details based on the request body
-	err = json.NewDecoder(r.Body).Decode(&booking)
+	// Create a temporary struct to hold the updated data from the request body
+	var updatedBooking models.CricketBooking
+	err = json.NewDecoder(r.Body).Decode(&updatedBooking)
 	if err != nil {
 		log.Println("Invalid request body:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Invalid request body")
 		return
 	}
+
+	// Update only the necessary fields
+	booking.StartTime = updatedBooking.StartTime
+	booking.EndTime = updatedBooking.EndTime
+	booking.Status = updatedBooking.Status
+	booking.UserID = updatedBooking.UserID
+	booking.PaymentID = updatedBooking.PaymentID
 
 	// Handle image upload and update the booking document with image URLs
 	err = saveImagesToS3ForBooking(&booking, bookingID, r)
@@ -412,7 +420,14 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Update the booking document in the collection with the new image URLs
-	update := bson.M{"$set": booking}
+	update := bson.M{
+		"$set": bson.M{
+			"startTime": booking.StartTime,
+			"endTime":   booking.EndTime,
+			"status":    booking.Status,
+			"images":    booking.Images,
+		},
+	}
 	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		// Handle the error appropriately
