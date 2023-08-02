@@ -7,12 +7,12 @@ const ListingTile = ({ listing }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const prevImage = (e) => {
-    e.stopPropagation(); // Prevent click event from propagating to parent elements
+    e.preventDefault(); // Prevent the default behavior (e.g., redirection)
     setCurrentImage((prevIndex) => (prevIndex === 0 ? listing.images.length - 1 : prevIndex - 1));
   };
 
   const nextImage = (e) => {
-    e.stopPropagation(); // Prevent click event from propagating to parent elements
+    e.preventDefault(); // Prevent the default behavior (e.g., redirection)
     setCurrentImage((prevIndex) => (prevIndex === listing.images.length - 1 ? 0 : prevIndex + 1));
   };
 
