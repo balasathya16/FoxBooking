@@ -370,7 +370,7 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the collection
-	collection := database.Collection("cricket_bookings")
+	collection := database.Collection("cricket_courts")
 
 	// Define a filter to find the booking by ID
 	filter := bson.M{"id": bookingID}
