@@ -49,9 +49,18 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Convert the UUID string to a github.com/google/uuid.UUID type
+	courtUUID, err := uuid.Parse(courtID.String())
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to parse court ID")
+		return
+	}
+
 	// Save images to S3 and update the court.Images with the S3 URLs
 	court := models.CricketCourt{
-		ID:       courtID,
+		ID:       courtUUID, // Use the UUID directly as the ID field
 		Location: r.FormValue("location"),
 	}
 
@@ -108,7 +117,7 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	// Update the court document with the images' URLs
 	_, err = collection.UpdateOne(
 		context.TODO(),
-		bson.M{"_id": court.ID},
+		bson.M{"_id": courtUUID}, // Use the UUID directly as the ID field
 		bson.M{"$set": bson.M{"images": court.Images}},
 	)
 	if err != nil {
@@ -121,6 +130,7 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
 }
+
 
 func UploadImage(courtID uuid.UUID, file *multipart.FileHeader) (string, error) {
 	src, err := file.Open()
@@ -349,7 +359,6 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 }
 
 // EditCricketBooking edits a single cricket booking in the database
-// EditCricketBooking edits a single cricket booking in the database
 func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -436,6 +445,9 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Failed to update booking")
 		return
 	}
+
+	// Print the updated booking for debugging purposes
+	log.Println("Updated booking:", booking)
 
 	json.NewEncoder(w).Encode(booking)
 }
@@ -560,7 +572,7 @@ func PayForBooking(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the collection
-	collection := database.Collection("cricket_bookings")
+	collection := database.Collection("cricket_courts")
 
 	// Define a filter to find the booking by ID
 	filter := bson.M{"id": bookingID}
