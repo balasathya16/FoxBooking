@@ -5,8 +5,6 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../components/HomePage/HomePage';
 import ListingDetailsPage from '../pages/ListingDetailsPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
-import AvailabilityCalendar from '../pages/AvailabilityCalendar'; // Import the AvailabilityCalendar component
-
 const AppRouter = () => {
   return (
     <Routes>

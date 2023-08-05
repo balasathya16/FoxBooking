@@ -1,3 +1,5 @@
+// src/pages/ListingDetailsPage.js
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -78,7 +80,7 @@ const ListingDetailsPage = () => {
       <p>{listing.description}</p>
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
-      <button>Book Now</button>
+      <button className="cool-listing-book-button">Book Now</button>
       {/* Fullscreen image overlay */}
       {showFullscreen && (
         <div className="fullscreen-image-overlay" onClick={handleCloseFullscreen}>
