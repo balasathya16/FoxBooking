@@ -14,8 +14,6 @@ const AppRouter = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/listing/:id" element={<ListingDetailsPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
-      {/* Add the route for the Availability Calendar page */}
-      <Route path="/availability" element={<AvailabilityCalendar />} />
     </Routes>
   );
 };
