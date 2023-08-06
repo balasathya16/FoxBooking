@@ -80,7 +80,7 @@ const ListingDetailsPage = () => {
       <p>{listing.description}</p>
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
-      <button className="cool-listing-book-button">Reserve</button>
+     
       {/* Fullscreen image overlay */}
       {showFullscreen && (
         <div className="fullscreen-image-overlay" onClick={handleCloseFullscreen}>

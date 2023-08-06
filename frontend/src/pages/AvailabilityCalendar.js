@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DateTimePicker from 'react-datetime-picker';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/AvailabilityCalendar.css';
 
@@ -28,9 +28,9 @@ const AvailabilityCalendar = () => {
       {/* Render the availability calendar and time picker components here */}
       <div>
         <h2>Select Date</h2>
-        <DateTimePicker
+        <DatePicker
+          selected={selectedDate}
           onChange={handleDateChange}
-          value={selectedDate}
           minDate={new Date()} // Optionally set a minimum date
           // You can add more props to customize the appearance and behavior of the date picker
         />
@@ -39,10 +39,13 @@ const AvailabilityCalendar = () => {
 
       <div>
         <h2>Select Start Time</h2>
-        <DateTimePicker
+        <DatePicker
+          selected={startTime}
           onChange={handleStartTimeChange}
-          value={startTime}
-          disableClock={true} // Disable the clock for time picking
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          dateFormat="h:mm aa"
           // You can add more props to customize the appearance and behavior of the time picker
         />
         <p>Selected Start Time: {startTime.toString()}</p>
@@ -50,10 +53,13 @@ const AvailabilityCalendar = () => {
 
       <div>
         <h2>Select End Time</h2>
-        <DateTimePicker
+        <DatePicker
+          selected={endTime}
           onChange={handleEndTimeChange}
-          value={endTime}
-          disableClock={true} // Disable the clock for time picking
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          dateFormat="h:mm aa"
           // You can add more props to customize the appearance and behavior of the time picker
         />
         <p>Selected End Time: {endTime.toString()}</p>
@@ -63,6 +69,7 @@ const AvailabilityCalendar = () => {
         <h2>Time Duration</h2>
         <p>{timeDuration.toFixed(2)} hours</p>
       </div>
+      <button className="cool-listing-book-button">Reserve</button>
     </div>
   );
 };
