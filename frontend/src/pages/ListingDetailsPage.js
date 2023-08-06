@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ListingDetailsPage.css';
+import '../styles/AvailabilityCalendar.css';
 import AvailabilityCalendar from './AvailabilityCalendar'; // Import the AvailabilityCalendar component
+
 
 const ListingDetailsPage = () => {
   const { id } = useParams();

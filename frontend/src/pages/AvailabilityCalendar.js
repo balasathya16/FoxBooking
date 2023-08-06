@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../styles/AvailabilityCalendar.css';
+//import '../styles/AvailabilityCalendar.css';
 
 const AvailabilityCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
