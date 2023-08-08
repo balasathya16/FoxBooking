@@ -22,7 +22,10 @@ type CricketCourt struct {
 
 	// New field for image file handling
 	ImageFiles []*ImageFile `json:"-"`
-	// Add more fields for the cricket court, such as pricing, amenities, etc.
+	// Add more fields for the cricket court, such as amenities, etc.
+
+	// New field for price per hour
+	PricePerHour float64 `json:"pricePerHour"`
 }
 
 type ImageFile struct {
@@ -35,7 +38,7 @@ type CricketBooking struct {
 	StartTime time.Time `json:"startTime"`
 	EndTime   time.Time `json:"endTime"`
 	Status    string    `json:"status"`
-	Images     []string  `json:"images"` // Separate field for storing image URLs
+	Images    []string  `json:"images"` // Separate field for storing image URLs
 	// Add other relevant fields for cricket bookings
 
 	// Additional fields
