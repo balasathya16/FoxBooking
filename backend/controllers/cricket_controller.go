@@ -363,15 +363,20 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
-	bookingID := params["id"]
+	bookingIDStr := params["id"]
 
-	// Log the bookingID for debugging purposes
-	log.Println("BookingID:", bookingID)
+	// Parse the bookingID string into a UUID
+	bookingID, err := uuid.Parse(bookingIDStr)
+	if err != nil {
+		log.Println("Invalid booking ID:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid booking ID")
+		return
+	}
 
 	// Retrieve the cricket booking from the database using MongoDB driver based on bookingID
 	database, err := db.ConnectDB()
 	if err != nil {
-		// Handle the error appropriately
 		log.Println("Database connection error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Database connection error")
@@ -382,11 +387,11 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	collection := database.Collection("cricket_courts")
 
 	// Define a filter to find the booking by ID
-	filter := bson.M{"id": bookingID}
+	filter := bson.M{"bookingTime.id": bookingID}
 
 	// Find the booking document in the collection
-	var booking models.CricketBooking
-	err = collection.FindOne(context.TODO(), filter).Decode(&booking)
+	var court models.CricketCourt
+	err = collection.FindOne(context.TODO(), filter).Decode(&court)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println("Booking not found in the database")
@@ -402,9 +407,24 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a temporary struct to hold the updated data from the request body
-	var updatedBooking models.CricketBooking
-	err = json.NewDecoder(r.Body).Decode(&updatedBooking)
+	// Find and update the specific booking within the court's BookingTime slice
+	var updatedBooking *models.CricketBooking
+	for i, booking := range court.BookingTime {
+		if booking.ID == bookingID {
+			updatedBooking = &court.BookingTime[i]
+			break
+		}
+	}
+
+	if updatedBooking == nil {
+		log.Println("Booking not found in the court's BookingTime")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Booking not found")
+		return
+	}
+
+	// Update only the necessary fields from the request body
+	err = json.NewDecoder(r.Body).Decode(updatedBooking)
 	if err != nil {
 		log.Println("Invalid request body:", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -412,15 +432,8 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update only the necessary fields
-	booking.StartTime = updatedBooking.StartTime
-	booking.EndTime = updatedBooking.EndTime
-	booking.Status = updatedBooking.Status
-	booking.UserID = updatedBooking.UserID
-	booking.PaymentID = updatedBooking.PaymentID
-
 	// Handle image upload and update the booking document with image URLs
-	err = saveImagesToS3ForBooking(&booking, bookingID, r)
+	err = saveImagesToS3ForBooking(updatedBooking, bookingIDStr, r)
 	if err != nil {
 		log.Println("Failed to save images to S3:", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -428,18 +441,13 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update the booking document in the collection with the new image URLs
-	update := bson.M{
-		"$set": bson.M{
-			"startTime": booking.StartTime,
-			"endTime":   booking.EndTime,
-			"status":    booking.Status,
-			"images":    booking.Images,
-		},
-	}
-	_, err = collection.UpdateOne(context.TODO(), filter, update)
+	// Update the entire court document in the collection with the modified BookingTime slice
+	_, err = collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": court.ID},
+		bson.M{"$set": bson.M{"bookingTime": court.BookingTime}},
+	)
 	if err != nil {
-		// Handle the error appropriately
 		log.Println("Failed to update booking in the database:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("Failed to update booking")
@@ -447,10 +455,11 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Print the updated booking for debugging purposes
-	log.Println("Updated booking:", booking)
+	log.Println("Updated booking:", updatedBooking)
 
-	json.NewEncoder(w).Encode(booking)
+	json.NewEncoder(w).Encode(updatedBooking)
 }
+
 
 // Handle image upload and update the booking document with image URLs
 func saveImagesToS3ForBooking(booking *models.CricketBooking, bookingID string, r *http.Request) error {
