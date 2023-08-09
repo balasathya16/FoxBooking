@@ -95,7 +95,7 @@ const ListingDetailsPage = () => {
         </div>
       )}
       {/* Display the Availability Calendar component below the content */}
-      <AvailabilityCalendar />
+      <AvailabilityCalendar pricePerHour={listing.pricePerHour} /> {/* Pass pricePerHour as prop */}
     </div>
   );
 };

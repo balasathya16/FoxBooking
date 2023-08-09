@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-//import '../styles/AvailabilityCalendar.css';
+import { useNavigate } from 'react-router-dom';
 
-const AvailabilityCalendar = () => {
+const AvailabilityCalendar = ({ pricePerHour }) => { // Receive pricePerHour as prop
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
+
+  const navigate = useNavigate();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -20,19 +22,34 @@ const AvailabilityCalendar = () => {
     setEndTime(time);
   };
 
-  // Calculate the time duration in hours
+  const handleReserveClick = () => {
+    const startTimeObj = new Date(startTime);
+    const endTimeObj = new Date(endTime);
+  
+    const totalCost = pricePerHour * timeDuration;
+  
+    navigate('/booking-summary', {
+      state: {
+        selectedDate,
+        startTime: startTimeObj, // Pass the Date objects
+        endTime: endTimeObj,     // Pass the Date objects
+        pricePerHour,
+        totalCost,
+      },
+    });
+  };
+  
+
   const timeDuration = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
   return (
     <div>
-      {/* Render the availability calendar and time picker components here */}
       <div>
         <h2>Select Date</h2>
         <DatePicker
           selected={selectedDate}
           onChange={handleDateChange}
-          minDate={new Date()} // Optionally set a minimum date
-          // You can add more props to customize the appearance and behavior of the date picker
+          minDate={new Date()}
         />
         <p>Selected Date: {selectedDate.toString()}</p>
       </div>
@@ -46,7 +63,6 @@ const AvailabilityCalendar = () => {
           showTimeSelectOnly
           timeIntervals={15}
           dateFormat="h:mm aa"
-          // You can add more props to customize the appearance and behavior of the time picker
         />
         <p>Selected Start Time: {startTime.toString()}</p>
       </div>
@@ -60,7 +76,6 @@ const AvailabilityCalendar = () => {
           showTimeSelectOnly
           timeIntervals={15}
           dateFormat="h:mm aa"
-          // You can add more props to customize the appearance and behavior of the time picker
         />
         <p>Selected End Time: {endTime.toString()}</p>
       </div>
@@ -69,7 +84,9 @@ const AvailabilityCalendar = () => {
         <h2>Time Duration</h2>
         <p>{timeDuration.toFixed(2)} hours</p>
       </div>
-      <button className="cool-listing-book-button">Reserve</button>
+      <button className="cool-listing-book-button" onClick={handleReserveClick}>
+        Reserve
+      </button>
     </div>
   );
 };
