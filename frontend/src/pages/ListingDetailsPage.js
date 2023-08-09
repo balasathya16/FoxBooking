@@ -80,6 +80,8 @@ const ListingDetailsPage = () => {
       {/* Display listing name and description */}
       <h2>{listing.name}</h2>
       <p>{listing.description}</p>
+      {/* Display price per hour */}
+      <p>Price per hour: ${listing.pricePerHour}</p>
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
      

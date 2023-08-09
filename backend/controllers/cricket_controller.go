@@ -78,6 +78,15 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	court.Description = r.FormValue("description")
 	court.ContactEmail = r.FormValue("contactEmail")
 	court.ContactPhone = r.FormValue("contactPhone")
+	// Parse "pricePerHour" as a float64
+	pricePerHour, err := strconv.ParseFloat(r.FormValue("pricePerHour"), 64)
+	if err != nil {
+		// Handle the error appropriately
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid value for pricePerHour")
+		return
+	}
+	court.PricePerHour = pricePerHour
 
 	err = saveImagesToS3(&court, courtID, r)
 	if err != nil {
@@ -376,7 +385,7 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Retrieve the cricket booking from the database using MongoDB driver based on bookingID
+	// Retrieve the cricket court from the database using MongoDB driver based on bookingID
 	database, err := db.ConnectDB()
 	if err != nil {
 		log.Println("Database connection error:", err)
@@ -388,12 +397,12 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 	// Get the collection
 	collection := database.Collection("cricket_courts")
 
-	// Define a filter to find the booking by ID
+	// Define a filter to find the booking by booking ID
 	filter := bson.M{"bookingTime.id": bookingID}
 
 	log.Println("Querying database for booking ID:", bookingID)
 
-	// Find the booking document in the collection
+	// Find the court document in the collection
 	var court models.CricketCourt
 	err = collection.FindOne(context.TODO(), filter).Decode(&court)
 	if err != nil {
@@ -411,14 +420,70 @@ func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Booking found:", court.BookingTime)
+	log.Println("Booking found:", court)
 
-	// Rest of the function remains unchanged...
+	// Update only the necessary fields from the request body
+	var updatedBooking models.CricketBooking
+	err = json.NewDecoder(r.Body).Decode(&updatedBooking)
+	if err != nil {
+		log.Println("Invalid request body:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Invalid request body")
+		return
+	}
+
+	// Find the index of the booking in the court's BookingTime slice
+	bookingIndex := -1
+	for i, booking := range court.BookingTime {
+		if booking.ID == bookingID {
+			bookingIndex = i
+			break
+		}
+	}
+
+	// If booking is not found, return an error
+	if bookingIndex == -1 {
+		log.Println("Booking not found in the court's BookingTime")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Booking not found in the court's BookingTime")
+		return
+	}
+
+	// Update the booking in the court's BookingTime slice
+	court.BookingTime[bookingIndex] = updatedBooking
+
+	// Handle image upload and update the booking document with image URLs
+	err = saveImagesToS3ForBooking(&court, bookingIDStr, r)
+	if err != nil {
+		log.Println("Failed to save images to S3:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to save images to S3")
+		return
+	}
+
+	// Update the entire court document in the collection
+	_, err = collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": court.ID},
+		bson.M{"$set": court},
+	)
+	if err != nil {
+		log.Println("Failed to update booking in the database:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("Failed to update booking")
+		return
+	}
+
+	// Print the updated booking for debugging purposes
+	log.Println("Updated booking:", court)
+
+	json.NewEncoder(w).Encode(court)
 }
 
 
+
 // Handle image upload and update the booking document with image URLs
-func saveImagesToS3ForBooking(booking *models.CricketBooking, bookingID string, r *http.Request) error {
+func saveImagesToS3ForBooking(court *models.CricketCourt, bookingID string, r *http.Request) error {
 	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
 	if err != nil {
 		return err
@@ -435,11 +500,12 @@ func saveImagesToS3ForBooking(booking *models.CricketBooking, bookingID string, 
 		if err != nil {
 			return err
 		}
-		booking.Images = append(booking.Images, imageURL)
+		court.Images = append(court.Images, imageURL)
 	}
 
 	return nil
 }
+
 
 // DeleteAllCricketCourts deletes all cricket courts from the database
 func DeleteAllCricketCourts(w http.ResponseWriter, r *http.Request) {
