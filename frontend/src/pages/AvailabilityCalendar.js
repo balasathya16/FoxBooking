@@ -26,20 +26,20 @@ const AvailabilityCalendar = ({ pricePerHour }) => { // Receive pricePerHour as 
     const startTimeObj = new Date(startTime);
     const endTimeObj = new Date(endTime);
   
+    const timeDuration = (endTimeObj.getTime() - startTimeObj.getTime()) / (1000 * 60 * 60); // Calculate timeDuration here
     const totalCost = pricePerHour * timeDuration;
   
     navigate('/booking-summary', {
       state: {
         selectedDate,
-        startTime: startTimeObj, // Pass the Date objects
-        endTime: endTimeObj,     // Pass the Date objects
+        startTime: startTimeObj,
+        endTime: endTimeObj,
         pricePerHour,
         totalCost,
       },
     });
   };
   
-
   const timeDuration = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
   return (
