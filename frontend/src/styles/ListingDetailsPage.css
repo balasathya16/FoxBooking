@@ -7,7 +7,7 @@
   color: #333;
 }
 
-.listing-details-container h2 {
+.listing-details-heading {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
@@ -17,11 +17,11 @@
 .listing-images-container {
   display: flex;
   overflow: hidden;
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   height: 400px;
-  margin-bottom: 2rem;
-  position: relative;
   margin: 0 auto;
+  position: relative;
 }
 
 .slideshow-container.fullscreen {
@@ -79,7 +79,6 @@
 
 .listing-details-content {
   margin-top: 1rem;
-  color: #333;
 }
 
 .listing-details-content h2 {
