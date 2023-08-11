@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import '../styles/BookingSummary.css';
 
 const BookingSummary = () => {
   const location = useLocation();
@@ -12,15 +13,15 @@ const BookingSummary = () => {
   const totalCost = pricePerHour * timeDuration;
 
   return (
-    <div className="booking-summary">
-      <h2>Booking Summary</h2>
+    <div className="custom-booking-summary"> {/* Use your unique class name here */}
+      <h1>Booking Summary</h1>
       <p>Selected Date: {selectedDate.toString()}</p>
       <p>Start Time: {startTimeObj.toString()}</p>
       <p>End Time: {endTimeObj.toString()}</p>
       <p>Total Hours: {timeDuration.toFixed(2)}</p>
       <p>Total Cost: ${totalCost.toFixed(2)}</p>
       {/* Add a "Confirm Booking" button */}
-      <button>Confirm Booking</button>
+      <button className="custom-confirm-button">Confirm Booking</button>
     </div>
   );
 };

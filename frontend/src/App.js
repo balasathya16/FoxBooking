@@ -6,6 +6,7 @@ import './styles/Header.css';
 import './styles/Footer.css';
 import './styles/tailwind.css';
 import AppRouter from './routes/AppRouter'; // Import the AppRouter component
+import './styles/BookingSummary.css';
 
 const App = () => {
   const [showSignUp, setShowSignUp] = useState(false);
