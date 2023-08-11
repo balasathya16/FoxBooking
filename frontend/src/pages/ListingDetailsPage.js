@@ -1,12 +1,9 @@
-// src/pages/ListingDetailsPage.js
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ListingDetailsPage.css';
 import '../styles/AvailabilityCalendar.css';
-import AvailabilityCalendar from './AvailabilityCalendar'; // Import the AvailabilityCalendar component
-
+import AvailabilityCalendar from './AvailabilityCalendar';
 
 const ListingDetailsPage = () => {
   const { id } = useParams();
@@ -44,11 +41,11 @@ const ListingDetailsPage = () => {
   };
 
   const handleImageClick = () => {
-    setShowFullscreen(!showFullscreen); // Toggle fullscreen view on image click
+    setShowFullscreen(!showFullscreen);
   };
 
   const handleCloseFullscreen = () => {
-    setShowFullscreen(false); // Close fullscreen view
+    setShowFullscreen(false);
   };
 
   if (loading) {
@@ -60,42 +57,35 @@ const ListingDetailsPage = () => {
   }
 
   return (
-    <div className="listing-details-page">
-      {/* Display the current image */}
-      <div className="listing-images">
+    <div className="listing-details-container">
+      <div className="listing-images-container">
         <div className={`slideshow-container ${showFullscreen ? 'fullscreen' : ''}`}>
           <img
             src={listing.images[currentImageIndex]}
             alt={listing.name}
-            className="slideshow-image"
+            className="slideshow-image-content"
             onClick={handleImageClick}
           />
-          {/* Display the left and right arrows */}
           <div className="listing-image-navigation">
             <button onClick={handlePrevImage}>◀</button>
             <button onClick={handleNextImage}>▶</button>
           </div>
         </div>
       </div>
-      {/* Display listing name and description */}
       <h2>{listing.name}</h2>
       <p>{listing.description}</p>
-      {/* Display price per hour */}
       <p>Price per hour: ${listing.pricePerHour}</p>
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
-     
-      {/* Fullscreen image overlay */}
       {showFullscreen && (
         <div className="fullscreen-image-overlay" onClick={handleCloseFullscreen}>
-          <img src={listing.images[currentImageIndex]} alt={listing.name} className="fullscreen-image" />
+          <img src={listing.images[currentImageIndex]} alt={listing.name} className="fullscreen-image-content" />
           <span className="close-button" onClick={handleCloseFullscreen}>
             &times;
           </span>
         </div>
       )}
-      {/* Display the Availability Calendar component below the content */}
-      <AvailabilityCalendar pricePerHour={listing.pricePerHour} /> {/* Pass pricePerHour as prop */}
+      <AvailabilityCalendar pricePerHour={listing.pricePerHour} />
     </div>
   );
 };
