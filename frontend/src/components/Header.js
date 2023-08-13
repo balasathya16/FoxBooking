@@ -6,10 +6,10 @@ import sportsLogo from '../sports.png';
 const Header = () => {
   return (
     <header className="header">
-      <div className="logo">
+      <Link to="/" className="logo">
         <img src={sportsLogo} alt="FoxBooking Logo" />
         <span className="logo-text">FoxBooking</span>
-      </div>
+      </Link>
       <div className="navigation">
         <div className="search-bar">
           <input type="text" placeholder="Search..." />
