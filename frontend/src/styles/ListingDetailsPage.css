@@ -1,5 +1,7 @@
-/* ListingDetailsPage.css */
-.listing-details-container {
+/* CustomListingDetailsPage.css */
+
+/* Use your unique class names */
+.custom-listing-details-container {
   margin: 2rem auto;
   padding: 1rem;
   max-width: 800px;
@@ -7,14 +9,7 @@
   color: #333;
 }
 
-.listing-details-heading {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #1c4c9a; /* Sporty blue color */
-}
-
-.listing-images-container {
+.custom-listing-images-container {
   display: flex;
   overflow: hidden;
   width: 100%;
@@ -24,11 +19,11 @@
   position: relative;
 }
 
-.slideshow-container.fullscreen {
+.custom-slideshow-container.custom-fullscreen {
   cursor: pointer;
 }
 
-.fullscreen-image-overlay {
+.custom-fullscreen-image-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -41,19 +36,14 @@
   z-index: 9999;
 }
 
-.fullscreen-image-container {
-  max-width: 80%;
-  max-height: 80%;
-}
-
-.fullscreen-image-content {
+.custom-fullscreen-image-content {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   cursor: pointer;
 }
 
-.close-button {
+.custom-close-button {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -62,7 +52,7 @@
   cursor: pointer;
 }
 
-.listing-images-container img {
+.custom-listing-images-container img {
   flex-shrink: 0;
   width: 100%;
   height: 100%;
@@ -73,35 +63,35 @@
   cursor: pointer;
 }
 
-.listing-images-container img:hover {
+.custom-listing-images-container img:hover {
   transform: scale(1.05);
 }
 
-.listing-details-content {
+.custom-listing-details-content {
   margin-top: 1rem;
 }
 
-.listing-details-content h2 {
+.custom-listing-details-content h2 {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
   color: #1c4c9a;
 }
 
-.listing-details-content p {
+.custom-listing-details-content p {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1rem;
   color: #555;
 }
 
-.listing-booking-info {
+.custom-listing-booking-info {
   font-size: 1rem;
   margin-bottom: 1rem;
   color: #555;
 }
 
-.listing-image-navigation {
+.custom-listing-image-navigation {
   position: absolute;
   top: 50%;
   left: 0;
@@ -114,7 +104,7 @@
   transform: translateY(-50%);
 }
 
-.listing-image-navigation button {
+.custom-listing-image-navigation button {
   background-color: #1c4c9a;
   color: #fff;
   padding: 0.5rem 1rem;
@@ -125,11 +115,11 @@
   transition: background-color 0.3s ease;
 }
 
-.listing-image-navigation button:hover {
+.custom-listing-image-navigation button:hover {
   background-color: #0e3063;
 }
 
-.listing-book-button {
+.custom-listing-book-button {
   background-color: #eb4646;
   color: #fff;
   padding: 0.8rem 1.5rem;
@@ -140,31 +130,11 @@
   transition: background-color 0.3s ease;
 }
 
-.slideshow-container {
+.custom-slideshow-container {
   width: 100%;
   height: 100%;
 }
 
-.listing-book-button:hover {
+.custom-listing-book-button:hover {
   background-color: #c11e1e;
-}
-
-.fullscreen-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.fullscreen-image img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  cursor: pointer;
 }

@@ -5,7 +5,7 @@ import '../styles/ListingDetailsPage.css';
 import '../styles/AvailabilityCalendar.css';
 import AvailabilityCalendar from './AvailabilityCalendar';
 
-const ListingDetailsPage = () => {
+const ListingDetailsPage  = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -57,16 +57,16 @@ const ListingDetailsPage = () => {
   }
 
   return (
-    <div className="listing-details-container">
-      <div className="listing-images-container">
-        <div className={`slideshow-container ${showFullscreen ? 'fullscreen' : ''}`}>
+    <div className="custom-listing-details-container">
+      <div className="custom-listing-images-container">
+        <div className={`custom-slideshow-container ${showFullscreen ? 'custom-fullscreen' : ''}`}>
           <img
             src={listing.images[currentImageIndex]}
             alt={listing.name}
-            className="slideshow-image-content"
+            className="custom-slideshow-image-content"
             onClick={handleImageClick}
           />
-          <div className="listing-image-navigation">
+          <div className="custom-listing-image-navigation">
             <button onClick={handlePrevImage}>◀</button>
             <button onClick={handleNextImage}>▶</button>
           </div>
@@ -78,9 +78,9 @@ const ListingDetailsPage = () => {
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
       {showFullscreen && (
-        <div className="fullscreen-image-overlay" onClick={handleCloseFullscreen}>
-          <img src={listing.images[currentImageIndex]} alt={listing.name} className="fullscreen-image-content" />
-          <span className="close-button" onClick={handleCloseFullscreen}>
+        <div className="custom-fullscreen-image-overlay" onClick={handleCloseFullscreen}>
+          <img src={listing.images[currentImageIndex]} alt={listing.name} className="custom-fullscreen-image-content" />
+          <span className="custom-close-button" onClick={handleCloseFullscreen}>
             &times;
           </span>
         </div>
