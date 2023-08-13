@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import AvailabilityCalendar from './AvailabilityCalendar';
+import ListingInfo from './ListingInfo'; // Import the new component
 import '../styles/ListingDetailsPage.css';
 import '../styles/AvailabilityCalendar.css';
 
@@ -72,9 +73,7 @@ const ListingDetailsPage  = () => {
           </div>
         </div>
       </div>
-      <h2>{listing.name}</h2>
-      <p>{listing.description}</p>
-      <p>Price per hour: ${listing.pricePerHour}</p>
+      <ListingInfo listing={listing} /> {/* Use the new component */}
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
       {showFullscreen && (
