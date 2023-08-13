@@ -84,7 +84,7 @@ const ListingDetailsPage  = () => {
           </span>
         </div>
       )}
-      <AvailabilityCalendar pricePerHour={listing.pricePerHour} />
+      <AvailabilityCalendar pricePerHour={listing.pricePerHour} listing={listing} />
     </div>
   );
 };

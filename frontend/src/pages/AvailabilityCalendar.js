@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 
-const AvailabilityCalendar = ({ pricePerHour }) => {
+const AvailabilityCalendar = ({ pricePerHour, listing }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
@@ -36,6 +36,7 @@ const AvailabilityCalendar = ({ pricePerHour }) => {
         endTime: endTimeObj,
         pricePerHour,
         totalCost,
+        listing,
       },
     });
   };
