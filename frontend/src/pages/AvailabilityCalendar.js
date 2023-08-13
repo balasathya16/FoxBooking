@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 
-const AvailabilityCalendar = ({ pricePerHour }) => { // Receive pricePerHour as prop
+const AvailabilityCalendar = ({ pricePerHour }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
@@ -25,10 +25,10 @@ const AvailabilityCalendar = ({ pricePerHour }) => { // Receive pricePerHour as 
   const handleReserveClick = () => {
     const startTimeObj = new Date(startTime);
     const endTimeObj = new Date(endTime);
-  
-    const timeDuration = (endTimeObj.getTime() - startTimeObj.getTime()) / (1000 * 60 * 60); // Calculate timeDuration here
+
+    const timeDuration = (endTimeObj.getTime() - startTimeObj.getTime()) / (1000 * 60 * 60);
     const totalCost = pricePerHour * timeDuration;
-  
+
     navigate('/booking-summary', {
       state: {
         selectedDate,
@@ -39,50 +39,50 @@ const AvailabilityCalendar = ({ pricePerHour }) => { // Receive pricePerHour as 
       },
     });
   };
-  
+
   const timeDuration = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
   return (
-    <div>
-      <div>
-        <h2>Select Date</h2>
+    <div className="availability-calendar-container">
+      <div className="availability-calendar-picker">
+        <h2 className="availability-calendar-header">Select Date</h2>
         <DatePicker
           selected={selectedDate}
           onChange={handleDateChange}
           minDate={new Date()}
+          className="availability-calendar-date-picker"
         />
-        <p>Selected Date: {selectedDate.toString()}</p>
       </div>
 
-      <div>
-        <h2>Select Start Time</h2>
+      <div className="availability-calendar-picker">
+        <h2 className="availability-calendar-header">Select Start Time</h2>
         <DatePicker
           selected={startTime}
           onChange={handleStartTimeChange}
           showTimeSelect
           showTimeSelectOnly
-          timeIntervals={15}
+          timeIntervals={60} // Set time intervals to 60 minutes (1 hour)
           dateFormat="h:mm aa"
+          className="availability-calendar-time-picker"
         />
-        <p>Selected Start Time: {startTime.toString()}</p>
       </div>
 
-      <div>
-        <h2>Select End Time</h2>
+      <div className="availability-calendar-picker">
+        <h2 className="availability-calendar-header">Select End Time</h2>
         <DatePicker
           selected={endTime}
           onChange={handleEndTimeChange}
           showTimeSelect
           showTimeSelectOnly
-          timeIntervals={15}
+          timeIntervals={60} // Set time intervals to 60 minutes (1 hour)
           dateFormat="h:mm aa"
+          className="availability-calendar-time-picker"
         />
-        <p>Selected End Time: {endTime.toString()}</p>
       </div>
 
-      <div>
-        <h2>Time Duration</h2>
-        <p>{timeDuration.toFixed(2)} hours</p>
+      <div className="availability-calendar-picker">
+        <h2 className="availability-calendar-header">Time Duration</h2>
+        <p className="availability-calendar-time-duration">{timeDuration.toFixed(2)} hours</p>
       </div>
       <button className="cool-listing-book-button" onClick={handleReserveClick}>
         Reserve

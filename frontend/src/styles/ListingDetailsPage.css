@@ -1,4 +1,4 @@
-/* CustomListingDetailsPage.css */
+/* ListingDetailsPage.css */
 
 /* Use your unique class names */
 .custom-listing-details-container {
@@ -137,4 +137,40 @@
 
 .custom-listing-book-button:hover {
   background-color: #c11e1e;
+}
+
+/* Style for listing details table */
+.custom-listing-details-table {
+  width: 100%;
+  margin-top: 2rem;
+  border-collapse: collapse;
+}
+
+.custom-listing-details-table th,
+.custom-listing-details-table td {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+}
+
+.custom-listing-details-table th {
+  background-color: #f5f5f5;
+}
+
+.custom-listing-details-table th:first-child,
+.custom-listing-details-table td:first-child {
+  border-left: none;
+}
+
+.custom-listing-details-table th:last-child,
+.custom-listing-details-table td:last-child {
+  border-right: none;
+}
+
+.custom-listing-details-table td {
+  text-align: left;
+  vertical-align: top;
+}
+
+.custom-listing-details-table p {
+  margin: 0;
 }

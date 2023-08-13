@@ -1,8 +1,9 @@
 module.exports = {
-  purge: [
-    '!./src/pages/ListingDetailsPage.js',    // Exclude specific JS file
-    '!./src/styles/ListingDetailsPage.css',  // Exclude specific CSS file
+  content: [
+    './src/pages/ListingDetailsPage.js',
+    './src/styles/ListingDetailsPage.css',
   ],
+  purge: [],
   darkMode: false,
   theme: {
     extend: {},
