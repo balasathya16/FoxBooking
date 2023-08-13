@@ -73,7 +73,7 @@ const ListingDetailsPage  = () => {
           </div>
         </div>
       </div>
-      <ListingInfo listing={listing} /> {/* Use the new component */}
+      <ListingInfo listing={listing} />
       {/* Add other listing details here */}
       {/* Add a "Book Now" button */}
       {showFullscreen && (
