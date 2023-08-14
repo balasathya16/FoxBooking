@@ -1,0 +1,81 @@
+/* AvailabilityCalendar.css */
+
+/* Container styling */
+.availability-calendar-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.availability-calendar-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Date and time picker divs styling */
+.availability-calendar-picker {
+  margin-bottom: 1rem;
+}
+
+/* Date picker input styling */
+.availability-calendar-date-picker input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+/* Time picker input styling */
+.availability-calendar-time-picker input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+/* Time duration styling */
+.availability-calendar-time-duration {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Submit button styling */
+.availability-calendar-submit {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.availability-calendar-submit:hover {
+  background-color: #0056b3;
+}
+
+/* Book Now button styling */
+.cool-listing-book-button {
+  background-color: #00bcd4;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cool-listing-book-button:hover {
+  background-color: #008ba3;
+}
