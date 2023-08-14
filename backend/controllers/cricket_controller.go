@@ -1,256 +1,110 @@
 package controllers
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"image"
-	"image/jpeg"
-	"image/png"
-	"io/ioutil"
-	"log"
-	"mime/multipart"
 	"net/http"
 	"strconv"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/gorilla/mux"
-)
-
-const (
-	S3BucketURL = "http://cricket-court-images.s3-website.ap-south-1.amazonaws.com/"
-	AWSRegion   = "ap-south-1"
 )
 
 func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 	// Parse the form data to get the uploaded image
 	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
 	if err != nil {
-		log.Println("Error parsing form data:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Error parsing form data: " + err.Error())
+		handleError(w, http.StatusBadRequest, "Error parsing form data: "+err.Error())
 		return
 	}
 
 	courtID, err := uuid.NewUUID()
 	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to generate court ID")
+		handleError(w, http.StatusInternalServerError, "Failed to generate court ID")
 		return
 	}
 
 	// Convert the UUID string to a github.com/google/uuid.UUID type
-	courtUUID, err := uuid.Parse(courtID.String())
-	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to parse court ID")
-		return
-	}
+	courtUUID := uuid.MustParse(courtID.String())
 
-	// Save images to S3 and update the court.Images with the S3 URLs
 	court := models.CricketCourt{
-		ID:       courtUUID, // Use the UUID directly as the ID field
-		Location: r.FormValue("location"),
+		ID:             courtUUID,
+		Location:       r.FormValue("location"),
+		Name:           r.FormValue("name"),
+		Description:    r.FormValue("description"),
+		ContactEmail:   r.FormValue("contactEmail"),
+		ContactPhone:   r.FormValue("contactPhone"),
+		NetsAvailable:  parseIntegerValue(r.FormValue("netsAvailable")),
+		PricePerHour:   parseFloatValue(r.FormValue("pricePerHour")),
+		Images:         nil,
 	}
 
-	// Parse "netsAvailable" as an integer
-	netsAvailable, err := strconv.Atoi(r.FormValue("netsAvailable"))
+	// Call the saveImagesToS3 function to handle image upload
+	imageURLs, err := saveImagesToS3(courtID, r)
 	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Invalid value for netsAvailable")
-		return
-	}
-	court.NetsAvailable = netsAvailable
-
-	court.Name = r.FormValue("name")
-	court.Description = r.FormValue("description")
-	court.ContactEmail = r.FormValue("contactEmail")
-	court.ContactPhone = r.FormValue("contactPhone")
-	// Parse "pricePerHour" as a float64
-	pricePerHour, err := strconv.ParseFloat(r.FormValue("pricePerHour"), 64)
-	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Invalid value for pricePerHour")
-		return
-	}
-	court.PricePerHour = pricePerHour
-
-	err = saveImagesToS3(&court, courtID, r)
-	if err != nil {
-		log.Println("Error saving images to S3:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to save images to S3")
+		handleError(w, http.StatusInternalServerError, "Failed to save images to S3")
 		return
 	}
 
-	// Save the court to the database
-	database, err := db.ConnectDB()
+	// Set the court's Images field to the image URLs
+	court.Images = imageURLs
+
+	err = saveCricketCourtToDB(&court)
 	if err != nil {
-		log.Println("Error connecting to the database:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Database connection error")
+		handleError(w, http.StatusInternalServerError, "Failed to save cricket court to DB")
 		return
 	}
 
-	// Get the collection
-	collection := database.Collection("cricket_courts")
-
-	// Insert the court document
-	_, err = collection.InsertOne(context.TODO(), court)
-	if err != nil {
-		log.Println("Error inserting court into the database:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to insert court")
-		return
-	}
-
-	// Save the images' URLs to the court.Images field
-	for _, image := range court.ImageFiles {
-		imageURL := S3BucketURL + courtID.String() + "/" + image.Filename
-		court.Images = append(court.Images, imageURL)
-	}
-
-	// Update the court document with the images' URLs
-	_, err = collection.UpdateOne(
-		context.TODO(),
-		bson.M{"_id": courtUUID}, // Use the UUID directly as the ID field
-		bson.M{"$set": bson.M{"images": court.Images}},
-	)
-	if err != nil {
-		log.Println("Error updating court with images' URLs:", err)
-		// You may handle the error accordingly; this example just logs the error.
-	}
-
-	court.Images = nil // Clear the images field as we are not uploading images
+	court.Images = nil // Clear the images field
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(court)
 }
 
 
-func UploadImage(courtID uuid.UUID, file *multipart.FileHeader) (string, error) {
-	src, err := file.Open()
+func parseIntegerValue(value string) int {
+	parsedValue, err := strconv.Atoi(value)
 	if err != nil {
-		return "", err
+		return 0
 	}
-	defer src.Close()
-
-	// Read the image file data
-	imageData, err := ioutil.ReadAll(src)
-	if err != nil {
-		return "", err
-	}
-
-	// Compress the image using an image processing library (e.g., "image/jpeg")
-	// Replace "image/jpeg" with the appropriate image format based on the file type.
-	// Make sure you have the necessary image processing library installed.
-	compressedImageData, err := compressImage(imageData, "image/jpeg")
-	if err != nil {
-		return "", err
-	}
-
-	// Create a new AWS session
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(AWSRegion),
-		// You can provide your AWS credentials here or use environment variables.
-	})
-	if err != nil {
-		return "", err
-	}
-
-	// Create an S3 service client
-	svc := s3.New(sess)
-
-	// Create a unique UUID for the image filename
-	imageUUID, err := uuid.NewUUID()
-	if err != nil {
-		return "", err
-	}
-
-	// Upload the compressed image file to S3 with the unique filename
-	imageKey := courtID.String() + "/" + imageUUID.String() + ".jpg" // Replace ".jpg" with the appropriate image format.
-	_, err = svc.PutObject(&s3.PutObjectInput{
-		Bucket: aws.String("cricket-court-images"), // Use your S3 bucket name here
-		Key:    aws.String(imageKey),
-		Body:   bytes.NewReader(compressedImageData),
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return S3BucketURL + imageKey, nil
+	return parsedValue
 }
 
-func compressImage(imageData []byte, format string) ([]byte, error) {
-	// Implement the image compression logic here using an image processing library.
-	// You can use packages like "image/jpeg" or "image/png" to compress the image.
-	// For example, to compress the image in JPEG format, you can use "image/jpeg.Encode".
-	// The compressed image data should be returned as []byte.
-
-	img, _, err := image.Decode(bytes.NewReader(imageData))
+func parseFloatValue(value string) float64 {
+	parsedValue, err := strconv.ParseFloat(value, 64)
 	if err != nil {
-		return nil, err
+		return 0.0
 	}
-
-	// Create a buffer to hold the compressed image
-	var buf bytes.Buffer
-
-	// Compress the image using the given format
-	switch format {
-	case "image/jpeg":
-		// For JPEG format, you can adjust the quality (80 is a common value).
-		jpegOptions := &jpeg.Options{Quality: 80}
-		err = jpeg.Encode(&buf, img, jpegOptions)
-	case "image/png":
-		// For PNG format, there is no quality option as it is lossless.
-		err = png.Encode(&buf, img)
-	default:
-		// Unsupported image format
-		return nil, fmt.Errorf("unsupported image format: %s", format)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return parsedValue
 }
 
-func saveImagesToS3(court *models.CricketCourt, courtID uuid.UUID, r *http.Request) error {
-	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
+func saveCricketCourtToDB(court *models.CricketCourt) error {
+	database, err := db.ConnectDB()
 	if err != nil {
 		return err
 	}
 
-	// Get the images from the request form
-	images := r.MultipartForm.File["images"]
-	if len(images) == 0 {
-		return nil // No images uploaded, nothing to do.
-	}
+	collection := database.Collection("cricket_courts")
 
-	for _, image := range images {
-		imageURL, err := UploadImage(courtID, image)
-		if err != nil {
-			return err
-		}
-		court.Images = append(court.Images, imageURL)
+	_, err = collection.InsertOne(context.TODO(), court)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
+
+func handleError(w http.ResponseWriter, statusCode int, message string) {
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(message)
+}
+
+// Other functions (GetAllCricketCourts, GetCricketCourtByID, DeleteAllCricketCourts, DeleteCricketCourtByID) remain unchanged.
+
 
 func GetAllCricketCourts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -367,144 +221,7 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
-// EditCricketBooking edits a single cricket booking in the database
-func EditCricketBooking(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
-	params := mux.Vars(r)
-	bookingIDStr := params["id"]
-
-	log.Printf("Editing booking with ID: %s\n", bookingIDStr)
-
-	// Parse the bookingID string into a UUID
-	bookingID, err := uuid.Parse(bookingIDStr)
-	if err != nil {
-		log.Println("Invalid booking ID:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Invalid booking ID")
-		return
-	}
-
-	// Retrieve the cricket court from the database using MongoDB driver based on bookingID
-	database, err := db.ConnectDB()
-	if err != nil {
-		log.Println("Database connection error:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Database connection error")
-		return
-	}
-
-	// Get the collection
-	collection := database.Collection("cricket_courts")
-
-	// Define a filter to find the booking by booking ID
-	filter := bson.M{"bookingTime.id": bookingID}
-
-	log.Println("Querying database for booking ID:", bookingID)
-
-	// Find the court document in the collection
-	var court models.CricketCourt
-	err = collection.FindOne(context.TODO(), filter).Decode(&court)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			log.Println("Booking not found in the database")
-			w.WriteHeader(http.StatusNotFound)
-			json.NewEncoder(w).Encode("Booking not found")
-			return
-		}
-
-		// Handle other errors appropriately
-		log.Println("Failed to fetch booking from the database:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to fetch booking")
-		return
-	}
-
-	log.Println("Booking found:", court)
-
-	// Update only the necessary fields from the request body
-	var updatedBooking models.CricketBooking
-	err = json.NewDecoder(r.Body).Decode(&updatedBooking)
-	if err != nil {
-		log.Println("Invalid request body:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Invalid request body")
-		return
-	}
-
-	// Find the index of the booking in the court's BookingTime slice
-	bookingIndex := -1
-	for i, booking := range court.BookingTime {
-		if booking.ID == bookingID {
-			bookingIndex = i
-			break
-		}
-	}
-
-	// If booking is not found, return an error
-	if bookingIndex == -1 {
-		log.Println("Booking not found in the court's BookingTime")
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Booking not found in the court's BookingTime")
-		return
-	}
-
-	// Update the booking in the court's BookingTime slice
-	court.BookingTime[bookingIndex] = updatedBooking
-
-	// Handle image upload and update the booking document with image URLs
-	err = saveImagesToS3ForBooking(&court, bookingIDStr, r)
-	if err != nil {
-		log.Println("Failed to save images to S3:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to save images to S3")
-		return
-	}
-
-	// Update the entire court document in the collection
-	_, err = collection.UpdateOne(
-		context.TODO(),
-		bson.M{"_id": court.ID},
-		bson.M{"$set": court},
-	)
-	if err != nil {
-		log.Println("Failed to update booking in the database:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to update booking")
-		return
-	}
-
-	// Print the updated booking for debugging purposes
-	log.Println("Updated booking:", court)
-
-	json.NewEncoder(w).Encode(court)
-}
-
-
-
-// Handle image upload and update the booking document with image URLs
-func saveImagesToS3ForBooking(court *models.CricketCourt, bookingID string, r *http.Request) error {
-	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
-	if err != nil {
-		return err
-	}
-
-	// Get the images from the request form
-	images := r.MultipartForm.File["images"]
-	if len(images) == 0 {
-		return nil // No images uploaded, nothing to do.
-	}
-
-	for _, image := range images {
-		imageURL, err := UploadImage(uuid.MustParse(bookingID), image)
-		if err != nil {
-			return err
-		}
-		court.Images = append(court.Images, imageURL)
-	}
-
-	return nil
-}
 
 
 // DeleteAllCricketCourts deletes all cricket courts from the database
@@ -585,60 +302,3 @@ func DeleteCricketCourtByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Court deleted successfully")
 }
 
-// payForBooking pays for a single cricket booking in the database
-
-func PayForBooking(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	params := mux.Vars(r)
-	bookingID := params["id"]
-
-	// Retrieve the cricket booking from the database using MongoDB driver based on bookingID
-	database, err := db.ConnectDB()
-	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Database connection error")
-		return
-	}
-
-	// Get the collection
-	collection := database.Collection("cricket_courts")
-
-	// Define a filter to find the booking by ID
-	filter := bson.M{"id": bookingID}
-
-	// Find the booking document in the collection
-	var booking models.CricketBooking
-	err = collection.FindOne(context.TODO(), filter).Decode(&booking)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			w.WriteHeader(http.StatusNotFound)
-			json.NewEncoder(w).Encode("Booking not found")
-			return
-		}
-
-		// Handle other errors appropriately
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to fetch booking")
-		return
-	}
-
-	// Perform the payment processing logic here
-	// ...
-
-	// Update the booking status to "paid" or handle the payment-related data
-	booking.Status = "paid"
-
-	// Update the booking document in the collection
-	update := bson.M{"$set": booking}
-	_, err = collection.UpdateOne(context.TODO(), filter, update)
-	if err != nil {
-		// Handle the error appropriately
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode("Failed to update booking")
-		return
-	}
-
-	json.NewEncoder(w).Encode(booking)
-}
