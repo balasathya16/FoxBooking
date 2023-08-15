@@ -13,11 +13,18 @@ const BookingSummary = () => {
   const totalCost = pricePerHour * timeDuration;
   const taxes = totalCost * 0.1; // Assuming 10% tax rate
 
+  // Custom options for formatting time without seconds
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+
   return (
     <div className="booking-summary-container">
       <h1>Booking Summary</h1>
       <div className="booking-summary-listing-info">
-        <img src={listing.images} alt={listing.name} className="booking-summary-listing-image" />
+        {listing.images && listing.images.length > 0 ? (
+          <img src={listing.images[0]} alt={listing.name} className="booking-summary-listing-image" />
+        ) : (
+          <div className="no-image">No Image Available</div>
+        )}
         <div className="booking-summary-listing-details">
           <h2>{listing.name}</h2>
         </div>
@@ -28,7 +35,7 @@ const BookingSummary = () => {
       </div>
       <div className="booking-summary-summary-item">
         <p>Time:</p>
-        <p>{`${startTimeObj.toLocaleTimeString()} - ${endTimeObj.toLocaleTimeString()}`}</p>
+        <p>{`${startTimeObj.toLocaleTimeString([], timeOptions)} - ${endTimeObj.toLocaleTimeString([], timeOptions)}`}</p>
       </div>
       <div className="booking-summary-summary-item">
         <p>Total Hours:</p>

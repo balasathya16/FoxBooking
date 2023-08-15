@@ -12,10 +12,17 @@
   position: relative; /* Add position relative to parent */
 }
 
+.image-container {
+  width: 100%;
+  max-height: 200px; /* Set a fixed height for the image container */
+  overflow: hidden; /* Hide overflowing content */
+  position: relative; /* Add position relative to parent */
+}
+
 .listing-image {
   width: 100%;
-  max-height: 200px;
-  object-fit: cover;
+  height: 100%; /* Fill the image container */
+  object-fit: cover; /* Maintain aspect ratio and cover container */
   border-radius: 0.5rem;
 }
 
@@ -57,7 +64,6 @@
 .right-arrow {
   right: 10px;
   color: #283747;
-
 }
 
 .arrow-circle.left-arrow:hover,

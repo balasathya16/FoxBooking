@@ -2,7 +2,7 @@
 
 .booking-summary-container {
   max-width: 600px;
-  margin: 60px auto 40px ; /* Add margin to the top */
+  margin: 60px auto 40px; /* Add margin to the top */
   padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
@@ -23,9 +23,9 @@
 }
 
 .booking-summary-listing-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  border-radius: 10px; /* Rounded rectangle shape */
   object-fit: cover;
   margin-right: 20px;
 }
