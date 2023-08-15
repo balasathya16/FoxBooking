@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../components/HomePage/HomePage';
 import ListingDetailsPage from '../pages/ListingDetailsPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
+import Terms from '../pages/Terms';
 import BookingSummary from '../pages/BookingSummary'; // Import BookingSummary
 
 const AppRouter = () => {
@@ -13,6 +14,7 @@ const AppRouter = () => {
       <Route path="/listing/:id" element={<ListingDetailsPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/booking-summary" element={<BookingSummary />} /> {/* Add this line */}
+      <Route path="/terms" element={<Terms />} />
     </Routes>
   );
 };

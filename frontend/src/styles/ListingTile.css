@@ -46,7 +46,7 @@
   cursor: pointer;
   position: absolute; /* Position arrows over the image */
   top: 50%;
-  z-index: 1; /* Ensure the arrows are above the image */
+  
   border-radius: 50%;
   width: 30px;
   height: 30px;
