@@ -44,4 +44,7 @@ type CricketBooking struct {
 	// Additional fields
 	UserID    string `json:"userID"`
 	PaymentID string `json:"paymentID"`
+
+	// New field to establish a relationship with the cricket court
+	CourtID uuid.UUID `json:"courtID"`
 }

@@ -49,7 +49,7 @@ const BookingSummary = () => {
         <p>Total:</p>
         <p>${totalCost.toFixed(2)}</p>
       </div>
-      <button className="booking-summary-confirm-button">Confirm Booking</button>
+      <button className="booking-summary-confirm-button" onClick={handleConfirmBooking}>Confirm Booking</button>
     </div>
   );
 };
