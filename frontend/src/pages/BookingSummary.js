@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/BookingSummary.css';
+import handleConfirmBooking from './BookingFunctions.js'; // Import the handleConfirmBooking function
 
 const BookingSummary = () => {
   const location = useLocation();
@@ -15,6 +16,14 @@ const BookingSummary = () => {
 
   // Custom options for formatting time without seconds
   const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+
+  const handleConfirmBookingClick = async () => {
+    try {
+      await handleConfirmBooking(/* pass the required parameters here */);
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+    }
+  };
 
   return (
     <div className="booking-summary-container">
@@ -49,7 +58,9 @@ const BookingSummary = () => {
         <p>Total:</p>
         <p>${totalCost.toFixed(2)}</p>
       </div>
-      <button className="booking-summary-confirm-button" onClick={handleConfirmBooking}>Confirm Booking</button>
+      <button className="booking-summary-confirm-button" onClick={handleConfirmBookingClick}>
+        Confirm Booking
+      </button>
     </div>
   );
 };
