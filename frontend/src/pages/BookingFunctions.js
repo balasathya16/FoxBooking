@@ -2,10 +2,10 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe('pk_test_51NfSEEG73qJpjALVaHz7O59835GKo33MWLrLrmfbtYJVKVeQf6ZE0UZzQCepDteHikbE4rGdxiM8LmvVocJmIAdG00L1DjQ8ex');
 
-const handleConfirmBooking = async (bookingUUID, cricketCourtUUID, amount) => {
+const handleConfirmBooking = async (bookingUUID, cricketCourtUUID, amount, cardElement) => {
     try {
         // Step 1: Create a payment intent on the server
-        const paymentResponse = await fetch('http://localhost:8000/api/create-payment-intent', {
+        const paymentResponse = await fetch('http://127.0.0.1:8000/api/create-payment-intent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,15 +25,13 @@ const handleConfirmBooking = async (bookingUUID, cricketCourtUUID, amount) => {
 
         // Step 2: Collect payment details and complete the payment using a payment gateway
         const stripe = await stripePromise; // Await the stripePromise
-        const elements = stripe.elements();
 
         const { clientSecret } = paymentData;
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: elements.create('card'), // Create a CardElement instance
-            },
+            payment_method: cardElement,
         });
+        
 
         if (error) {
             console.error('Payment failed:', error);

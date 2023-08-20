@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js'; // Import loadStripe
 import '../styles/BookingSummary.css';
 import handleConfirmBooking from './BookingFunctions.js'; // Import the handleConfirmBooking function
 
 const BookingSummary = () => {
+  const stripePromise = loadStripe('pk_test_51NfSEEG73qJpjALVaHz7O59835GKo33MWLrLrmfbtYJVKVeQf6ZE0UZzQCepDteHikbE4rGdxiM8LmvVocJmIAdG00L1DjQ8ex'); // Load Stripe instance
   const location = useLocation();
   const { selectedDate, startTime, endTime, pricePerHour, listing } = location.state;
 
@@ -14,19 +16,31 @@ const BookingSummary = () => {
   const totalCost = pricePerHour * timeDuration;
   const taxes = totalCost * 0.1; // Assuming 10% tax rate
 
+  const [bookingData, setBookingData] = useState({
+    bookingUUID: 'your_booking_uuid_here',
+    cricketCourtUUID: 'your_cricket_court_uuid_here',
+    amount: totalCost + taxes,
+  });
+
   // Custom options for formatting time without seconds
   const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
 
   const handleConfirmBookingClick = async () => {
     try {
-      await handleConfirmBooking(/* pass the required parameters here */);
+      const stripe = await stripePromise; // Wait for stripePromise
+      await handleConfirmBooking(
+        bookingData.bookingUUID,
+        bookingData.cricketCourtUUID,
+        bookingData.amount,
+        stripe // Pass the stripe instance
+      );
     } catch (error) {
       console.error('Error confirming booking:', error);
     }
   };
 
   return (
-    <div className="booking-summary-container">
+       <div className="booking-summary-container">
       <h1>Booking Summary</h1>
       <div className="booking-summary-listing-info">
         {listing.images && listing.images.length > 0 ? (
