@@ -100,18 +100,20 @@ const CreateCourtForm = () => {
           required
         />
 
-        <label className={styles.formLabel}>Images:</label>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-        />
-        {selectedImages.length > 0 && (
-          <span className={styles.fileInputLabel}>
-            {`${selectedImages.length} file(s) chosen`}
-          </span>
-        )}
+        <div className={styles.imagesSection}>
+          <label className={styles.formLabel}>Images:</label>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+          />
+          {selectedImages.length > 0 && (
+            <span className={styles.fileInputLabel}>
+              {`${selectedImages.length} file(s) chosen`}
+            </span>
+          )}
+        </div>
 
         <button className={styles.formButton} type="submit">Create Court</button>
       </form>
