@@ -1,5 +1,7 @@
 import React from 'react';
 import CreateCourtForm from '../components/court/CreateCourtForm';
+import '../../styles/Global.css'; // Import the global CSS file
+
 
 const CreateCourtPage = () => {
   return (

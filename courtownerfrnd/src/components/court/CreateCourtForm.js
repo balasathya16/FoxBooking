@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../../../styles/CreateCourtForm.module.css';
 
 const CreateCourtForm = () => {
   const [location, setLocation] = useState('');
@@ -6,7 +7,7 @@ const CreateCourtForm = () => {
   const [description, setDescription] = useState('');
   const [netsAvailable, setNetsAvailable] = useState('');
   const [pricePerHour, setPricePerHour] = useState('');
-  const [selectedImages, setSelectedImages] = useState([]); // To store selected images
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -22,8 +23,7 @@ const CreateCourtForm = () => {
     formData.append('description', description);
     formData.append('netsAvailable', netsAvailable);
     formData.append('pricePerHour', pricePerHour);
-    // Append other fields as needed
-
+    
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('images', selectedImages[i]);
     }
@@ -37,7 +37,6 @@ const CreateCourtForm = () => {
       if (response.status === 201) {
         const { id } = await response.json();
         console.log(`Court created with ID: ${id}`);
-        // Reset the form fields and selected images
         setLocation('');
         setName('');
         setDescription('');
@@ -53,66 +52,68 @@ const CreateCourtForm = () => {
     }
   };
   
-
   return (
-    <div>
-      <h2>Create Court</h2>
+    <div className={styles.formContainer}>
+      <h2 className={styles.formHeader}>Create Court</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Location:
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Nets Available:
-          <input
-            type="number"
-            value={netsAvailable}
-            onChange={(e) => setNetsAvailable(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Price Per Hour:
-          <input
-            type="number"
-            value={pricePerHour}
-            onChange={(e) => setPricePerHour(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Images:
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-          />
-        </label>
-        {/* Add more input fields for other data */}
-        <button type="submit">Create Court</button>
+        <label className={styles.formLabel}>Name:</label>
+        <input
+          className={styles.formInput}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Location:</label>
+        <input
+          className={styles.formInput}
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Description:</label>
+        <textarea
+          className={styles.formTextarea}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Nets Available:</label>
+        <input
+          className={styles.formInput}
+          type="number"
+          value={netsAvailable}
+          onChange={(e) => setNetsAvailable(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Price Per Hour:</label>
+        <input
+          className={styles.formInput}
+          type="number"
+          value={pricePerHour}
+          onChange={(e) => setPricePerHour(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Images:</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+        />
+        {selectedImages.length > 0 && (
+          <span className={styles.fileInputLabel}>
+            {`${selectedImages.length} file(s) chosen`}
+          </span>
+        )}
+
+        <button className={styles.formButton} type="submit">Create Court</button>
       </form>
     </div>
   );
