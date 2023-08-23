@@ -1,0 +1,18 @@
+/* global.css */
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../public/fonts/Ubuntu/Ubuntu-Light.ttf') format('woff2');
+    /* Add additional font file formats if necessary */
+  }
+  
+  body {
+    font-family: 'Ubuntu', sans-serif;
+  }
+  
+  h1 {
+    font-size: 2em;
+    font-weight: bold;
+    /* Add any other styling you want for h1 elements */
+  }
+  

@@ -1,0 +1,68 @@
+/* styles/CreateCourtForm.module.css */
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../public/fonts/Ubuntu/Ubuntu-Light.ttf') format('woff2');
+    /* Add additional font file formats if necessary */
+  }
+  
+  /* Apply the Ubuntu font to the formContainer, formHeader, and formLabel */
+  .formContainer {
+    font-family: 'Ubuntu', sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formHeader {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .formLabel {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  
+  .formInput,
+  .formTextarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .formInput:focus,
+  .formTextarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .formTextarea {
+    resize: vertical;
+  }
+  
+  .formButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .formButton:hover {
+    background-color: #0056b3;
+  }
+  
