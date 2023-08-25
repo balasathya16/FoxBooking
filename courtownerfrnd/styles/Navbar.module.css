@@ -3,18 +3,29 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #333;
+    background-color: #007bff; /* Bold blue color */
     color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
   }
   
   .logo a {
     color: white;
     text-decoration: none;
     font-size: 1.5rem;
+    font-weight: bold; /* Make the text bold */
   }
   
   .userIcon {
     cursor: pointer;
-    /* Add your user icon styling here */
+    background-color: #f7f7f7; /* Light gray background */
+    padding: 0.5rem;
+    border-radius: 50%; /* Make it a circular icon */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Add smooth transitions */
+  }
+  
+  .userIcon:hover {
+    background-color: #e0e0e0; /* Darken the background on hover */
+    transform: scale(1.05); /* Slightly scale up the icon on hover */
   }
   
