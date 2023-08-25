@@ -302,3 +302,62 @@ func DeleteCricketCourtByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Court deleted successfully")
 }
 
+func EditCricketCourt(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    params := mux.Vars(r)
+    courtIDStr := params["id"]
+
+    courtID, err := uuid.Parse(courtIDStr)
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        json.NewEncoder(w).Encode("Invalid court ID")
+        return
+    }
+
+    var updatedCourt models.CricketCourt
+    err = json.NewDecoder(r.Body).Decode(&updatedCourt)
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        json.NewEncoder(w).Encode("Invalid request payload")
+        return
+    }
+
+    // Update the court in the database
+    err = updateCricketCourt(courtID, &updatedCourt)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        json.NewEncoder(w).Encode("Failed to update court")
+        return
+    }
+
+    json.NewEncoder(w).Encode("Court updated successfully")
+}
+
+func updateCricketCourt(courtID uuid.UUID, updatedCourt *models.CricketCourt) error {
+    database, err := db.ConnectDB()
+    if err != nil {
+        return err
+    }
+
+    collection := database.Collection("cricket_courts")
+
+    filter := bson.M{"id": courtID}
+    update := bson.M{
+        "$set": bson.M{
+            "name":           updatedCourt.Name,
+            "description":    updatedCourt.Description,
+            "contactEmail":   updatedCourt.ContactEmail,
+            "contactPhone":   updatedCourt.ContactPhone,
+            "pricePerHour":   updatedCourt.PricePerHour,
+            // Update other fields as needed
+        },
+    }
+
+    _, err = collection.UpdateOne(context.TODO(), filter, update)
+    if err != nil {
+        return err
+    }
+
+    return nil
+}
