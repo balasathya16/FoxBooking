@@ -1,15 +1,20 @@
 import firebase from '../firebase';
 
-const handleGoogleSignUp = () => {
-  // Implement Google sign up functionality
+// Example in GoogleSignUp.js
+const handleGoogleSignUp = (onSignUp) => {
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
     .then((result) => {
-      // Handle successful sign up
       console.log('Google sign up successful:', result.user);
+      console.log('onSignUp type:', typeof onSignUp);
+      
+      if (typeof onSignUp === 'function') {
+        onSignUp(); // Call the callback function from the main window
+      } else {
+        console.error('onSignUp is not a function');
+      }
     })
     .catch((error) => {
-      // Handle sign up error
       console.error('Error signing up with Google:', error);
     });
 };

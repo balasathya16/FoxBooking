@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
+import AuthContext from '../auth'; // Import the AuthContext
+import GetStartedButton from '../components/HomePage/GetStartedButton'; // Import the GetStartedButton component
 
 const Header = () => {
+  const user = useContext(AuthContext);
+
   return (
     <header className="header">
       <Link to="/" className="logo">
@@ -18,9 +22,14 @@ const Header = () => {
           </button>
         </div>
         <div className="cta-buttons">
-          <Link to="/login" className="login-button">
-            Sign In
-          </Link>
+          {user ? (
+            <Link to="/dashboard" className="user-icon">
+              {/* Display user icon or username */}
+              <i className="fas fa-user"></i>
+            </Link>
+          ) : (
+            <GetStartedButton onClick={() => console.log("Open sign up popup")} />
+          )}
         </div>
       </div>
     </header>

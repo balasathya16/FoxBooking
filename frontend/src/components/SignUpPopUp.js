@@ -1,24 +1,27 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import faTimes icon
+import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import handleGoogleSignUp from './GoogleSignUp';
+import handleGoogleSignUp from './GoogleSignUp'; // Make sure the import is correct
 import handleEmailSignUp from './EmailSignUp';
 import '../styles/SignUpPopUp.css';
 
-const SignUpPopUp = ({ onClose }) => {
+const SignUpPopUp = ({ onClose, onSignUp }) => {
   const handleEmailSignUpClick = () => {
-    const email = 'balasathya16@yahoo.com'; // Replace with your email input value
-    const password = 'testjjjjjo'; // Replace with your password input value
+    const email = 'balasathya16@yahoo.com';
+    const password = 'testjjjjjo';
 
     handleEmailSignUp(email, password);
+  };
+
+  const handleGoogleSignUpClick = () => {
+    handleGoogleSignUp(onSignUp); // Make sure this usage is correct
   };
 
   return (
     <div id="signup-popup" className="signup-popup">
       <div className="popup-content">
-        <h3>Sign up NOW</h3>
-        <button className="popup-button" onClick={handleGoogleSignUp}>
+        <button className="popup-button" onClick={handleGoogleSignUpClick}>
           <FontAwesomeIcon icon={faGoogle} className="icon" />
           Sign up with Google
         </button>
@@ -27,7 +30,7 @@ const SignUpPopUp = ({ onClose }) => {
           Sign up with Email
         </button>
         <button className="popup-button" onClick={onClose}>
-          <FontAwesomeIcon icon={faTimes} className="icon" /> {/* Use faTimes icon for Close */}
+          <FontAwesomeIcon icon={faTimes} className="icon" />
           Close
         </button>
       </div>
