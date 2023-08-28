@@ -5,7 +5,6 @@ import '../../styles/AnimatedText.css';
 
 const AnimatedText = () => {
   const [showSignUpPopup, setShowSignUpPopup] = useState(false);
-  const [isSignedUp, setIsSignedUp] = useState(false); // Add this state
 
   const handleGetStarted = () => {
     setShowSignUpPopup(true);
@@ -13,11 +12,6 @@ const AnimatedText = () => {
 
   const handleCloseSignUpPopup = () => {
     setShowSignUpPopup(false);
-  };
-
-  const handleSignUp = () => {
-    setIsSignedUp(true);
-    setShowSignUpPopup(false); // Close the popup after successful sign-up
   };
 
   return (
@@ -28,7 +22,7 @@ const AnimatedText = () => {
       </h1>
       <GetStartedButton onClick={handleGetStarted} />
       {showSignUpPopup && (
-        <SignUpPopup onClose={handleCloseSignUpPopup} isButtonVisible={!isSignedUp} />
+        <SignUpPopup onClose={handleCloseSignUpPopup} isButtonVisible={true} />
       )}
     </div>
   );
