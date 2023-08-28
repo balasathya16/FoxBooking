@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
+import AuthContext from '../auth'; // Import the AuthContext
 
 const Header = () => {
+  const user = useContext(AuthContext);
 
   return (
     <header className="header">
@@ -17,6 +21,11 @@ const Header = () => {
           <button>
             <i className="fas fa-search"></i>
           </button>
+          {user ? (
+            <Link to="/dashboard" className="user-icon">
+              <FontAwesomeIcon icon={faUser} className="icon" />
+            </Link>
+          ) : null}
         </div>
       </div>
     </header>

@@ -20,6 +20,7 @@ body {
   padding: 10px 90px; /* Adjust padding to create even margin on both sides */
   width: 100%;
   background-color: #283747;
+  position: relative; /* Added for positioning the dropdown */
 }
 
 .container {
@@ -60,10 +61,11 @@ body {
 .search-bar {
   display: flex;
   align-items: center;
+  height: 40px; /* Increase height to match the icon size */
 }
 
 .search-bar input {
-  padding: 5px 10px;
+  padding: 5px 15px; /* Adjust padding for a consistent look */
   border: none;
   border-radius: 20px;
   background-color: #ffffff;
@@ -109,6 +111,44 @@ body {
 .login-button:hover,
 .get-started-button:hover {
   background-color: #e65c00; /* Slightly darker shade on hover */
+}
+
+/* Added styles for user icon and dropdown */
+.user-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 24px; /* Increase icon size */
+  margin-left: 10px; /* Add some space between search bar and icon */
+}
+
+.signup-popup {
+  position: absolute;
+  top: 100%; /* Position below the user icon */
+  left: 0;
+  display: none;
+  /* ... Your popup styles ... */
+}
+
+.user-icon:hover .signup-popup {
+  display: block;
+}
+
+.popup-content {
+  /* ... Your popup content styles ... */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 400px;
+}
+
+.popup-content button {
+  /* ... Your button styles ... */
+}
+
+.icon {
+  margin-right: 8px;
 }
 
 /* Mobile responsiveness */
