@@ -8,7 +8,9 @@ const handleGoogleSignUp = (onSignUp) => {
       console.log('Google sign up successful:', result.user);
       console.log('onSignUp type:', typeof onSignUp);
       
-      if (typeof onSignUp === 'function') {
+      if (onSignUp && typeof onSignUp === 'function') {
+
+        console.log('onSignUp is a function');
         onSignUp(); // Call the callback function from the main window
       } else {
         console.error('onSignUp is not a function');

@@ -15,6 +15,7 @@ const SignUpPopUp = ({ onClose, isButtonVisible }) => {
   };
 
   const handleGoogleSignUpClick = () => {
+    console.log("handleGoogleSignUpClick called");
     handleGoogleSignUp(onClose); // Call the appropriate function
   };
 
