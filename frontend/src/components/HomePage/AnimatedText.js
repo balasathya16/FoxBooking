@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import GetStartedButton from './GetStartedButton';
-import SignUpPopup from '../SignUpPopUp';
 import '../../styles/AnimatedText.css';
 
 const AnimatedText = () => {
-  const [showSignUpPopup, setShowSignUpPopup] = useState(false);
+  const [showEmailSignUp, setShowEmailSignUp] = useState(false);
+  // const [showGoogleSignUp, setShowGoogleSignUp] = useState(false);
 
   const handleGetStarted = () => {
-    setShowSignUpPopup(true);
+    setShowEmailSignUp(true);
   };
 
-  const handleCloseSignUpPopup = () => {
-    setShowSignUpPopup(false);
-  };
+
 
   return (
     <div className="animated-text-container">
@@ -21,9 +19,12 @@ const AnimatedText = () => {
         Step up your game. Book a sports arena and conquer.
       </h1>
       <GetStartedButton onClick={handleGetStarted} />
-      {showSignUpPopup && (
-        <SignUpPopup onClose={handleCloseSignUpPopup} isButtonVisible={true} />
+      
+      {showEmailSignUp && (
+        {/* Render your email sign-up component here when created */}
       )}
+
+      {/* Remove the Google sign-up section */}
     </div>
   );
 };
