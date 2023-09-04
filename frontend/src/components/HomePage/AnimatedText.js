@@ -4,13 +4,10 @@ import '../../styles/AnimatedText.css';
 
 const AnimatedText = () => {
   const [showEmailSignUp, setShowEmailSignUp] = useState(false);
-  // const [showGoogleSignUp, setShowGoogleSignUp] = useState(false);
 
   const handleGetStarted = () => {
     setShowEmailSignUp(true);
   };
-
-
 
   return (
     <div className="animated-text-container">
@@ -21,7 +18,10 @@ const AnimatedText = () => {
       <GetStartedButton onClick={handleGetStarted} />
       
       {showEmailSignUp && (
-        {/* Render your email sign-up component here when created */}
+        // Place your JSX content to render when showEmailSignUp is true here
+        <div>
+          This is the content to render when showEmailSignUp is true.
+        </div>
       )}
 
       {/* Remove the Google sign-up section */}
