@@ -1,5 +1,4 @@
 import React from 'react';
-import SignUpPopUp from './SignUpPopUp';
 import GoogleSignUp from './GoogleSignUp'; // Create this component for Google sign-up
 import EmailSignUp from './EmailSignUp'; // Create this component for email sign-up
 import PhoneSignUp from './PhoneSignUp'; // Create this component for phone sign-up

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import SignUpPopup from './components/SignUpPopUp';
+import SignUpPage from './components/SignUpPage'; // Import SignUpPage directly
 import './styles/Header.css';
 import './styles/Footer.css';
 import './styles/tailwind.css';
-import AppRouter from './routes/AppRouter'; // Import AppRouter
+import AppRouter from './routes/AppRouter';
 
 const App = () => {
   const [showSignUp, setShowSignUp] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [isUserSignedUp, setIsUserSignedUp] = useState(false); // Track user sign-up
 
   const openSignUpPopup = () => {
     console.log('Opening sign-up popup');
@@ -22,12 +20,6 @@ const App = () => {
     setShowSignUp(false);
   };
 
-  const handleSuccessfulSignUp = () => {
-    console.log('Successful sign-up callback called');
-    setIsUserSignedUp(true); // Set the user as signed up
-    closeSignUpPopup();
-  };
-
   console.log('App render');
 
   return (
@@ -35,7 +27,7 @@ const App = () => {
        <Header openSignUp={openSignUpPopup} />
        <div className="App-content">
           {showSignUp && (
-             <SignUpPopup onClose={closeSignUpPopup} onSignUp={handleSuccessfulSignUp} />
+             <SignUpPage onClose={closeSignUpPopup} />
           )}
           <AppRouter />
        </div>

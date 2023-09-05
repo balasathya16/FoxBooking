@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import GetStartedButton from './GetStartedButton';
+import SignUpPage from '../SignUpPage'; // Make sure the path is correct
 import '../../styles/AnimatedText.css';
 
 const AnimatedText = () => {
-  const [showEmailSignUp, setShowEmailSignUp] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
 
   const handleGetStarted = () => {
-    setShowEmailSignUp(true);
+    setShowSignUp(true);
+  };
+
+  const handleCloseSignUp = () => {
+    setShowSignUp(false);
   };
 
   return (
@@ -17,11 +22,8 @@ const AnimatedText = () => {
       </h1>
       <GetStartedButton onClick={handleGetStarted} />
       
-      {showEmailSignUp && (
-        // Place your JSX content to render when showEmailSignUp is true here
-        <div>
-          This is the content to render when showEmailSignUp is true.
-        </div>
+      {showSignUp && (
+        <SignUpPage onClose={handleCloseSignUp} />
       )}
 
       {/* Remove the Google sign-up section */}
