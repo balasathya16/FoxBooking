@@ -27,6 +27,6 @@ const AnimatedText = () => {
       {/* Remove the Google sign-up section */}
     </div>
   );
-}
+};
 
 export default AnimatedText;
