@@ -5,7 +5,7 @@ import ListingDetailsPage from '../pages/ListingDetailsPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import Terms from '../pages/Terms';
 import BookingSummary from '../pages/BookingSummary';
-import SignUpPage from '../components/SignUpPage'; // Import the SignUpPage component
+// Remove the import for SignUpPage
 
 const AppRouter = () => {
   return (
@@ -16,7 +16,7 @@ const AppRouter = () => {
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/booking-summary" element={<BookingSummary />} />
       <Route path="/terms" element={<Terms />} />
-      <Route path="/signup" element={<SignUpPage />} /> {/* Add this line */}
+      {/* Remove the route for SignUpPage */}
     </Routes>
   );
 };
