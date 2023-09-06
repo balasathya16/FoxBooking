@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 90px; /* Adjust padding to create even margin on both sides */
+  padding: 10px 20px; /* Adjust padding for breathable margins */
   width: 100%;
   background-color: #283747;
   position: relative; /* Added for positioning the dropdown */
@@ -28,10 +28,11 @@ body {
   margin: 0 auto;
 }
 
-/* Style the logo and logo text */
+/* Style the logo and logo text to be on the left */
 .logo {
   display: flex;
   align-items: center;
+  margin-right: auto; /* Push the logo to the left */
 }
 
 .logo img {
@@ -44,10 +45,11 @@ body {
   font-size: 20px;
 }
 
-/* Style the navigation links */
+/* Style the navigation links to be on the right */
 .navigation {
   display: flex;
   align-items: center;
+  margin-left: auto; /* Push the navigation to the right */
 }
 
 .navigation a {
@@ -57,15 +59,15 @@ body {
   margin: 0 15px;
 }
 
-/* Style the search bar */
-.search-bar {
+/* Style the search bar and user icon */
+.search-bar,
+.user-icon {
   display: flex;
   align-items: center;
-  height: 40px; /* Increase height to match the icon size */
 }
 
 .search-bar input {
-  padding: 5px 15px; /* Adjust padding for a consistent look */
+  padding: 5px 15px;
   border: none;
   border-radius: 20px;
   background-color: #ffffff;
@@ -118,7 +120,7 @@ body {
   position: relative;
   cursor: pointer;
   font-size: 24px; /* Increase icon size */
-  margin-left: 10px; /* Add some space between search bar and icon */
+  margin-left: 10px;
 }
 
 .signup-popup {
