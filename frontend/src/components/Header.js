@@ -28,10 +28,12 @@ const Header = () => {
   return (
     <header className="header">
       <div className="container">
-        <Link to="/" className="logo">
-          <img src={sportsLogo} alt="FoxBooking Logo" />
-          <span className="logo-text">FoxBooking</span>
-        </Link>
+        <div className="logo-container">
+          <Link to="/" className="logo">
+            <img src={sportsLogo} alt="FoxBooking Logo" />
+            <span className="logo-text">FoxBooking</span>
+          </Link>
+        </div>
         <div className="navigation">
           <div className="search-bar">
             <input type="text" placeholder="Search..." />

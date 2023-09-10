@@ -17,10 +17,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px; /* Adjust padding for breathable margins */
+  padding: 10px 20px;
   width: 100%;
   background-color: #283747;
-  position: relative; /* Added for positioning the dropdown */
+  position: relative;
 }
 
 .container {
@@ -29,10 +29,9 @@ body {
 }
 
 /* Style the logo and logo text to be on the left */
-.logo {
+.logo-container {
   display: flex;
   align-items: center;
-  margin-right: auto; /* Push the logo to the left */
 }
 
 .logo img {
@@ -49,7 +48,8 @@ body {
 .navigation {
   display: flex;
   align-items: center;
-  margin-left: auto; /* Push the navigation to the right */
+  margin-left: auto;
+  justify-content: flex-end; /* Move the search bar and dashboard icon to the right */
 }
 
 .navigation a {
@@ -98,8 +98,7 @@ body {
   align-items: center;
 }
 
-.login-button,
-.get-started-button {
+.auth-button {
   background-color: #ff6f00;
   color: #ffffff;
   font-size: 16px;
@@ -110,8 +109,7 @@ body {
   margin: 0 10px;
 }
 
-.login-button:hover,
-.get-started-button:hover {
+.auth-button:hover {
   background-color: #e65c00; /* Slightly darker shade on hover */
 }
 
@@ -123,31 +121,6 @@ body {
   margin-left: 10px;
 }
 
-.signup-popup {
-  position: absolute;
-  top: 100%; /* Position below the user icon */
-  left: 0;
-  display: none;
-  /* ... Your popup styles ... */
-}
-
-.user-icon:hover .signup-popup {
-  display: block;
-}
-
-.popup-content {
-  /* ... Your popup content styles ... */
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 400px;
-}
-
-.popup-content button {
-  /* ... Your button styles ... */
-}
 
 .icon {
   margin-right: 8px;
@@ -165,6 +138,7 @@ body {
 
   .navigation {
     margin-top: 10px;
+    justify-content: center; /* Center align navigation items on mobile */
   }
 
   .search-bar {
