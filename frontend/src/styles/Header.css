@@ -13,7 +13,7 @@ body {
 }
 
 /* Apply the same styles for the header as the footer */
-.header {
+.custom-header { /* Use a unique class name */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -32,16 +32,24 @@ body {
 .logo-container {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* Move the logo and text to the left */
+  flex: 1; /* Allow the logo and text to take up available space */
 }
 
-.logo img {
+.custom-logo { /* Use a unique class name */
+  display: flex;
+  align-items: center;
+}
+
+.custom-logo img { /* Use a unique class name */
   width: 40px;
   height: 40px;
   margin-right: 10px;
 }
 
-.logo-text {
+.custom-logo-text { /* Use a unique class name */
   font-size: 20px;
+  margin-left: 10px; /* Add margin to separate the logo and text */
 }
 
 /* Style the navigation links to be on the right */
@@ -49,7 +57,6 @@ body {
   display: flex;
   align-items: center;
   margin-left: auto;
-  justify-content: flex-end; /* Move the search bar and dashboard icon to the right */
 }
 
 .navigation a {
@@ -98,7 +105,7 @@ body {
   align-items: center;
 }
 
-.auth-button {
+.custom-auth-button { /* Use a unique class name */
   background-color: #ff6f00;
   color: #ffffff;
   font-size: 16px;
@@ -109,43 +116,43 @@ body {
   margin: 0 10px;
 }
 
-.auth-button:hover {
+.custom-auth-button:hover { /* Use a unique class name */
   background-color: #e65c00; /* Slightly darker shade on hover */
 }
 
 /* Added styles for user icon and dropdown */
-.user-icon {
+.custom-user-icon { /* Use a unique class name */
   position: relative;
   cursor: pointer;
   font-size: 24px; /* Increase icon size */
   margin-left: 10px;
 }
 
-
-.icon {
+.custom-icon { /* Use a unique class name */
   margin-right: 8px;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
+  .custom-header { /* Use a unique class name */
+    flex-direction: row; /* Adjust flex direction for horizontal alignment */
+    justify-content: space-between; /* Add space between logo/FoxBooking and search bar/user icon */
   }
 
-  .logo-text {
-    margin-top: 10px;
+  .custom-logo-text { /* Use a unique class name */
+    margin-top: 0; /* Remove top margin on logo text */
   }
 
   .navigation {
-    margin-top: 10px;
-    justify-content: center; /* Center align navigation items on mobile */
+    margin-top: 0; /* Remove top margin on navigation links */
+    justify-content: flex-end; /* Align navigation items to the right */
   }
 
   .search-bar {
-    margin-top: 10px;
+    margin-top: 0; /* Remove top margin on search bar */
   }
 
   .cta-buttons {
-    margin-top: 10px;
+    margin-top: 0; /* Remove top margin on CTA buttons */
   }
 }

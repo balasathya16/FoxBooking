@@ -26,12 +26,12 @@ const Header = () => {
   };
 
   return (
-    <header className="header">
+    <header className="custom-header"> {/* Use a unique class name */}
       <div className="container">
         <div className="logo-container">
-          <Link to="/" className="logo">
+          <Link to="/" className="custom-logo"> {/* Use a unique class name */}
             <img src={sportsLogo} alt="FoxBooking Logo" />
-            <span className="logo-text">FoxBooking</span>
+            <span className="custom-logo-text">FoxBooking</span> {/* Use a unique class name */}
           </Link>
         </div>
         <div className="navigation">
@@ -43,15 +43,15 @@ const Header = () => {
           </div>
           <div className="cta-buttons">
             {user ? (
-              <Link to="/dashboard" className="user-icon">
-                <FontAwesomeIcon icon={faUser} className="icon" />
+              <Link to="/dashboard" className="custom-user-icon"> {/* Use a unique class name */}
+                <FontAwesomeIcon icon={faUser} className="custom-icon" /> {/* Use a unique class name */}
               </Link>
             ) : (
               <div>
-                <button className="auth-button" onClick={handleSignIn}>
+                <button className="custom-auth-button" onClick={handleSignIn}> {/* Use a unique class name */}
                   Sign In
                 </button>
-                <button className="auth-button" onClick={handleSignUp}>
+                <button className="custom-auth-button" onClick={handleSignUp}> {/* Use a unique class name */}
                   Sign Up
                 </button>
               </div>
