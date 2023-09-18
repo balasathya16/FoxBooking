@@ -26,14 +26,22 @@ export const AuthProvider = ({ children }) => {
     }
     return false;
   };
-  
+
+  const signOut = () => {
+    firebase.auth().signOut()
+      .then(() => {
+        console.log('User signed out successfully.');
+      })
+      .catch((error) => {
+        console.error('Error signing out:', error);
+      });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, isUserSignedUp }}>
+    <AuthContext.Provider value={{ user, isUserSignedUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
 
 export default AuthContext;

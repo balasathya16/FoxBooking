@@ -1,17 +1,19 @@
-/* Use the same font-family and color as in footer.css */
+/* Import the Ubuntu font */
 @font-face {
   font-family: 'Ubuntu';
   src: url('../../public/fonts/Ubuntu/Ubuntu-Light.ttf') format('woff2');
   /* Add additional font file formats if necessary */
 }
 
+/* Global body styles */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Ubuntu', sans-serif;
   color: #ffffff;
 }
-/* Apply the same styles for the header as the footer */
+
+/* Header styles */
 .custom-header {
   display: flex;
   justify-content: space-between;
@@ -150,4 +152,3 @@ body {
     margin-top: 0;
   }
 }
-

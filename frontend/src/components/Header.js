@@ -9,19 +9,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
+  console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const { user, isUserSignedUp } = useContext(AuthContext);
+  const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
 
   const toggleAuthModal = () => {
+    console.log('Toggling auth modal');
     setAuthModalOpen(!isAuthModalOpen);
   };
 
   useEffect(() => {
+    console.log('user:', user);
+    console.log('isUserSignedUp():', isUserSignedUp());
+
     // Handle Google sign-in success
     if (user && isUserSignedUp() && user.providerData.some(provider => provider.providerId === 'google.com')) {
+      console.log('Google sign-in success');
       setGoogleSignInSuccess(true);
     } else {
+      console.log('Google sign-in failure');
       setGoogleSignInSuccess(false);
     }
   }, [user, isUserSignedUp]);
@@ -32,6 +39,10 @@ const Header = () => {
 
   const handleSignUp = () => {
     console.log('Sign Up clicked');
+  };
+
+  const handleSignOut = () => {
+    signOut();
   };
 
   return (
@@ -68,6 +79,11 @@ const Header = () => {
                   <FontAwesomeIcon icon={faUser} className="custom-icon" />
                 </Link>
               </div>
+            )}
+            {user && (
+              <button className="custom-auth-button" onClick={handleSignOut}>
+                Sign Out
+              </button>
             )}
           </div>
         </div>
