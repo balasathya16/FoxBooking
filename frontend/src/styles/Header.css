@@ -11,9 +11,8 @@ body {
   font-family: 'Ubuntu', sans-serif;
   color: #ffffff;
 }
-
 /* Apply the same styles for the header as the footer */
-.custom-header { /* Use a unique class name */
+.custom-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,31 +27,29 @@ body {
   margin: 0 auto;
 }
 
-/* Style the logo and logo text to be on the left */
 .logo-container {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Move the logo and text to the left */
-  flex: 1; /* Allow the logo and text to take up available space */
+  justify-content: flex-start;
+  flex: 1;
 }
 
-.custom-logo { /* Use a unique class name */
+.custom-logo {
   display: flex;
   align-items: center;
 }
 
-.custom-logo img { /* Use a unique class name */
+.custom-logo img {
   width: 40px;
   height: 40px;
   margin-right: 10px;
 }
 
-.custom-logo-text { /* Use a unique class name */
+.custom-logo-text {
   font-size: 20px;
-  margin-left: 10px; /* Add margin to separate the logo and text */
+  margin-left: 10px;
 }
 
-/* Style the navigation links to be on the right */
 .navigation {
   display: flex;
   align-items: center;
@@ -66,7 +63,6 @@ body {
   margin: 0 15px;
 }
 
-/* Style the search bar and user icon */
 .search-bar,
 .user-icon {
   display: flex;
@@ -99,13 +95,12 @@ body {
   font-size: 16px;
 }
 
-/* Style the CTA buttons */
 .cta-buttons {
   display: flex;
   align-items: center;
 }
 
-.custom-auth-button { /* Use a unique class name */
+.custom-auth-button {
   background-color: #ff6f00;
   color: #ffffff;
   font-size: 16px;
@@ -116,53 +111,43 @@ body {
   margin: 0 10px;
 }
 
-.custom-auth-button:hover { /* Use a unique class name */
-  background-color: #e65c00; /* Slightly darker shade on hover */
+.custom-auth-button:hover {
+  background-color: #e65c00;
 }
 
-/* Added styles for user icon and dropdown */
-.custom-user-icon { /* Use a unique class name */
+.custom-user-icon {
   position: relative;
   cursor: pointer;
-  font-size: 24px; /* Increase icon size */
+  font-size: 24px;
   margin-left: 10px;
 }
 
-.custom-icon { /* Use a unique class name */
+.custom-icon {
   margin-right: 8px;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .custom-header { /* Use a unique class name */
-    flex-direction: row; /* Adjust flex direction for horizontal alignment */
-    justify-content: space-between; /* Add space between logo/FoxBooking and search bar/user icon */
+  .custom-header {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .custom-logo-text { /* Use a unique class name */
-    margin-top: 0; /* Remove top margin on logo text */
+  .custom-logo-text {
+    margin-top: 0;
   }
 
   .navigation {
-    margin-top: 0; /* Remove top margin on navigation links */
-    justify-content: flex-end; /* Align navigation items to the right */
+    margin-top: 0;
+    justify-content: flex-end;
   }
 
   .search-bar {
-    margin-top: 0; /* Remove top margin on search bar */
+    margin-top: 0;
   }
 
   .cta-buttons {
-    margin-top: 0; /* Remove top margin on CTA buttons */
+    margin-top: 0;
   }
 }
 
-/* Hide the user icon when user is not signed up */
-.hide-user-icon .custom-user-icon {
-  display: none;
-}
-
-/* Show the Sign Up button when user is not signed up */
-.show-signup-button .custom-auth-button-signup {
-  display: block;
-}

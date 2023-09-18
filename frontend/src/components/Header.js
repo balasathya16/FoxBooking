@@ -1,16 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import AuthContext from '../auth';
 import AuthModal from './AuthModal';
 import SignInWithGoogle from './SignInWithGoogle';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 
 const Header = () => {
-  const { user, isUserSignedUp } = useContext(AuthContext);
-  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [isAuthModalOpen, setAuthModalOpen] = React.useState(false);
 
   const toggleAuthModal = () => {
     setAuthModalOpen(!isAuthModalOpen);
@@ -41,24 +37,13 @@ const Header = () => {
             </button>
           </div>
           <div className="cta-buttons">
-            {!user && !isUserSignedUp() && (
-              <div>
-                <button className="custom-auth-button" onClick={handleSignIn}>
-                  Sign In
-                </button>
-                <button className="custom-auth-button" onClick={handleSignUp}>
-                  Sign Up
-                </button>
-              </div>
-            )}
-            {user && isUserSignedUp() && (
-              <div className="show-user-icon">
-                <Link to="/dashboard" className="custom-user-icon">
-                  <FontAwesomeIcon icon={faUser} className="custom-icon" />
-                </Link>
-              </div>
-            )}
-            {!user && <SignInWithGoogle />}
+            <button className="custom-auth-button" onClick={handleSignUp}>
+              Sign Up
+            </button>
+            <button className="custom-auth-button" onClick={handleSignIn}>
+              Sign In
+            </button>
+            <SignInWithGoogle />
           </div>
         </div>
       </div>
