@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import SignInWithGoogle from './SignInWithGoogle';
+import AuthContext from '../../src/auth';  // Adjust the import path based on your project structure
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
-  const [isAuthModalOpen, setAuthModalOpen] = React.useState(false);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const { user, isUserSignedUp } = useContext(AuthContext);
+  const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
 
   const toggleAuthModal = () => {
     setAuthModalOpen(!isAuthModalOpen);
   };
+
+  useEffect(() => {
+    // Handle Google sign-in success
+    if (user && isUserSignedUp() && user.providerData.some(provider => provider.providerId === 'google.com')) {
+      setGoogleSignInSuccess(true);
+    } else {
+      setGoogleSignInSuccess(false);
+    }
+  }, [user, isUserSignedUp]);
 
   const handleSignIn = () => {
     console.log('Sign In clicked');
@@ -37,13 +51,24 @@ const Header = () => {
             </button>
           </div>
           <div className="cta-buttons">
-            <button className="custom-auth-button" onClick={handleSignUp}>
-              Sign Up
-            </button>
-            <button className="custom-auth-button" onClick={handleSignIn}>
-              Sign In
-            </button>
-            <SignInWithGoogle />
+            {!googleSignInSuccess && !user && (
+              <>
+                <button className="custom-auth-button" onClick={handleSignUp}>
+                  Sign Up
+                </button>
+                <button className="custom-auth-button" onClick={handleSignIn}>
+                  Sign In
+                </button>
+                <SignInWithGoogle />
+              </>
+            )}
+            {googleSignInSuccess && user && isUserSignedUp() && (
+              <div className="show-user-icon">
+                <Link to="/dashboard" className="custom-user-icon">
+                  <FontAwesomeIcon icon={faUser} className="custom-icon" />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

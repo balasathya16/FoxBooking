@@ -20,12 +20,13 @@ export const AuthProvider = ({ children }) => {
 
   const isUserSignedUp = () => {
     if (user) {
-      return user.providerData.some((provider) =>
-        ['password', 'google.com', 'phone'].includes(provider.providerId)
+      return user.providerData.some(
+        (provider) => provider.providerId === 'google.com'
       );
     }
     return false;
   };
+  
 
   return (
     <AuthContext.Provider value={{ user, isUserSignedUp }}>
