@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../auth';
 import AuthModal from './AuthModal';
-import '../styles/Header.css'; // Import your Header.css stylesheet
+import SignInWithGoogle from './SignInWithGoogle';
+import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 
 const Header = () => {
-  const user = useContext(AuthContext);
+  const { user, isUserSignedUp } = useContext(AuthContext);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
 
   const toggleAuthModal = () => {
@@ -16,22 +17,20 @@ const Header = () => {
   };
 
   const handleSignIn = () => {
-    // Add logic for handling sign-in action
     console.log('Sign In clicked');
   };
 
   const handleSignUp = () => {
-    // Add logic for handling sign-up action
     console.log('Sign Up clicked');
   };
 
   return (
-    <header className="custom-header"> {/* Use a unique class name */}
+    <header className="custom-header">
       <div className="container">
         <div className="logo-container">
-          <Link to="/" className="custom-logo"> {/* Use a unique class name */}
+          <Link to="/" className="custom-logo">
             <img src={sportsLogo} alt="FoxBooking Logo" />
-            <span className="custom-logo-text">FoxBooking</span> {/* Use a unique class name */}
+            <span className="custom-logo-text">FoxBooking</span>
           </Link>
         </div>
         <div className="navigation">
@@ -42,20 +41,24 @@ const Header = () => {
             </button>
           </div>
           <div className="cta-buttons">
-            {user ? (
-              <Link to="/dashboard" className="custom-user-icon"> {/* Use a unique class name */}
-                <FontAwesomeIcon icon={faUser} className="custom-icon" /> {/* Use a unique class name */}
-              </Link>
-            ) : (
+            {!user && !isUserSignedUp() && (
               <div>
-                <button className="custom-auth-button" onClick={handleSignIn}> {/* Use a unique class name */}
+                <button className="custom-auth-button" onClick={handleSignIn}>
                   Sign In
                 </button>
-                <button className="custom-auth-button" onClick={handleSignUp}> {/* Use a unique class name */}
+                <button className="custom-auth-button" onClick={handleSignUp}>
                   Sign Up
                 </button>
               </div>
             )}
+            {user && isUserSignedUp() && (
+              <div className="show-user-icon">
+                <Link to="/dashboard" className="custom-user-icon">
+                  <FontAwesomeIcon icon={faUser} className="custom-icon" />
+                </Link>
+              </div>
+            )}
+            {!user && <SignInWithGoogle />}
           </div>
         </div>
       </div>

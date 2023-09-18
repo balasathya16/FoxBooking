@@ -156,3 +156,13 @@ body {
     margin-top: 0; /* Remove top margin on CTA buttons */
   }
 }
+
+/* Hide the user icon when user is not signed up */
+.hide-user-icon .custom-user-icon {
+  display: none;
+}
+
+/* Show the Sign Up button when user is not signed up */
+.show-signup-button .custom-auth-button-signup {
+  display: block;
+}

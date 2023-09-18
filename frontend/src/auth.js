@@ -18,11 +18,21 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  const isUserSignedUp = () => {
+    if (user) {
+      return user.providerData.some((provider) =>
+        ['password', 'google.com', 'phone'].includes(provider.providerId)
+      );
+    }
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={user}>
+    <AuthContext.Provider value={{ user, isUserSignedUp }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 export default AuthContext;
