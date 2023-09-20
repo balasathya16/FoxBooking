@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
-import AuthPopup from './AuthPopup';  // New component for the popup
+import AuthPopup from './AuthPopup';
 import AuthContext from '../../src/auth';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
@@ -11,7 +11,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 const Header = () => {
   console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
-  const [isPopupOpen, setPopupOpen] = useState(false);  // State for the popup
+  const [isPopupOpen, setPopupOpen] = useState(false);
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
 
@@ -28,7 +28,6 @@ const Header = () => {
     console.log('user:', user);
     console.log('isUserSignedUp():', isUserSignedUp());
 
-    // Handle Google sign-in success
     if (user && isUserSignedUp() && user.providerData.some(provider => provider.providerId === 'google.com')) {
       console.log('Google sign-in success');
       setGoogleSignInSuccess(true);
@@ -44,10 +43,13 @@ const Header = () => {
 
   const handleSignUp = () => {
     console.log('Sign Up clicked');
-    togglePopup();  // Open the popup
+    togglePopup();
   };
 
   const handleSignOut = () => {
+    if (isPopupOpen) {
+      togglePopup();
+    }
     signOut();
   };
 
