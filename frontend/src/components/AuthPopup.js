@@ -1,5 +1,6 @@
 import React from 'react';
 import SignInWithGoogle from './SignInWithGoogle';
+import '../styles/AuthPopup.css'
 
 const AuthPopup = ({ onClose }) => {
   return (
