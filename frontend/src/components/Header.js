@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
-import SignInWithGoogle from './SignInWithGoogle';
-import AuthContext from '../../src/auth';  // Adjust the import path based on your project structure
+import AuthPopup from './AuthPopup';  // New component for the popup
+import AuthContext from '../../src/auth';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,12 +11,17 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 const Header = () => {
   console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [isPopupOpen, setPopupOpen] = useState(false);  // State for the popup
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
 
   const toggleAuthModal = () => {
     console.log('Toggling auth modal');
     setAuthModalOpen(!isAuthModalOpen);
+  };
+
+  const togglePopup = () => {
+    setPopupOpen(!isPopupOpen);
   };
 
   useEffect(() => {
@@ -39,6 +44,7 @@ const Header = () => {
 
   const handleSignUp = () => {
     console.log('Sign Up clicked');
+    togglePopup();  // Open the popup
   };
 
   const handleSignOut = () => {
@@ -67,10 +73,7 @@ const Header = () => {
                 <button className="custom-auth-button" onClick={handleSignUp}>
                   Sign Up
                 </button>
-                <button className="custom-auth-button" onClick={handleSignIn}>
-                  Sign In
-                </button>
-                <SignInWithGoogle />
+                {isPopupOpen && <AuthPopup onClose={togglePopup} />}
               </>
             )}
             {googleSignInSuccess && user && isUserSignedUp() && (
