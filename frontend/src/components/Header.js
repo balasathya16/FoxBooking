@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import AuthPopup from './AuthPopup';
 import AuthContext from '../../src/auth';
+import SignInWithEmail from './SignInWithEmail'; // Import SignUpWithEmail
+import SignInWithPhone from './SignInWithPhone'; // Import SignInWithPhone
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
