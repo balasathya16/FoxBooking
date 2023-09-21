@@ -1,5 +1,5 @@
 import React from 'react';
-import SignUpWithEmail from './SignUpWithEmail'; // Import your authentication components
+import SignUpWithEmail from './SignInWithEmail'; // Import your authentication components
 import SignInWithGoogle from './SignInWithGoogle';
 import SignInWithPhone from './SignInWithPhone';
 
