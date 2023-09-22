@@ -30,11 +30,11 @@ const Header = () => {
     console.log('user:', user);
     console.log('isUserSignedUp():', isUserSignedUp());
 
-    if (user && isUserSignedUp() && user.providerData.some(provider => provider.providerId === 'google.com')) {
-      console.log('Google sign-in success');
+    if ((user && isUserSignedUp()) || (user && user.providerData.length > 0)) {
+      console.log('Successful sign-in');
       setGoogleSignInSuccess(true);
     } else {
-      console.log('Google sign-in failure');
+      console.log('Sign-in failure');
       setGoogleSignInSuccess(false);
     }
   }, [user, isUserSignedUp]);
@@ -80,7 +80,7 @@ const Header = () => {
                 {isPopupOpen && <AuthPopup onClose={togglePopup} />}
               </>
             )}
-            {googleSignInSuccess && user && isUserSignedUp() && (
+            {(googleSignInSuccess || (user && isUserSignedUp())) && (
               <div className="show-user-icon">
                 <Link to="/dashboard" className="custom-user-icon">
                   <FontAwesomeIcon icon={faUser} className="custom-icon" />
