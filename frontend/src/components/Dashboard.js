@@ -7,7 +7,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h2>Welcome, {user ? user.displayName || 'User' : 'User'}!</h2>
+      <h2>Welcome, {user ? (user.displayName || 'User') : 'User'}!</h2>
       {/* Add more dashboard content here */}
     </div>
   );

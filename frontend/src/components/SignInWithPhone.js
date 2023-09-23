@@ -3,7 +3,7 @@ import firebase from '../firebase';
 
 const SignInWithPhone = () => {
   const handleSignInWithPhone = () => {
-    const phoneNumber = '+1234567890';  // Replace with actual phone number
+    const phoneNumber = '+1234567890'; // Replace with actual phone number
     const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
       callback: (response) => {
