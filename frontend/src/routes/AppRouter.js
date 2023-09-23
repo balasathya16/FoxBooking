@@ -5,7 +5,7 @@ import ListingDetailsPage from '../pages/ListingDetailsPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import Terms from '../pages/Terms';
 import BookingSummary from '../pages/BookingSummary';
-import Dashboard from '../components/Dashboard'; // Import the Dashboard component
+import Dashboard from '../components/dashboard/Dashboard'; // Import the Dashboard component
 
 const AppRouter = () => {
   return (
