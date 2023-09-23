@@ -11,6 +11,9 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <h2>Welcome, {user ? (user.displayName || 'User') : 'User'}!</h2>
+      
+      {/* Display ProfileSummary component */}
+      <ProfileSummary />
 
       {/* Display UpcomingBookings component */}
       <UpcomingBookings />
@@ -18,8 +21,6 @@ const Dashboard = () => {
       {/* Display BookingHistory component */}
       <BookingHistory />
 
-      {/* Display ProfileSummary component */}
-      <ProfileSummary />
     </div>
   );
 };

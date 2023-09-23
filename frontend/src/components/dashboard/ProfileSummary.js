@@ -2,6 +2,7 @@
 
 import React, { useContext } from 'react';
 import AuthContext from '../../auth';  // Update the path for AuthContext
+import '../../styles/ProfileSummary.css'
 
 const ProfileSummary = () => {
   const { user } = useContext(AuthContext);
