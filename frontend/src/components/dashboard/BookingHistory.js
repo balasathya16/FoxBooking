@@ -1,6 +1,7 @@
 // BookingHistory.js
 
 import React from 'react';
+import '../../styles/BookingHistory.css'
 
 const BookingHistory = () => {
   // Fetch booking history for the user (you'll need to implement this)

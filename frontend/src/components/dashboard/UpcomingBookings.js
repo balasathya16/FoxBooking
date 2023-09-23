@@ -1,6 +1,7 @@
 // UpcomingBookings.js
 
 import React from 'react';
+import '../../styles/UpcomingBookings.css'
 
 const UpcomingBookings = () => {
   // Fetch upcoming bookings for the user (you'll need to implement this)
