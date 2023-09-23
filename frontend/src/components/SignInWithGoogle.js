@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from '../firebase'; // Import your Firebase configuration
+import '../styles/SignInWithGoogle.css'
 
 const SignInWithGoogle = () => {
   const handleSignInWithGoogle = () => {

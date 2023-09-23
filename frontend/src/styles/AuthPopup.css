@@ -42,4 +42,21 @@
   .auth-popup button:hover {
     background-color: #0056b3;
   }
-  
+
+
+ /* Adjust the padding for the Google and Phone buttons */
+.auth-popup .google-button,
+.auth-popup .phone-button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Adjust the hover styles for consistency */
+.auth-popup .google-button:hover,
+.auth-popup .phone-button:hover {
+  background-color: #0056b3;
+}
