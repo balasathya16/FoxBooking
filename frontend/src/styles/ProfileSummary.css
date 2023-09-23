@@ -1,0 +1,39 @@
+/* ProfileSummary.css */
+
+.profile-summary {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-summary h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .profile-summary div {
+    margin-bottom: 10px;
+  }
+  
+  .profile-summary p {
+    margin: 5px 0;
+  }
+  
+  .profile-summary div strong {
+    margin-right: 5px;
+  }
+  
+  .profile-summary button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-summary button:hover {
+    background-color: #2980b9;
+  }
+  

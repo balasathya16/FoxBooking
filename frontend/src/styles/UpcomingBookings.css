@@ -1,0 +1,32 @@
+/* UpcomingBookings.css */
+
+.upcoming-bookings {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .upcoming-bookings h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .upcoming-bookings ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .upcoming-bookings li {
+    margin-bottom: 10px;
+  }
+  
+  .upcoming-bookings li strong {
+    margin-right: 5px;
+  }
+  
+  .upcoming-bookings p {
+    font-style: italic;
+    color: #888;
+  }
+  

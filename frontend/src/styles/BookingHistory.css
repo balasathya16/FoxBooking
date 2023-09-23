@@ -1,0 +1,32 @@
+/* BookingHistory.css */
+
+.booking-history {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .booking-history h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .booking-history ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .booking-history li {
+    margin-bottom: 10px;
+  }
+  
+  .booking-history li strong {
+    margin-right: 5px;
+  }
+  
+  .booking-history p {
+    font-style: italic;
+    color: #888;
+  }
+  
