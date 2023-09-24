@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from '../firebase'; // Import your Firebase configuration
+import firebase from '../firebase';
 import '../styles/SignInWithGoogle.css';
 
 const SignInWithGoogle = () => {
@@ -10,20 +10,19 @@ const SignInWithGoogle = () => {
       .auth()
       .signInWithPopup(provider)
       .then((result) => {
-        // You can access the Google user via the result object
         const user = result.user;
         console.log('Google sign-in successful:', user);
       })
       .catch((error) => {
-        // Handle errors here
         console.error('Google sign-in error:', error);
       });
   };
 
   return (
-    <button onClick={handleSignInWithGoogle} className="custom-button">
-      Sign In with Google
-    </button>
+    <button onClick={handleSignInWithGoogle} className="signIn-google-button">
+    Sign In with Google
+  </button>
+  
   );
 };
 

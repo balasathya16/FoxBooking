@@ -1,16 +1,19 @@
 /* SignInWithGoogle.css */
 
-.custom-button {
-  padding: 10px 20px; /* Adjusted padding */
-  font-size: 16px; /* Adjusted font size */
+.auth-popup .signIn-google-button {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 20px auto 0 auto; /* Adjusted margin to move the button down */
+  padding: 10px 70px; /* Adjusted padding to increase width */
+  font-size: 16px;
   background-color: #007BFF;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  
 }
 
-.custom-button:hover {
+.auth-popup .signIn-google-button:hover {
   background-color: #0056b3;
 }

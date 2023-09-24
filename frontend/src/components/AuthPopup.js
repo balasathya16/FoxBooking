@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import SignInWithGoogle from './SignInWithGoogle';
 import SignInWithPhone from './SignInWithPhone';
 import SignUpWithEmail from './SignInWithEmail';
-import '../styles/AuthPopup.css'; // Import the CSS file
+import '../styles/AuthPopup.css'; // Update import to use lowercase
 
 const AuthPopup = ({ onClose }) => {
   const popupRef = useRef(null);
@@ -14,9 +14,18 @@ const AuthPopup = ({ onClose }) => {
       }
     };
 
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [onClose]);
 
