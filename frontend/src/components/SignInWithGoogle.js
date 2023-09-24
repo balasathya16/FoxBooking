@@ -1,12 +1,13 @@
 import React from 'react';
 import firebase from '../firebase'; // Import your Firebase configuration
-import '../styles/SignInWithGoogle.css'
+import '../styles/SignInWithGoogle.css';
 
 const SignInWithGoogle = () => {
   const handleSignInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth()
+    firebase
+      .auth()
       .signInWithPopup(provider)
       .then((result) => {
         // You can access the Google user via the result object
@@ -20,7 +21,7 @@ const SignInWithGoogle = () => {
   };
 
   return (
-    <button onClick={handleSignInWithGoogle}>
+    <button onClick={handleSignInWithGoogle} className="custom-button">
       Sign In with Google
     </button>
   );

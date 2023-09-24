@@ -24,7 +24,7 @@ const AuthPopup = ({ onClose }) => {
     <div className="auth-popup-background" onClick={onClose}>
       <div className="auth-popup" ref={popupRef} onClick={(e) => e.stopPropagation()}>
         <SignUpWithEmail />
-        <SignInWithGoogle className="google-button" />
+        <SignInWithGoogle />
         <SignInWithPhone className="phone-button" />
       </div>
     </div>
