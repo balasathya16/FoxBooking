@@ -6,6 +6,7 @@ import PrivacyPolicy from '../pages/PrivacyPolicy';
 import Terms from '../pages/Terms';
 import BookingSummary from '../pages/BookingSummary';
 import Dashboard from '../components/dashboard/Dashboard'; // Import the Dashboard component
+import CardDetailsPage from '../components/CardDetailsPage'; // Adjust the import path as needed
 
 const AppRouter = () => {
   return (
@@ -17,6 +18,7 @@ const AppRouter = () => {
       <Route path="/terms" element={<Terms />} />
       {/* Add the route for the Dashboard */}
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/card-details" element={<CardDetailsPage />} />
     </Routes>
   );
 };
