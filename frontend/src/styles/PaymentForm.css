@@ -1,0 +1,32 @@
+/* MyCheckoutForm.css */
+
+/* Add your styles here */
+.form-container {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .card-element {
+    background-color: white;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .pay-button {
+    background-color: #0069d9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
