@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import MyCheckoutForm from './PaymentForm'; // Import the PaymentForm
 import '../styles/BookingSummary.css';
 import handleConfirmBooking from './BookingFunctions.js';
 
@@ -78,9 +76,6 @@ const BookingSummary = () => {
         <p>Total:</p>
         <p>${totalCost.toFixed(2)}</p>
       </div>
-      <Elements stripe={stripePromise}>
-        <MyCheckoutForm />
-      </Elements>
       <button className="booking-summary-confirm-button" onClick={handleConfirmBookingClick}>
         Confirm Booking
       </button>
