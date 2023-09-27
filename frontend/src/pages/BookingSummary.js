@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import '../styles/BookingSummary.css';
-import MyCheckoutForm from './PaymentForm'; // Updated import
-
-const stripePromise = loadStripe('pk_test_51NfSEEG73qJpjALVaHz7O59835GKo33MWLrLrmfbtYJVKVeQf6ZE0UZzQCepDteHikbE4rGdxiM8LmvVocJmIAdG00L1DjQ8ex');
 
 const BookingSummary = () => {
   const location = useLocation();
@@ -19,12 +14,16 @@ const BookingSummary = () => {
   const totalCost = pricePerHour * timeDuration;
   const taxes = totalCost * 0.1; // Assuming 10% tax rate
 
+  console.log('Price per hour:', pricePerHour);
+  console.log('Time duration (hours):', timeDuration);
+  console.log('Total cost (dollars):', totalCost);
+
   const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
 
   const handleConfirmBookingClick = async () => {
     try {
       // Redirect to the card details page after confirming the booking
-      navigate('/card-details'); // Update the path to your card details page
+      navigate('/card-details', { state: { totalCost } }); // Update the path and pass totalCost to card-details
     } catch (error) {
       console.error('Error confirming booking:', error);
     }
@@ -63,10 +62,6 @@ const BookingSummary = () => {
         <p>Total:</p>
         <p>${totalCost.toFixed(2)}</p>
       </div>
-      {/* Wrap MyCheckoutForm with Elements provider and pass stripe promise */}
-      <Elements stripe={stripePromise}>
-        <MyCheckoutForm totalCost={totalCost} />
-      </Elements>
       <button className="booking-summary-confirm-button" onClick={handleConfirmBookingClick}>
         Confirm Booking
       </button>

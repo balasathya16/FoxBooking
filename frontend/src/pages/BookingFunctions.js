@@ -14,7 +14,7 @@ const handleConfirmBooking = async (bookingUUID, cricketCourtUUID, amount) => {
       },
       body: JSON.stringify({
         cricketCourtUUID,
-        amount,
+        amount: totalCost,
       }),
     });
 
