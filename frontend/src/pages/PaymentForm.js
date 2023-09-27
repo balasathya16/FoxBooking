@@ -2,7 +2,7 @@ import React from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import '../styles/PaymentForm.css'; // Make sure to adjust the path based on your file structure
 
-const MyCheckoutForm = () => {
+const MyCheckoutForm = ({ totalCost }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -14,13 +14,16 @@ const MyCheckoutForm = () => {
     }
 
     try {
-      // Create a payment intent on your server
+      console.log('Amount being sent to the server:', totalCost);
+
       const response = await fetch('http://localhost:8000/api/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          amount: totalCost, // Send the amount to the server
+        }),
       });
 
       if (!response.ok) {
