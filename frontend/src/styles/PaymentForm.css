@@ -1,32 +1,33 @@
-/* MyCheckoutForm.css */
+/* PaymentForm.css */
 
 /* Add your styles here */
 .form-container {
-    width: 300px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .card-element {
-    background-color: white;
-    padding: 10px;
-    border-radius: 4px;
-  }
-  
-  .pay-button {
-    background-color: #0069d9;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
+  width: 350px; /* Adjust the width as needed */
+  margin: auto;
+  padding: 30px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 24px; /* Increase the font size for 'Card details' text */
+}
+
+.card-element {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 20px; /* Increase the font size for the card input */
+}
+
+.pay-button {
+  background-color: #0069d9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 15px 30px;
+  font-size: 16px; /* Increase the font size for the button */
+  cursor: pointer;
+}
