@@ -16,8 +16,8 @@ const MyCheckoutForm = ({ totalCost }) => {
       return;
     }
   
-    // Ensure totalCost is a valid number
-    const amountInCents = !isNaN(totalCost) ? Math.round(parseFloat(totalCost) * 100) : 0;
+    const amountInCents = !isNaN(totalCost) ? Math.round(totalCost * 100) : 0;
+
 
     console.log('Amount being sent to the server in cents:', amountInCents);
 
