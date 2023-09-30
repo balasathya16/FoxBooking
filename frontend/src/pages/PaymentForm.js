@@ -16,7 +16,7 @@ const MyCheckoutForm = ({ totalCost }) => {
       return;
     }
   
-    const amountInCents = !isNaN(totalCost) ? Math.round(totalCost * 100) : 0;
+    const amountInCents = !isNaN(totalCost) ? Math.round(totalCost) : 0;
 
 
     console.log('Amount being sent to the server in cents:', amountInCents);

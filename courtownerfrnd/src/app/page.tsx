@@ -1,10 +1,12 @@
 import React from 'react';
-import '../../styles/Global.css';
 
-export default function Home() {
+const SamplePage = () => {
   return (
     <div>
-      <p>This is a simplified Home component.</p>
+      <h1>Sample Page</h1>
+      <p>This is a sample page content.</p>
     </div>
   );
-}
+};
+
+export default SamplePage;
