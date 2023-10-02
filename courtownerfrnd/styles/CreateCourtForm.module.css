@@ -75,3 +75,7 @@
     background-color: #0056b3;
   }
   
+  .successMessage {
+    color: green;
+    margin-bottom: 10px;
+  }

@@ -55,6 +55,9 @@ const CreateCourtForm = () => {
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formHeader}>Create Court</h2>
+      {creationSuccess && (
+        <div className={styles.successMessage}>Court creation successful!</div>
+      )}
       <form onSubmit={handleSubmit}>
         <label className={styles.formLabel}>Name:</label>
         <input
