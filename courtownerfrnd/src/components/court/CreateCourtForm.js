@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../../../styles/CreateCourtForm.module.css';
+import CourtCreationModal from '../CourtCreationModal';
 
 const CreateCourtForm = () => {
   const [creationSuccess, setCreationSuccess] = useState(false); // State to track success
@@ -14,6 +15,17 @@ const CreateCourtForm = () => {
     const files = e.target.files;
     setSelectedImages(files);
   };
+
+
+  const resetFormFields = () => {
+    setLocation('');
+    setName('');
+    setDescription('');
+    setNetsAvailable('');
+    setPricePerHour('');
+    setSelectedImages([]);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,11 +66,14 @@ const CreateCourtForm = () => {
     }
   };
   
-  return (
+   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formHeader}>Create Court</h2>
       {creationSuccess && (
-        <div className={styles.successMessage}>Court creation successful!</div>
+        <CourtCreationModal closeModal={() => {
+          setCreationSuccess(false);
+          resetFormFields(); // Reset form fields when modal is closed
+        }} />
       )}
       <form onSubmit={handleSubmit}>
         <label className={styles.formLabel}>Name:</label>
