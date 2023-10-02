@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../../../styles/CreateCourtForm.module.css';
 
 const CreateCourtForm = () => {
+  const [creationSuccess, setCreationSuccess] = useState(false); // State to track success
   const [location, setLocation] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -16,24 +17,24 @@ const CreateCourtForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('location', location);
     formData.append('name', name);
     formData.append('description', description);
     formData.append('netsAvailable', netsAvailable);
     formData.append('pricePerHour', pricePerHour);
-    
+
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('images', selectedImages[i]);
     }
-  
+
     try {
       const response = await fetch('http://localhost:8000/cricket', {
         method: 'POST',
         body: formData,
       });
-  
+
       if (response.status === 201) {
         const { id } = await response.json();
         console.log(`Court created with ID: ${id}`);
@@ -43,6 +44,7 @@ const CreateCourtForm = () => {
         setNetsAvailable('');
         setPricePerHour('');
         setSelectedImages([]);
+        setCreationSuccess(true); // Set success state to true on successful creation
       } else {
         const errorMessage = await response.json();
         console.error('Failed to create court:', errorMessage.message);
