@@ -9,21 +9,12 @@ import (
 	"github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/paymentintent"
 	"github.com/google/uuid"
-	"github.com/joho/godotenv"
 	"os"
 )
 
-// Load .env file to get Stripe secret key
-func loadEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("Error loading .env file")
-	}
-}
-
 // CreatePaymentIntent creates a Stripe Payment Intent for a booking
 func CreatePaymentIntent(w http.ResponseWriter, r *http.Request) {
-	loadEnv() // Load environment variables from .env
+	LoadEnv() // Load environment variables from .env
 
 	// Parse the request data, which should include the cricket court UUID and amount
 	var requestData struct {
