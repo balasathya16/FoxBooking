@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"fmt"
 
 	"github.com/balasathya16/FoxBooking/db"
 	"github.com/balasathya16/FoxBooking/models"
@@ -29,6 +30,13 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 			handleError(w, http.StatusInternalServerError, "Failed to fetch location details")
 			return
 		}
+
+		   // Now you have the location details, you can use them as needed.
+    // For example, you can display the formatted address to the user.
+    formattedAddress := locationDetails.FormattedAddress
+    fmt.Println("Formatted Address:", formattedAddress)
+
+
 
 	courtID, err := uuid.NewUUID()
 	if err != nil {
