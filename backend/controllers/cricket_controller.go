@@ -22,6 +22,14 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+		// Fetch location details using the Google Places API
+		location := r.FormValue("location")
+		locationDetails, err := getLocationDetailsFromAPI(location)
+		if err != nil {
+			handleError(w, http.StatusInternalServerError, "Failed to fetch location details")
+			return
+		}
+
 	courtID, err := uuid.NewUUID()
 	if err != nil {
 		handleError(w, http.StatusInternalServerError, "Failed to generate court ID")
