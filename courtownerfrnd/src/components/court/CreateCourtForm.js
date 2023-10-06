@@ -28,6 +28,21 @@ const CreateCourtForm = () => {
   };
 
 
+  const handleLocationChange = (address) => {
+    setLocation(address);
+  };
+
+  const handleSelect = async (address) => {
+    setLocation(address);
+    try {
+      const results = await geocodeByAddress(address);
+      const latLng = await getLatLng(results[0]);
+      console.log('LatLng:', latLng); // You can save latLng or use it as needed
+    } catch (error) {
+      console.error('Error selecting location:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -87,6 +102,41 @@ const CreateCourtForm = () => {
         />
 
         <label className={styles.formLabel}>Location:</label>
+        <PlacesAutocomplete
+          value={location}
+          onChange={handleLocationChange}
+          onSelect={handleSelect}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: 'Search for a location...',
+                  className: styles.formInput,
+                })}
+                required
+              />
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map((suggestion) => {
+                  const className = suggestion.active
+                    ? styles.suggestionItemActive
+                    : styles.suggestionItem;
+                  return (
+                    <div
+                      key={suggestion.placeId}
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
         <input
           className={styles.formInput}
           type="text"
