@@ -45,6 +45,11 @@ const CreateCourtForm = () => {
     }
   };
 
+
+  useEffect(() => {
+    loadGoogleMapsScript();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
