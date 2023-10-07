@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../../styles/CreateCourtForm.module.css';
 import CourtCreationModal from '../CourtCreationModal';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -33,7 +33,7 @@ const CreateCourtForm = () => {
   const handleLocationChange = (address) => {
     setLocation(address);
   };
-
+  
   const handleSelect = async (address) => {
     setLocation(address);
     try {
@@ -46,9 +46,9 @@ const CreateCourtForm = () => {
   };
 
 
-  useEffect(() => {
-    loadGoogleMapsScript();
-  }, []);
+
+
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,6 +88,22 @@ const CreateCourtForm = () => {
       console.error('Internal server error:', error);
     }
   };
+
+
+
+  useEffect(() => {
+    const loadScript = async () => {
+      try {
+        console.log('Loading Google Maps API script...');
+        await loadGoogleMapsScript('API KEY HERE');
+        console.log('Google Maps API script loaded successfully.');
+      } catch (error) {
+        console.error('Error loading Google Maps JavaScript API:', error);
+      }
+    };
+
+    loadScript();
+  }, []);
   
    return (
     <div className={styles.formContainer}>
@@ -148,7 +164,6 @@ const CreateCourtForm = () => {
           className={styles.formInput}
           type="text"
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
           required
         />
 
