@@ -4,9 +4,8 @@ import CourtCreationModal from '../CourtCreationModal';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import loadGoogleMapsScript from '../../utils/loadGoogleMapsScript';
 
-
 const CreateCourtForm = () => {
-  const [creationSuccess, setCreationSuccess] = useState(false); // State to track success
+  const [creationSuccess, setCreationSuccess] = useState(false);
   const [location, setLocation] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -53,6 +52,23 @@ const CreateCourtForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
+    useEffect(() => {
+      const loadScript = async () => {
+        try {
+          console.log('Loading Google Maps API script...');
+          await new Promise((resolve, reject) => {
+            loadGoogleMapsScript('API HERE', resolve); // Replace with your API key
+          });
+          console.log('Google Maps API script loaded successfully.');
+        } catch (error) {
+          console.error('Error loading Google Maps JavaScript API:', error);
+        }
+      };
+    
+      loadScript();
+    }, []);
+
     const formData = new FormData();
     formData.append('location', location);
     formData.append('name', name);
@@ -89,21 +105,7 @@ const CreateCourtForm = () => {
     }
   };
 
-
-
-  useEffect(() => {
-    const loadScript = async () => {
-      try {
-        console.log('Loading Google Maps API script...');
-        await loadGoogleMapsScript('API KEY HERE');
-        console.log('Google Maps API script loaded successfully.');
-      } catch (error) {
-        console.error('Error loading Google Maps JavaScript API:', error);
-      }
-    };
-
-    loadScript();
-  }, []);
+  
   
    return (
     <div className={styles.formContainer}>
@@ -126,46 +128,43 @@ const CreateCourtForm = () => {
 
         <label className={styles.formLabel}>Location:</label>
         <PlacesAutocomplete
-          value={location}
-          onChange={handleLocationChange}
-          onSelect={handleSelect}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
-              <input
-                {...getInputProps({
-                  placeholder: 'Search for a location...',
-                  className: styles.formInput,
-                })}
-                required
-              />
-              <div className="autocomplete-dropdown-container">
-                {loading && <div>Loading...</div>}
-                {suggestions.map((suggestion) => {
-                  const className = suggestion.active
-                    ? styles.suggestionItemActive
-                    : styles.suggestionItem;
-                  return (
-                    <div
-                      key={suggestion.placeId}
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </PlacesAutocomplete>
+  value={location}
+  onChange={handleLocationChange}
+  onSelect={handleSelect}
+>
+  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
+    console.log('Suggestions:', suggestions); // Log the suggestions
+    return (
+      <div>
         <input
-          className={styles.formInput}
-          type="text"
-          value={location}
+          {...getInputProps({
+            placeholder: 'Search for a location...',
+            className: styles.formInput,
+          })}
           required
         />
+        <div className="autocomplete-dropdown-container">
+          {loading && <div>Loading...</div>}
+          {suggestions.map((suggestion) => {
+            const className = suggestion.active
+              ? styles.suggestionItemActive
+              : styles.suggestionItem;
+            return (
+              <div
+                key={suggestion.placeId}
+                {...getSuggestionItemProps(suggestion, {
+                  className,
+                })}
+              >
+                <span>{suggestion.description}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }}
+</PlacesAutocomplete>
 
         <label className={styles.formLabel}>Description:</label>
         <textarea
