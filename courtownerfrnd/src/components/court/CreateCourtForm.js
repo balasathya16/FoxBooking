@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from '../../../styles/CreateCourtForm.module.css';
 import CourtCreationModal from '../CourtCreationModal';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import loadGoogleMapsScript from '../../utils/loadGoogleMapsScript';
-
 
 const CreateCourtForm = () => {
   const [creationSuccess, setCreationSuccess] = useState(false);
@@ -14,33 +11,10 @@ const CreateCourtForm = () => {
   const [pricePerHour, setPricePerHour] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
 
-    // Load the Google Maps API script when the component mounts
-    useEffect(() => {
-      const loadScript = async () => {
-        try {
-          console.log('Loading Google Maps API script...');
-          const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-          console.log('API Key:', apiKey);
-    
-          await new Promise((resolve, reject) => {
-            loadGoogleMapsScript(apiKey, resolve);
-          });
-    
-          console.log('Google Maps API script loaded successfully.');
-        } catch (error) {
-          console.error('Error loading Google Maps JavaScript API:', error);
-        }
-      };
-    
-      loadScript();
-    }, []);
-    
-
   const handleImageChange = (e) => {
     const files = e.target.files;
     setSelectedImages(files);
   };
-
 
   const resetFormFields = () => {
     setLocation('');
@@ -50,27 +24,6 @@ const CreateCourtForm = () => {
     setPricePerHour('');
     setSelectedImages([]);
   };
-
-
-  const handleLocationChange = (address) => {
-    setLocation(address);
-  };
-  
-  const handleSelect = async (address) => {
-    setLocation(address);
-    try {
-      const results = await geocodeByAddress(address);
-      const latLng = await getLatLng(results[0]);
-      console.log('LatLng:', latLng); // You can save latLng or use it as needed
-    } catch (error) {
-      console.error('Error selecting location:', error);
-    }
-  };
-
-
-
-
- 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,7 +66,7 @@ const CreateCourtForm = () => {
 
   
   
-   return (
+  return (
     <div className={styles.formContainer}>
       <h2 className={styles.formHeader}>Create Court</h2>
       {creationSuccess && (
@@ -131,46 +84,6 @@ const CreateCourtForm = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
-
-        <label className={styles.formLabel}>Location:</label>
-        <PlacesAutocomplete
-  value={location}
-  onChange={handleLocationChange}
-  onSelect={handleSelect}
->
-  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
-    console.log('Suggestions:', suggestions); // Log the suggestions
-    return (
-      <div>
-        <input
-          {...getInputProps({
-            placeholder: 'Search for a location...',
-            className: styles.formInput,
-          })}
-          required
-        />
-        <div className="autocomplete-dropdown-container">
-          {loading && <div>Loading...</div>}
-          {suggestions.map((suggestion) => {
-            const className = suggestion.active
-              ? styles.suggestionItemActive
-              : styles.suggestionItem;
-            return (
-              <div
-                key={suggestion.placeId}
-                {...getSuggestionItemProps(suggestion, {
-                  className,
-                })}
-              >
-                <span>{suggestion.description}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }}
-</PlacesAutocomplete>
 
         <label className={styles.formLabel}>Description:</label>
         <textarea
