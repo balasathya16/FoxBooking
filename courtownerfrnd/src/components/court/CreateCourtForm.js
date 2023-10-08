@@ -4,6 +4,7 @@ import CourtCreationModal from '../CourtCreationModal';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import loadGoogleMapsScript from '../../utils/loadGoogleMapsScript';
 
+
 const CreateCourtForm = () => {
   const [creationSuccess, setCreationSuccess] = useState(false);
   const [location, setLocation] = useState('');
@@ -12,6 +13,28 @@ const CreateCourtForm = () => {
   const [netsAvailable, setNetsAvailable] = useState('');
   const [pricePerHour, setPricePerHour] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+
+    // Load the Google Maps API script when the component mounts
+    useEffect(() => {
+      const loadScript = async () => {
+        try {
+          console.log('Loading Google Maps API script...');
+          const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+          console.log('API Key:', apiKey);
+    
+          await new Promise((resolve, reject) => {
+            loadGoogleMapsScript(apiKey, resolve);
+          });
+    
+          console.log('Google Maps API script loaded successfully.');
+        } catch (error) {
+          console.error('Error loading Google Maps JavaScript API:', error);
+        }
+      };
+    
+      loadScript();
+    }, []);
+    
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -51,23 +74,6 @@ const CreateCourtForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-
-    useEffect(() => {
-      const loadScript = async () => {
-        try {
-          console.log('Loading Google Maps API script...');
-          await new Promise((resolve, reject) => {
-            loadGoogleMapsScript('API HERE', resolve); // Replace with your API key
-          });
-          console.log('Google Maps API script loaded successfully.');
-        } catch (error) {
-          console.error('Error loading Google Maps JavaScript API:', error);
-        }
-      };
-    
-      loadScript();
-    }, []);
 
     const formData = new FormData();
     formData.append('location', location);
