@@ -16,6 +16,11 @@ import (
 )
 
 func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
+
+
+	fmt.Println("Request Method:", r.Method)
+	fmt.Println("Request URL:", r.URL)
+	fmt.Println("Request Headers:", r.Header)
 	// Parse the form data to get the uploaded image
 	err := r.ParseMultipartForm(10 << 20) // 10 MB maximum file size (adjust as needed)
 	if err != nil {

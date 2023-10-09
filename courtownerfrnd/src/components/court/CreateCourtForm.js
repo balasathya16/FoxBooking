@@ -39,11 +39,15 @@ const CreateCourtForm = () => {
       formData.append('images', selectedImages[i]);
     }
 
+    console.log('API Request FormData:', formData);  // Add this line to print FormData
+    console.log('Form Values:', { location, name, description, netsAvailable, pricePerHour }); // Add this line to print form values
     try {
       const response = await fetch('http://localhost:8000/cricket', {
         method: 'POST',
         body: formData,
       });
+
+      console.log('API Response Status:', response.status); 
 
       if (response.status === 201) {
         const { id } = await response.json();
@@ -82,6 +86,15 @@ const CreateCourtForm = () => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
+        />
+
+        <label className={styles.formLabel}>Location:</label>
+        <input
+          className={styles.formInput}
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           required
         />
 
