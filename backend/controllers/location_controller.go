@@ -38,6 +38,12 @@ func getLocationDetailsFromAPI(location string) (*LocationDetails, error) {
     }
     defer resp.Body.Close()
 
+    // Check the HTTP status code
+    if resp.StatusCode != http.StatusOK {
+        fmt.Println("Google Places API returned non-OK status:", resp.Status)
+        return nil, fmt.Errorf("Google Places API returned non-OK status: %s", resp.Status)
+    }
+
     // Read the response body
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
@@ -55,7 +61,37 @@ func getLocationDetailsFromAPI(location string) (*LocationDetails, error) {
         return nil, err
     }
 
+    // Check if the API response indicates an error
+    if details.PlaceID == "" {
+        errorResponse := struct {
+            ErrorMessage string `json:"error_message"`
+            Status       string `json:"status"`
+        }{}
+
+        // Attempt to unmarshal the response into the error structure
+        if err := json.Unmarshal(body, &errorResponse); err == nil {
+            fmt.Println("Google Places API returned an error:", errorResponse.ErrorMessage)
+            return nil, fmt.Errorf("Google Places API returned an error: %s", errorResponse.ErrorMessage)
+        } else {
+            fmt.Println("Failed to unmarshal error response:", err)
+            return nil, fmt.Errorf("Failed to unmarshal error response")
+        }
+    }
+
     fmt.Println("Location Details:", details) // Print the location details for debugging
+
+    fmt.Println("Unmarshaled Location Details:", details)
+
+
+    // Print response status code and body
+    fmt.Println("API Response Status:", resp.Status)
+    fmt.Println("API Response Body:", string(body))
 
     return &details, nil
 }
+
+
+
+
+
+

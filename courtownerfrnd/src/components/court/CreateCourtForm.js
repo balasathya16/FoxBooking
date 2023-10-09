@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../../styles/CreateCourtForm.module.css';
 import CourtCreationModal from '../CourtCreationModal';
 
@@ -10,6 +10,37 @@ const CreateCourtForm = () => {
   const [netsAvailable, setNetsAvailable] = useState('');
   const [pricePerHour, setPricePerHour] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places`;
+    script.async = true;
+    script.onload = () => {
+      console.log('Google Places API script loaded.');
+
+      const autocomplete = new window.google.maps.places.Autocomplete(
+        document.getElementById('location'),
+        { types: ['geocode'] }
+      );
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place && place.formatted_address) {
+          setLocation(place.formatted_address);
+        }
+      });
+    };
+
+    script.onerror = () => {
+      console.error('Error loading Google Places API script.');
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);  // Replace YOUR_API_KEY with your actual API key
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -39,26 +70,28 @@ const CreateCourtForm = () => {
       formData.append('images', selectedImages[i]);
     }
 
-    console.log('API Request FormData:', formData);  // Add this line to print FormData
-    console.log('Form Values:', { location, name, description, netsAvailable, pricePerHour }); // Add this line to print form values
+    console.log('Form Values:', { location, name, description, netsAvailable, pricePerHour });
+    console.log('Location:', location);
+    console.log('API Request FormData:', formData);
+
     try {
       const response = await fetch('http://localhost:8000/cricket', {
         method: 'POST',
         body: formData,
       });
 
-      console.log('API Response Status:', response.status); 
+      console.log('API Response Status:', response.status);
 
       if (response.status === 201) {
-        const { id } = await response.json();
-        console.log(`Court created with ID: ${id}`);
+        const responseData = await response.json();
+        console.log('Court created successfully:', responseData);
         setLocation('');
         setName('');
         setDescription('');
         setNetsAvailable('');
         setPricePerHour('');
         setSelectedImages([]);
-        setCreationSuccess(true); // Set success state to true on successful creation
+        setCreationSuccess(true);
       } else {
         const errorMessage = await response.json();
         console.error('Failed to create court:', errorMessage.message);
@@ -68,15 +101,14 @@ const CreateCourtForm = () => {
     }
   };
 
-  
-  
+
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formHeader}>Create Court</h2>
       {creationSuccess && (
         <CourtCreationModal closeModal={() => {
           setCreationSuccess(false);
-          resetFormFields(); // Reset form fields when modal is closed
+          resetFormFields();
         }} />
       )}
       <form onSubmit={handleSubmit}>
@@ -89,14 +121,15 @@ const CreateCourtForm = () => {
           required
         />
 
-        <label className={styles.formLabel}>Location:</label>
-        <input
-          className={styles.formInput}
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-        />
+<label className={styles.formLabel}>Location:</label>
+      <input
+        id="location"  // Ensure this ID matches the one in getElementById
+        className={styles.formInput}
+        type="text"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        required
+      />
 
         <label className={styles.formLabel}>Description:</label>
         <textarea

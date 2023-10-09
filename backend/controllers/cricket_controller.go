@@ -18,6 +18,7 @@ import (
 func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 
 
+	fmt.Println("Received request to create cricket court.")
 	fmt.Println("Request Method:", r.Method)
 	fmt.Println("Request URL:", r.URL)
 	fmt.Println("Request Headers:", r.Header)
@@ -32,9 +33,11 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		location := r.FormValue("location")
 		locationDetails, err := getLocationDetailsFromAPI(location)
 		if err != nil {
+			fmt.Printf("Failed to fetch location details: %v\n", err)
 			handleError(w, http.StatusInternalServerError, "Failed to fetch location details")
 			return
 		}
+		fmt.Println("Successfully fetched location details.")
 
 		   // Now you have the location details, you can use them as needed.
     // For example, you can display the formatted address to the user.
