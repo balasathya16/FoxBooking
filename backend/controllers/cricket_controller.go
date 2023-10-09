@@ -29,7 +29,7 @@ func CreateCricketCourt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-		// Fetch location details using the Google Places API
+	    // Fetch location details using the Google Places API
 		location := r.FormValue("location")
 		locationDetails, err := getLocationDetailsFromAPI(location)
 		if err != nil {
