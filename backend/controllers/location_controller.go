@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 )
 
@@ -25,7 +26,9 @@ type LocationDetails struct {
 func getLocationDetailsFromAPI(location string) (*LocationDetails, error) {
 	LoadEnv()
 	apiKey := os.Getenv("MAPS_API_KEY")
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&fields=formatted_address&key=%s", location, apiKey)
+	urlEncodedLocation := url.QueryEscape(location)
+
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&fields=formatted_address&key=%s", urlEncodedLocation, apiKey)
 
 	fmt.Println("API Request URL:", url) // Print the request URL for debugging
 
