@@ -13,7 +13,7 @@ const CreateCourtForm = () => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyD2YnYR1raZMw7AOBFDwUaf8osQASSZE90&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
     script.async = true;
     script.onload = () => {
       console.log('Google Places API script loaded.');
