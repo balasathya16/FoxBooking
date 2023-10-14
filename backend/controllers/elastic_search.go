@@ -5,7 +5,7 @@ import (
     "log"
 
     "github.com/elastic/go-elasticsearch/v8"
-	"github.com/balasathya16/FoxBooking/backend/models"
+	"github.com/balasathya16/FoxBooking/models"
 )
 
 var esClient *elasticsearch.Client
