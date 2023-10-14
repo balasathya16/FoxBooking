@@ -26,4 +26,7 @@ func SetupRoutes(router *mux.Router) {
 	// payment route stripe
 	router.HandleFunc("/api/create-payment-intent", controllers.CreatePaymentIntent).Methods("POST")
 
+	// Add a new route for search
+    router.HandleFunc("/search", controllers.SearchCourts).Methods("GET")
+
 }
