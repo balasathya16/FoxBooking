@@ -22,30 +22,6 @@ func initElasticsearch() {
     }
 }
 
-package controllers
-
-import (
-    "context"
-    "log"
-
-    "github.com/elastic/go-elasticsearch/v8"
-	"github.com/balasathya16/FoxBooking/models"
-)
-
-var esClient *elasticsearch.Client
-
-func initElasticsearch() {
-    cfg := elasticsearch.Config{
-        Addresses: []string{"http://localhost:9200"},
-    }
-
-    var err error
-    esClient, err = elasticsearch.NewClient(cfg)
-    if err != nil {
-        log.Fatalf("Error creating the Elasticsearch client: %v", err)
-    }
-}
-
 func searchCourts(query string) ([]models.CricketCourt, error) {
     var courts []models.CricketCourt
 
@@ -58,15 +34,20 @@ func searchCourts(query string) ([]models.CricketCourt, error) {
         },
     }
 
-    // Perform the search
-    res, err := esClient.Search(
-        esClient.Search.WithContext(context.Background()),
-        esClient.Search.WithIndex("cricket_courts"),  // Elasticsearch index name
-        esClient.Search.WithBodyJSON(searchRequest),
-    )
-    if err != nil {
-        return nil, err
-    }
+  // Perform the search
+var buf bytes.Buffer
+if err := json.NewEncoder(&buf).Encode(searchRequest); err != nil {
+    return nil, err
+}
+
+res, err := esClient.Search(
+    esClient.Search.WithContext(context.Background()),
+    esClient.Search.WithIndex("cricket_courts"),  // Elasticsearch index name
+    esClient.Search.WithBody(&buf),  // Set the request body
+)
+if err != nil {
+    return nil, err
+}
     defer res.Body.Close()
 
     // Parse the search response and extract the courts
@@ -75,4 +56,3 @@ func searchCourts(query string) ([]models.CricketCourt, error) {
 
     return courts, nil
 }
-
