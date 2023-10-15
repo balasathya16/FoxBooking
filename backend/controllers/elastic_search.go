@@ -1,54 +1,32 @@
 package controllers
 
 import (
-    "bytes"
+	"bytes"
 	"context"
 	"encoding/json"
-	"log"
 	"fmt"
+	"net/http"
+	"log"
 
-
-    "github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/balasathya16/FoxBooking/models"
 )
 
 var esClient *elasticsearch.Client
 
-func initElasticsearch() {
-    cfg := elasticsearch.Config{
-        Addresses: []string{"http://localhost:9200"},
-    }
-
-    var err error
-    esClient, err = elasticsearch.NewClient(cfg)
-    if err != nil {
-        log.Fatalf("Error creating the Elasticsearch client: %v", err)
-    }
-}
-
-func searchCourts(query string) ([]models.CricketCourt, error) {
-	query := r.URL.Query().Get("query")
-
-	// Call the searchCourts function to search for courts
-	courts, err := searchCourts(query)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+func InitElasticsearch() {
+	cfg := elasticsearch.Config{
+		Addresses: []string{"http://localhost:9200"},
 	}
 
-	// Serialize the response to JSON
-	jsonResponse, err := json.Marshal(courts)
+	var err error
+	esClient, err = elasticsearch.NewClient(cfg)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		log.Fatalf("Error creating the Elasticsearch client: %v", err)
 	}
-
-	// Set the response content type to JSON
-	w.Header().Set("Content-Type", "application/json")
-
-	// Write the JSON response
-	w.Write(jsonResponse)
 }
+
+func actualSearchCourts(query string) ([]models.CricketCourt, error) {
 	var courts []models.CricketCourt
 
 	// Define the search request for Elasticsearch
@@ -105,3 +83,27 @@ func searchCourts(query string) ([]models.CricketCourt, error) {
 	return courts, nil
 }
 
+// SearchCourts is the HTTP handler to search for cricket courts
+func SearchCourts(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("query")
+
+	// Call the searchCourts function to search for courts
+	courts, err := actualSearchCourts(query)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Serialize the response to JSON
+	jsonResponse, err := json.Marshal(courts)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Set the response content type to JSON
+	w.Header().Set("Content-Type", "application/json")
+
+	// Write the JSON response
+	w.Write(jsonResponse)
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/balasathya16/FoxBooking/routes"
+	"github.com/balasathya16/FoxBooking/controllers"  // Import the controllers package
 )
 
 func main() {
@@ -16,6 +17,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+
+	// Initialize Elasticsearch client
+	controllers.InitElasticsearch()  // Call the function from the controllers package
 
 	router := mux.NewRouter()
 
