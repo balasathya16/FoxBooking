@@ -23,6 +23,9 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/badminton", controllers.CreateBadmintonCourt).Methods("POST")
 	router.HandleFunc("/badminton/{id}", controllers.GetBadmintonCourt).Methods("GET")
 
+	// Update the router to include the search handler
+	router.HandleFunc("/cricket/search", controllers.SearchCricketCourts).Methods("GET")
+
 	// payment route stripe
 	router.HandleFunc("/api/create-payment-intent", controllers.CreatePaymentIntent).Methods("POST")
 
