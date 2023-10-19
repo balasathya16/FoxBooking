@@ -246,6 +246,23 @@ func GetCricketCourt(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(court)
 }
 
+func SearchCricketCourts(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Retrieve the search query from the request
+    query := r.URL.Query().Get("query")
+
+    // Call the search function
+    courts, err := searchCricketCourts(query)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        json.NewEncoder(w).Encode("Search error")
+        return
+    }
+
+    // Return the search results as JSON
+    json.NewEncoder(w).Encode(courts)
+}
 
 
 
