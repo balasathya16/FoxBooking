@@ -6,8 +6,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-
 	"github.com/balasathya16/FoxBooking/routes"
+	"github.com/rs/cors" // Import the cors package
 )
 
 func main() {
@@ -23,26 +23,10 @@ func main() {
 	routes.SetupRoutes(router)
 
 	// CORS configuration
-	cors := func(handler http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Allow requests from any origin
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			// Allow the following HTTP methods
-			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-			// Allow the following headers
-			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
-			// If it's a preflight request, respond with 200 status code
-			if r.Method == http.MethodOptions {
-				return
-			}
-
-			handler.ServeHTTP(w, r)
-		})
-	}
+	corsHandler := cors.Default() // Use the default CORS configuration
 
 	// Wrap the router with the CORS middleware
-	handler := cors(router)
+	handler := corsHandler.Handler(router)
 
 	log.Fatal(http.ListenAndServe(":8000", handler))
 }
