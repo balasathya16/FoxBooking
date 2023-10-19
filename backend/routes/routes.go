@@ -8,14 +8,14 @@ import (
 
 func SetupRoutes(router *mux.Router) {
 	// Cricket Court Routes
-	router.HandleFunc("/cricket", controllers.CreateCricketCourt).Methods("POST")
-	router.HandleFunc("/cricket/{id}", controllers.EditCricketCourt).Methods("PUT")
-	router.HandleFunc("/cricket/{id}", controllers.GetCricketCourt).Methods("GET")
-	router.HandleFunc("/cricket", controllers.GetAllCricketCourts).Methods("GET")
-	router.HandleFunc("/cricket", controllers.DeleteAllCricketCourts).Methods("DELETE")      // New route to delete all cricket courts
-	router.HandleFunc("/cricket/{id}", controllers.DeleteCricketCourtByID).Methods("DELETE") // New route to delete a single cricket court
+router.HandleFunc("/cricket", controllers.CreateCricketCourt).Methods("POST")
+router.HandleFunc("/cricket/search", controllers.SearchCricketCourts).Methods("GET")  // Place the search route before the ID route
+router.HandleFunc("/cricket/{id}", controllers.EditCricketCourt).Methods("PUT")
+router.HandleFunc("/cricket/{id}", controllers.GetCricketCourt).Methods("GET")
+router.HandleFunc("/cricket", controllers.GetAllCricketCourts).Methods("GET")
+router.HandleFunc("/cricket", controllers.DeleteAllCricketCourts).Methods("DELETE")
+router.HandleFunc("/cricket/{id}", controllers.DeleteCricketCourtByID).Methods("DELETE")
 
-	router.HandleFunc("/cricket/search", controllers.SearchCricketCourts).Methods("GET")
 
 
 	// Football Court Routes
