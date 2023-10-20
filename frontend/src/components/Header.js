@@ -3,19 +3,54 @@ import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
 import AuthPopup from './AuthPopup';
 import AuthContext from '../../src/auth';
-import SignInWithEmail from './SignInWithEmail'; // Import SignUpWithEmail
-import SignInWithPhone from './SignInWithPhone'; // Import SignInWithPhone
+import SignInWithEmail from './SignInWithEmail';
+import SignInWithPhone from './SignInWithPhone';
 import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios'; // Import axios
 
 const Header = () => {
   console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // Add this line
+  const [searchResults, setSearchResults] = useState([]); // Add this line
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
+
+  
+  const handleSearch = () => {
+    // Log that the search is being initiated
+    console.log('Initiating search with query:', searchQuery);
+  
+    // Make an HTTP GET request to the backend search endpoint using axios
+    axios.get('http://localhost:8000/cricket/search?query=' + searchQuery)
+      .then((response) => {
+        // Log the response and its status
+        console.log('Response status:', response.status);
+        console.log('Response data:', response.data);
+  
+        // Check for a successful response status (e.g., 200 OK)
+        if (response.status === 200) {
+          setSearchResults(response.data);
+        } else {
+          console.error('Received a non-successful response:', response.status);
+        }
+      })
+      .catch((error) => {
+        // Log the error
+        console.error('Error fetching search results:', error);
+      });
+  };
+  
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const toggleAuthModal = () => {
     console.log('Toggling auth modal');
@@ -65,12 +100,18 @@ const Header = () => {
           </Link>
         </div>
         <div className="navigation">
-          <div className="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button>
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
+        <div className="search-bar">
+  <input
+    type="text"
+    placeholder="Search..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    onKeyPress={handleKeyPress}
+  />
+  <button onClick={handleSearch}>
+    <i className="fas fa-search"></i>
+  </button>
+</div>
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>
