@@ -9,30 +9,26 @@ import '../styles/Header.css';
 import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
+import GalleryTile from '../components/HomePage/GalleryTile'; // Import GalleryTile component
 
 const Header = () => {
   console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // Add this line
-  const [searchResults, setSearchResults] = useState([]); // Add this line
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
 
-  
   const handleSearch = () => {
-    // Log that the search is being initiated
     console.log('Initiating search with query:', searchQuery);
   
-    // Make an HTTP GET request to the backend search endpoint using axios
     axios.get('http://localhost:8000/cricket/search?query=' + searchQuery)
       .then((response) => {
-        // Log the response and its status
         console.log('Response status:', response.status);
         console.log('Response data:', response.data);
   
-        // Check for a successful response status (e.g., 200 OK)
         if (response.status === 200) {
           setSearchResults(response.data);
         } else {
@@ -40,11 +36,9 @@ const Header = () => {
         }
       })
       .catch((error) => {
-        // Log the error
         console.error('Error fetching search results:', error);
       });
   };
-  
   
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -53,7 +47,6 @@ const Header = () => {
   };
 
   const toggleAuthModal = () => {
-    console.log('Toggling auth modal');
     setAuthModalOpen(!isAuthModalOpen);
   };
 
@@ -62,14 +55,9 @@ const Header = () => {
   };
 
   useEffect(() => {
-    console.log('user:', user);
-    console.log('isUserSignedUp():', isUserSignedUp());
-
     if ((user && isUserSignedUp()) || (user && user.providerData.length > 0)) {
-      console.log('Successful sign-in');
       setGoogleSignInSuccess(true);
     } else {
-      console.log('Sign-in failure');
       setGoogleSignInSuccess(false);
     }
   }, [user, isUserSignedUp]);
@@ -100,18 +88,18 @@ const Header = () => {
           </Link>
         </div>
         <div className="navigation">
-        <div className="search-bar">
-  <input
-    type="text"
-    placeholder="Search..."
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    onKeyPress={handleKeyPress}
-  />
-  <button onClick={handleSearch}>
-    <i className="fas fa-search"></i>
-  </button>
-</div>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            <button onClick={handleSearch}>
+              <i className="fas fa-search"></i>
+            </button>
+          </div>
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>
@@ -136,7 +124,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <AuthModal isOpen={isAuthModalOpen} onClose={toggleAuthModal} />
     </header>
   );
 };
