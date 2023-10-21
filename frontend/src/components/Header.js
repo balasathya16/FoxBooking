@@ -10,7 +10,7 @@ import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import GalleryTile from '../components/HomePage/GalleryTile'; // Import GalleryTile component
+import HomePage from '../components/HomePage/HomePage'; // Import GalleryTile component
 
 const Header = () => {
   console.log('Rendering Header component');
@@ -88,18 +88,18 @@ const Header = () => {
           </Link>
         </div>
         <div className="navigation">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <button onClick={handleSearch}>
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          <button onClick={handleSearch}>
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>
