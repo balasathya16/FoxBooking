@@ -1,38 +1,35 @@
+// GalleryTile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListingTile from './ListingTile';
 import '../../styles/GalleryTile.css';
 
-const GalleryTile = ({ searchResults }) => {
+
+
+const GalleryTile = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchListings = async () => {
-      if (searchResults && searchResults.length > 0) {
-        // If search results are available, use them
-        setListings(searchResults);
-        setLoading(false);
-      } else {
-        try {
-          const response = await axios.get('http://127.0.0.1:8000/cricket');
-          const { data } = response;
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/cricket');
+        const { data } = response;
 
-          if (Array.isArray(data) && data.length > 0) {
-            setListings(data);
-          } else {
-            console.error('Invalid or empty API response:', data);
-          }
-        } catch (error) {
-          console.error('Error fetching listings:', error);
-        } finally {
-          setLoading(false);
+        if (Array.isArray(data) && data.length > 0) {
+          setListings(data);
+        } else {
+          console.error('Invalid or empty API response:', data);
         }
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchListings();
-  }, [searchResults]);
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
