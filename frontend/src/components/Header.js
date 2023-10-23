@@ -30,7 +30,8 @@ const Header = () => {
         console.log('Response data:', response.data);
   
         if (response.status === 200) {
-          setSearchResults(response.data);
+          setSearchResults((prevSearchResults) => [...prevSearchResults, ...response.data]);
+          console.log('SearchResults state updated:', searchResults);
         } else {
           console.error('Received a non-successful response:', response.status);
         }
@@ -39,6 +40,7 @@ const Header = () => {
         console.error('Error fetching search results:', error);
       });
   };
+  
   
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {

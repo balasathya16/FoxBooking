@@ -1,13 +1,19 @@
-import React from 'react';
-import AnimatedText from './AnimatedText'; // Import the AnimatedText component
-import GalleryTile from './GalleryTile'; // Import the GalleryTile component
+import React, { useState, useEffect } from 'react';
+import AnimatedText from './AnimatedText';
+import GalleryTile from './GalleryTile';
 import '../../styles/HomePage.css';
 
 const HomePage = () => {
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    console.log('HomePage searchResults updated:', searchResults);
+  }, [searchResults]);
+
   return (
     <div className="home-page">
-      <AnimatedText /> {/* Add the AnimatedText component */}
-      <GalleryTile />
+      <AnimatedText />
+      <GalleryTile searchResults={searchResults} /> {/* Pass searchResults as a prop */}
     </div>
   );
 };
