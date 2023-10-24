@@ -13,40 +13,12 @@ import axios from 'axios';
 import HomePage from '../components/HomePage/HomePage'; // Import GalleryTile component
 
 const Header = () => {
-  console.log('Rendering Header component');
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
-
-  const handleSearch = () => {
-    console.log('Initiating search with query:', searchQuery);
-  
-    axios.get('http://localhost:8000/cricket/search?query=' + searchQuery)
-      .then((response) => {
-        console.log('Response status:', response.status);
-        console.log('Response data:', response.data);
-  
-        if (response.status === 200) {
-          setSearchResults((prevSearchResults) => [...prevSearchResults, ...response.data]);
-          console.log('SearchResults state updated:', searchResults);
-        } else {
-          console.error('Received a non-successful response:', response.status);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching search results:', error);
-      });
-  };
-  
-  
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
 
   const toggleAuthModal = () => {
     setAuthModalOpen(!isAuthModalOpen);
@@ -90,18 +62,17 @@ const Header = () => {
           </Link>
         </div>
         <div className="navigation">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          <button onClick={handleSearch}>
-            <i className="fas fa-search"></i>
-          </button>
-        </div>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button>
+              <i className="fas fa-search"></i>
+            </button>
+          </div>
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>
@@ -125,7 +96,6 @@ const Header = () => {
             )}
           </div>
         </div>
-        
       </div>
     </header>
   );
