@@ -13,7 +13,9 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <AnimatedText />
-      <GalleryTile searchResults={searchResults} /> {/* Pass searchResults as a prop */}
+      <div className="search-bar">
+        <GalleryTile searchResults={searchResults} /> {/* Pass searchResults as a prop */}
+      </div>
     </div>
   );
 };

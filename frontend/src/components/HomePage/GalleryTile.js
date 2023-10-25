@@ -15,7 +15,7 @@
             // If search results are available, use them
             setListings(searchResults); // Set the search results directly
           } else {
-            const response = await axios.get('http://127.0.0.1:8000/cricket/search');
+            const response = await axios.get('http://127.0.0.1:8000/cricket');
             const { data } = response;
 
             if (Array.isArray(data) && data.length > 0) {

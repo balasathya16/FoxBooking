@@ -10,7 +10,7 @@ import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import HomePage from '../components/HomePage/HomePage'; // Import GalleryTile component
+import HomePage from '../components/HomePage/HomePage';
 
 const Header = () => {
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
@@ -19,6 +19,34 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const { user, isUserSignedUp, signOut } = useContext(AuthContext);
   const [googleSignInSuccess, setGoogleSignInSuccess] = useState(false);
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleInputKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      console.log('Searching with query:', searchQuery);
+      const response = await axios.get(`http://127.0.0.1:8000/cricket/search?query=${searchQuery}`);
+      const { data } = response;
+
+      if (Array.isArray(data) && data.length > 0) {
+        setSearchResults(data);
+        console.log('Search results found:', data);
+      } else {
+        setSearchResults([]);
+        console.log('No search results found.');
+      }
+    } catch (error) {
+      console.error('Error searching:', error);
+    }
+  };
 
   const toggleAuthModal = () => {
     setAuthModalOpen(!isAuthModalOpen);
@@ -67,11 +95,9 @@ const Header = () => {
               type="text"
               placeholder="Search..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleInputChange}
+              onKeyPress={handleInputKeyPress}
             />
-            <button>
-              <i className="fas fa-search"></i>
-            </button>
           </div>
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
