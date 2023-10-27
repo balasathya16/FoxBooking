@@ -3,6 +3,7 @@ import AnimatedText from './AnimatedText';
 import GalleryTile from './GalleryTile';
 import '../../styles/HomePage.css';
 
+
 const HomePage = () => {
   const [searchResults, setSearchResults] = useState([]);
 
@@ -13,9 +14,7 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <AnimatedText />
-      <div className="search-bar">
-        <GalleryTile searchResults={searchResults} /> {/* Pass searchResults as a prop */}
-      </div>
+        <GalleryTile />
     </div>
   );
 };

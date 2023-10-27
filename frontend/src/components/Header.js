@@ -37,10 +37,10 @@ const Header = () => {
       const { data } = response;
 
       if (Array.isArray(data) && data.length > 0) {
-        setSearchResults(data);
+        setSearchResults(data); // Update searchResults with the search data
         console.log('Search results found:', data);
       } else {
-        setSearchResults([]);
+        setSearchResults([]); // Set results to an empty array if no results are found
         console.log('No search results found.');
       }
     } catch (error) {
