@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import ListingTile from './ListingTile';
+import axios from 'axios';
 import '../../styles/GalleryTile.css';
 
 const GalleryTile = ({ searchResults }) => {
@@ -8,29 +8,43 @@ const GalleryTile = ({ searchResults }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('GalleryTile component mounted');
+    
     const fetchListings = async () => {
       try {
         if (searchResults && searchResults.length > 0) {
-          // If searchResults are provided, use them
-          setListings(searchResults); // Set the listings directly from searchResults
+          console.log('Using searchResults for listings:', searchResults);
+          setListings(searchResults);
+          setLoading(false);
         } else {
+          console.log('Fetching listings from API');
           const response = await axios.get('http://127.0.0.1:8000/cricket');
           const { data } = response;
-
           if (Array.isArray(data) && data.length > 0) {
             setListings(data);
           } else {
             console.error('Invalid or empty API response:', data);
           }
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching listings:', error);
-      } finally {
         setLoading(false);
       }
     };
 
-    fetchListings();
+    if (!searchResults || searchResults.length === 0) {
+      fetchListings();
+    }
+  }, [searchResults]);
+
+  console.log('Listings in GalleryTile:', listings);
+};
+
+    // Fetch listings only if searchResults are not provided
+    if (!searchResults || searchResults.length === 0) {
+      fetchListings();
+    }
   }, [searchResults]); // Re-run this effect whenever searchResults changes
 
   if (loading) {

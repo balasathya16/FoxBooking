@@ -10,7 +10,7 @@ import sportsLogo from '../sports.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import HomePage from '../components/HomePage/HomePage';
+import GalleryTile from './HomePage/GalleryTile'; // Import GalleryTile
 
 const Header = () => {
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
@@ -37,16 +37,18 @@ const Header = () => {
       const { data } = response;
 
       if (Array.isArray(data) && data.length > 0) {
-        setSearchResults(data); // Update searchResults with the search data
+        setSearchResults(data);
         console.log('Search results found:', data);
       } else {
-        setSearchResults([]); // Set results to an empty array if no results are found
+        setSearchResults([]);
         console.log('No search results found.');
       }
     } catch (error) {
       console.error('Error searching:', error);
     }
   };
+
+  console.log('Search Results in Header:', searchResults);
 
   const toggleAuthModal = () => {
     setAuthModalOpen(!isAuthModalOpen);
@@ -99,6 +101,8 @@ const Header = () => {
               onKeyPress={handleInputKeyPress}
             />
           </div>
+          {/* Pass searchResults as a prop to GalleryTile */}
+          <GalleryTile searchResults={searchResults} />
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>
