@@ -8,17 +8,16 @@ const GalleryTile = ({ searchResults }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('GalleryTile component mounted');
-    
     const fetchListings = async () => {
       try {
         if (searchResults && searchResults.length > 0) {
-          console.log('Using searchResults for listings:', searchResults);
+          // Render search results
           setListings(searchResults);
           setLoading(false);
         } else {
-          console.log('Fetching listings from API');
-          const response = await axios.get('http://127.0.0.1:8000/cricket');
+          // Fetch data from the /search endpoint when there are no search results
+          console.log('Fetching listings from /search endpoint');
+          const response = await axios.get(`http://127.0.0.1:8000/cricket/search?query=`); // You might need to add a query parameter for the search query here
           const { data } = response;
           if (Array.isArray(data) && data.length > 0) {
             setListings(data);
@@ -33,19 +32,9 @@ const GalleryTile = ({ searchResults }) => {
       }
     };
 
-    if (!searchResults || searchResults.length === 0) {
-      fetchListings();
-    }
+    fetchListings(); // Always fetch listings initially
+
   }, [searchResults]);
-
-  console.log('Listings in GalleryTile:', listings);
-};
-
-    // Fetch listings only if searchResults are not provided
-    if (!searchResults || searchResults.length === 0) {
-      fetchListings();
-    }
-  }, [searchResults]); // Re-run this effect whenever searchResults changes
 
   if (loading) {
     return <div>Loading...</div>;
@@ -65,5 +54,6 @@ const GalleryTile = ({ searchResults }) => {
     </div>
   );
 };
+
 
 export default GalleryTile;
