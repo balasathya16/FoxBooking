@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Header from '../Header'
+
 import AnimatedText from './AnimatedText';
 import GalleryTile from './GalleryTile';
 import '../../styles/HomePage.css';
@@ -14,6 +16,8 @@ const HomePage = () => {
     <div className="home-page">
       <AnimatedText />
       <GalleryTile searchResults={searchResults} />
+      {/* Pass a function to update searchResults to the Header component */}
+      <Header updateSearchResults={setSearchResults} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import GalleryTile from './HomePage/GalleryTile'; // Import GalleryTile
 
-const Header = () => {
+const Header = ( { updateSearchResults }) => {
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +37,8 @@ const Header = () => {
       const { data } = response;
 
       if (Array.isArray(data) && data.length > 0) {
-        setSearchResults(data);
+        // Update searchResults in HomePage
+        updateSearchResults(data);
         console.log('Search results found:', data);
       } else {
         setSearchResults([]);
@@ -101,8 +102,6 @@ const Header = () => {
               onKeyPress={handleInputKeyPress}
             />
           </div>
-          {/* Pass searchResults as a prop to GalleryTile */}
-          <GalleryTile searchResults={searchResults} />
           <div className="cta-buttons">
             {!googleSignInSuccess && !user && (
               <>

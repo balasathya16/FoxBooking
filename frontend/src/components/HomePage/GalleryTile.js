@@ -17,7 +17,7 @@ const GalleryTile = ({ searchResults }) => {
         } else {
           // Fetch data from the /search endpoint when there are no search results
           console.log('Fetching listings from /search endpoint');
-          const response = await axios.get(`http://127.0.0.1:8000/cricket/search?query=`); // You might need to add a query parameter for the search query here
+          const response = await axios.get(`http://127.0.0.1:8000/cricket`); // You might need to add a query parameter for the search query here
           const { data } = response;
           if (Array.isArray(data) && data.length > 0) {
             setListings(data);
