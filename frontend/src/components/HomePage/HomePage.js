@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../Header'
-
 import AnimatedText from './AnimatedText';
 import GalleryTile from './GalleryTile';
+import Header from '../Header'; // Import the Header component
+
 import '../../styles/HomePage.css';
 
 const HomePage = () => {
@@ -14,10 +14,9 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
+      <Header updateSearchResults={setSearchResults} /> {/* Pass the updateSearchResults function to the Header */}
       <AnimatedText />
       <GalleryTile searchResults={searchResults} />
-      {/* Pass a function to update searchResults to the Header component */}
-      <Header updateSearchResults={setSearchResults} />
     </div>
   );
 };
