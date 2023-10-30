@@ -16,7 +16,6 @@ const App = () => {
   return (
     <div className="App">
       <div className="App-content">
-        <Header updateSearchResults={updateSearchResults} />
         <AppRouter searchResults={searchResults} />
       </div>
       <Footer />
