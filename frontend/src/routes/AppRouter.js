@@ -8,12 +8,15 @@ import BookingSummary from '../pages/BookingSummary';
 import Dashboard from '../components/dashboard/Dashboard';
 import CardDetailsPage from '../components/CardDetailsPage';
 
-const AppRouter = () => {
+const AppRouter = ({ updateSearchResults }) => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<HomePage />} /> {/* Render the HomePage component at the root URL */}
-        <Route path="/listing/:id" element={<ListingDetailsPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/listing/:id"
+          element={<ListingDetailsPage updateSearchResults={updateSearchResults} />}
+        />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/booking-summary" element={<BookingSummary />} />
         <Route path="/terms" element={<Terms />} />
